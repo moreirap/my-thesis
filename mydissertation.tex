@@ -12,12 +12,15 @@
 
 \maketitle
 
-\begin{abstract}
-Software engineering methods have evolved from having a prescribed and sequential nature to using more adaptable and iterative approaches. Such is the case with Behaviour Driven Development (BDD), a recent member of the family of agile methodologies addressing the correct specification of the behaviour characteristics of a system, by focusing on close collaboration and identification of examples.
-Whilst BDD is very successful in ensuring developed software meets its functional requirements, it is largely silent regarding the systematic treatment of its non-functional counterparts --- descriptions of how the system should behave with respect to some quality attribute such as performance, reusability, etc.
 
-Historically, the systematic treatment of non-functional requirements (NFRs) in software engineering is categorised as being either product-oriented --- a quantitative approach aiming at evaluating the degree to which a system meets its non-functional requirements --- and a process-oriented one, qualitative in nature and where non-functional requirements are used to drive the software design process.
-One example of the latter category, is the NFR Framework\cite{Chung2000}, a structured approach to represent and reason about non-functional requirements. 
+\begin{abstract}
+Software engineering methods have evolved from having a prescribed and sequential nature to using more adaptable and iterative approaches. Such is the case with Behaviour Driven Development (BDD)~\cite{North2006,Smart201410}, a recent member of the family of agile methodologies addressing the correct specification of the behaviour characteristics of a system, by focusing on close collaboration and identification of examples.
+
+Whilst BDD is very successful in ensuring developed software meets its functional requirements, it is largely silent regarding the systematic treatment of its non-functional counterparts~--- descriptions of how the system should behave with respect to some quality attribute such as performance, reusability, etc.
+
+Historically, the systematic treatment of non-functional requirements (NFRs) in software engineering is categorised as being either product-oriented based on a quantitative approach aimed at evaluating the degree to which a system meets its non-functional requirements or process-oriented, qualitative in nature and where NFRs are used to drive the software design process.
+
+One example of the latter category, is the NFR Framework~\cite{Chung2000}, a structured approach to represent and reason about non-functional requirements. 
 
 In this thesis, we investigate the extent to which BDD can be integrated with the NFR Framework, with the aim of handling non-functional requirements in an explicit and systematic way whilst respecting the principles and philosophy behind Agile.
 \end{abstract}
@@ -25,7 +28,10 @@ In this thesis, we investigate the extent to which BDD can be integrated with th
 \clearpage
 
 \begin{acknowledgements}
-  Thanks.  
+  I would like to express my deepest gratitude to my supervisor, Dr Jeremy Gibbons, for his
+  guidance, support, comments and encouragement.
+  
+  I would also like to thank my family for their constant support and love.
 \end{acknowledgements}
 
 \clearpage
@@ -42,15 +48,85 @@ In this thesis, we investigate the extent to which BDD can be integrated with th
 \pagestyle{myheadings}
 
 \chapter{Introduction}
+This thesis presents an extension to Behaviour Driven Development~(BDD)~\cite{North2006} to support the elicitation, communication, modelling and analysis of non-functional requirements. This extension include concepts and techniques from Goal Oriented Requirements Engineering (GORE)~\cite{Lamsweerde:2001wpba}, and specifically, it allows the specification of goals in BDD and modelling and analysis in Goal Requirements Language (GRL)~\cite{Amyot:2010kd}. This is achieved by integrating goals specifications in Gherkin~\cite{wynne2012cucumber}, a domain specific language for the representation and specification of requirements, and presenting a translator from Gherkin to GRL.
+
+\section{Motivation}
+The primary measure of success of a software system is the degree to which it meets the purpose for which it was intended~\cite{Nuseibeh:2000ub}. Shortcomings in the ways that people learn about, document, agree upon and modify such statements of intent are known causes to many of the problems in software development~\cite{Wiegers2013}. We informally refer to these statements of intent as Requirements and the engineering process to elicit, document, verify, validate and manage them as Requirements Engineering.
+
+The importance of requirements in software engineering cannot be understated. In his essay \emph{No Silver Bullet}~\cite{Brooks1987}, Fred Brooks states that `\emph{The hardest single part of building a software system is deciding precisely what to build}'. More recently, ~\cite{Davis200505} reveals that errors introduced during requirements activities account for 40 to 50 percent of all defects found in a software product.  When arguing for the importance of requirements, \cite{Hull2011} reason that to be well understood by everybody they are generally expressed in natural language and herein lies the challenge: to capture the need or problem completely and unambiguously without resorting to specialist jargon or conventions. The authors follow by positing these needs may not be clearly defined at the start, may conflict or be constrained by factors outside their control or may be influenced by other goals which themselves change in the course of time.
+
+Furthermore, requirements can be classified in multiple and at times conflicting ways. \cite{Glinz:2007ehba} points out that in every current classification scheme there is a distinction between requirements concerning the functionality of a system and all other, often referred to as non-functional requirements. In another paper, the same author arguments why this notion of non-functional requirements is flawed and present a new classification which is based on four facets: \emph{kind} (e.g. function, performance, or constraint), \emph{representation} (e.g. operational, quantitative or qualitative), \emph{satisfaction} (hard or soft), and \emph{role} (e.g. prescriptive or assumptive). The author points out issues with sub-classification, terminology and satisfaction level whereby some requirements are considered \emph{`soft'} in the sense that they can be weakly or strongly satisfied (e.g \emph{The system shall have a good performance}; or \emph{The System shall be secure}). 
+
+The context just described applies to both traditional and agile software development processes. Genrically, a software process is defined as a set of activities, methods, practices, and transformations that are used to develop and maintain software and its associated products~\cite{Cugola:1998htba}. Agile software development approaches have become more popular during the last few years. Several methods have been developed with the aim to be able to deliver software faster and to ensure that the software meets customer changing needs. All these approaches share some common principles: Improved customer satisfaction, adopting requirements, frequently to changing delivering working software, and close collaboration of business people and developers~\cite{Paetsch:2003tl}.
+
+\section{Aim and limitations of study}
+The context described in the previous section justify research aimed at capturing, documenting and communicating requirements using natural language tools and techniques in a precise, complete and unambiguous way, but also with the flexibility and adaptability to allow those requirements to change and evolve through the course of time.
+
+In this these, we do not address the open research question of requirements classification schemes and the, sometimes flawed\cite{Glinz:2007ehba}, separation of functional and non-functional requirements. Instead, we adopt the notion of goals as an objective the system under consideration should achieve. Goal formulations thus refer to intended properties to be ensured; they are optative statements as opposed to indicative ones, and bounded by the subject matter. Goals also cover different types of concerns: functional which are associated with the services to be provided, and non-functional concerns associated with quality of service --such as safety, security, accuracy, performance, and so forth.\cite{Lamsweerde:2001wpba}
+
+
+\underline{\emph{TODO Rephrase:Extracted from Engineering and Managing Software Requirements}}\\
+The main obstacle in decision-driven RE research resides in the desire to solve
+any problem formally and rigorously. This presumes that each problem can be properly described by a formal model and is “solved” just using this model. It equates decision making with finding the optimal solution. According to Roy [51] and Schärlig [57], such thinking was also once dominant in management science and operations research. The reality was that despite enormous progress in optimization and operational research, many questions in the real world could not be answered
+in a satisfactory way. In many real situations, insisting on establishing the ideal model and searching for the numerically optimal solution eventually ends in a deadlock. Such problems have been characterized as “wicked problems” by Rittel and Webber [47].
+
+\section{Contributions}
+
+A reinterpretation of behaviours in BDD as not just specifications of functionality of a system but as statements of goals in the spirit of GORE.
+
+We address the vague nature of early requirements.
+
+\section{Overview of Contents}
+
+\begin{itemize}
+\item Outline the problem
+\item Explain the aim of the research
+\item Set any limits to the scope of the work
+\item Significance of the study
+\item Provide an overview of the thesis structure
+\end{itemize}
+
+\rule{\textwidth}{1pt}
+
+\begin{itemize}
+\item Define Requirements Engineering
+\item Define Software Practices and contrast Traditional vs Agile
+\item Expand on Agile RE
+\item Introduce BDD
+\item Highlight issues with current approaches for RE and BDD
+\item Expand on Functional vs Non-Functional Requirements
+\item Highlight approaches for handling NFRs
+\item Describe GORE and highlight benefits
+\item List Research questions
+\item Describe Thesis Structure 
+\end{itemize}
+
+
+
 
 \chapter{Background}
-\paragraph*{\underline{On Non-Functional Requirements}}\cite{Glinz:2007ehba}
+\label{ch:Background}
+\underline{Start of chapter}
+\paragraph{Link back to previous parts in particular previous chapter}
+\paragraph{State the aim of the chapter}
+\paragraph{Outline how you intend to achieve this aim in the form of an overview of contents}
+
+\section{Agile Requirements Engineering}
+
+\section{BDD}
+
+\section{NFR Research Overview}
+
+\section{Goal Oriented Requirements Engineering}
+
+
+\paragraph*{\underline{On Non-Functional Requirements}}~\cite{Glinz:2007ehba}
 \begin{itemize}
 \item Definition of Requirements Engineering
 \item Multiple Requirements Classification
 \item Formal vs Informal specifications
 \item Functional vs Non-Functional Requirements
-\item Definition of NFRs
+\item Definition of N FRs
 \item Issues with current definition of NFRs
 \paragraph{Definition}
 \begin{itemize}
@@ -72,7 +148,7 @@ In this thesis, we investigate the extent to which BDD can be integrated with th
 \end{itemize}
 \pagebreak
 
-\paragraph*{\underline{A Survey of Non-Functional Requirements in Software Development Process}}\cite{Matoussi:2008wr}
+\paragraph*{\underline{A Survey of Non-Functional Requirements in Software Development Process}}~\cite{Matoussi:2008wr}
 \begin{itemize}
 \item Definition of Requirements Engineering
 \item Formal vs Informal specifications
@@ -123,7 +199,7 @@ In this thesis, we investigate the extent to which BDD can be integrated with th
 \end{itemize}
 \pagebreak
 
-\paragraph*{\underline{On non-functional requirements in software engineering}}\cite{Chung:2009vg}
+\paragraph*{\underline{On non-functional requirements in software engineering}}~\cite{Chung:2009vg}
 \begin{itemize}
 \item Functional vs Non-Functional Requirements
 \item Definition of NFRs
@@ -160,6 +236,25 @@ In this thesis, we investigate the extent to which BDD can be integrated with th
 \end{itemize}
 \end{itemize}
 \end{itemize}
+
+\underline{End of chapter}
+\paragraph{General advice}
+Start with a strong summary of the main findings of this chapter with academic references and relate it with current theory.
+Relates this chapter results to earlier analysis.
+End with a strong lead into next chapter.
+
+\paragraph{Discussion or Analysis}
+\begin{itemize}
+\item What's important
+\item What overall themes can be identified
+\item What can be observed or learned
+\item What limitations or shortcomings have been identified
+\item Situate the chapter within the whole thesis
+\end{itemize}
+\paragraph{Summary}
+\begin{itemize}
+\item Replies to the introduction by briefly identifying the chapter's achievements and sets the scene for the next chapter
+\end{itemize}
 \pagebreak
 
 \chapter{Application and reflection}
@@ -168,8 +263,8 @@ In this thesis, we investigate the extent to which BDD can be integrated with th
 
 \begin{itemize}
 
-\item Benefits of new terminology defined \cite{Glinz:2007ehba}  
-\item Benefits of Reuse Process\cite{Leite:2005wpba}
+\item Benefits of new terminology defined ~\cite{Glinz:2007ehba}  
+\item Benefits of Reuse Process~\cite{Leite:2005wpba}
 
 \end{itemize}
 
@@ -177,338 +272,6 @@ In this thesis, we investigate the extent to which BDD can be integrated with th
 \bibliography{mydissertation}
 
 \appendix
-
-\chapter{Notes on \LaTeX}
-\label{chap:latex}
-
-There are books that you can buy on \LaTeX, but you are unlikely to
-need any of them: the commands mentioned here should see you through.
-If there's something else that you think we should add, let us know!
-
-\section{Letters, words, lines, and paragraphs}
-
-Remember, don't break your chapters up like this unless you really are
-presenting something along the lines of a manual.   
-
-\subsection{Special characters}
-
-{\LaTeX} treats the following characters as special cases: 
-\begin{itemize}\raggedright
-\item \verb|\| is the escape character, and indicates the beginning of
-  a command, as in \verb|\chapter|; if you want a backslash symbol,
-  write \verb|\backslash| \emph{in math mode (see below!)}
-\item \verb|%| comments out the remainder of the line, so if you need
-  a percent symbol, write \verb|\%|
-\item \verb|$| puts you into math mode, which you probably won't need
-  unless you're typesetting some mathematics; if you want a dollar
-  symbol, write \verb|\$|.  If you want the pound sign, type
-  \verb|\pounds|. 
-\item \verb|{| opens a group of characters for interpretation, and
-    \verb|}| closes one.  This can be used to delimit an argument to a
-  command: e.g. \verb|\chapter{Name}|.  It can also be used to limit
-  the scope of some declaration: e.g. 
-  \verb|{\bfseries some text in bold}|.  
-  If you want the braces themselves, you'll need \verb|\{|
-  and \verb|\}|.
-\item \verb|&| is used as a column separator in the \verb|\tabular|
-  environment: see Section~\ref{sec:tabular} below.  If you need an
-  ampersand symbol, you can write \verb|\&|. 
-\item \verb|[| and \verb|]| after a command are used to delimit an
-  optional argument.  If you find that this is happening when you
-  don't want it to, then you can put \verb|\relax| between the command
-  and the opening square bracket---e.g. 
-  \verb|\item \relax [some text in brackets]|
-\item \verb|`| and \verb|'| produce opening and closing quotation
-  marks, respectively; they do the right thing when doubled.  Take
-  care to use these correctly!
-\end{itemize}
-
-\subsection{Breaking}
-
-{\LaTeX} does this kind of thing for you, but you need to show it how
-your text is divided into paragraphs.  Just leave a blank line to do
-this.  If you can't leave a blank line (really?) you can type
-\verb|\par| instead.
-
-In running text, a new paragraph should start with an indented line,
-unless it's the first paragraph after a heading.  This will happen
-automatically.  Don't mess with this: that is, don't redefine
-\verb|\parindent| and \verb|\parskip|.  If you need to tell a specific
-paragraph \emph{not} to indent the first line, and you really mean to
-do that, then you can type \verb|\noindent| just before it starts.  
-
-\begin{itemize}\raggedright
-\item \verb|\\| produces an immediate line break.  Do not use this in
-  running text unless you absolutely have to; never use it to create
-  paragraph breaks---just use a blank line. 
-\item Use \verb|\clearpage| to produce a page break.  You shouldn't
-  really do this kind of thing until you're putting the finishing
-  touches to your document.
-\end{itemize}
-
-If {\LaTeX} is complaining about ``overfull hboxs'', that's probably
-because it can't break a line where it wants to.  If the box in
-question is overfull by more than 10pt (take a look at the typeset
-version and see if you can spot it) then try reorganising the line or
-paragraph.
-
-\subsection{Fonts}
-
-You might not need to insert any font commands in your running text,
-but in case you want to: 
-\begin{itemize}\raggedright
-\item \verb|\emph| puts its argument in emphatic font---usually italic
-  or slanted: e.g.\\ ``\verb|\emph{your} mileage|'' produces
-  ``\emph{your} mileage''.
-\item
-  \verb|\verb| does more than just put its argument in typewriter 
-  font, it renders it verbatim: spaces matter. %
-  Exceptionally, this command requires that its argument be delimited
-  by the next symbol it sees: %
-  e.g.  \texttt{$\mathtt\backslash$verb|st\ uff|} will produce
-  \verb|st uff|.  Also, the argument to
-  \verb|\verb| can't include a linebreak: for that, you need a
-  \verb|verbatim| environment.
-\item \verb|\textbf|, \verb|\textsl|, \verb|\textit|, \verb|\textsf|,
-  and \verb|\texttt| put their arguments in bold, slanted, italic,
-  sansserif, or typewriter font, respectively.
-\item \verb|\bfseries|, \verb|\slshape|, \verb|\itfamily|,
-  \verb|\sffamily|, and \verb|\ttfamily| are the corresponding
-  declarations, and apply for the rest of the current enclosing group.
-\item \verb|\small| and \verb|\large| do what their names suggest: you
-  might want to use \verb|\small| to shrink a table to fit, but
-  otherwise you shouldn't need to use these.  
-\end{itemize}
-
-\section{Environments}
-
-\subsection{Lists}
-
-Environment commands in {\LaTeX} are more like the familiar markup of
-HTML or XML: they have a \verb|\begin| and an \verb|\end|.  
-\begin{itemize}\raggedright
-\item \verb|\begin{enumerate} \item ... \item ... \end{enumerate}|
-  produces an enumerated list, with command \verb|\item| marking the
-  beginning of a new item with a label. 
-\item \verb|\begin{itemize} \item ... \item ... \end{itemize}| does
-  the same, but the labels are all bullets, or dashes, or circles,
-  depending upon how deep you go.
-\item \verb|\|\verb|begin{verbatim} ... \end{verbatim}| renders
-everything inside it, well, in verbatim: in typewriter font, with
-newlines and spaces, and even the special symbols, appearing as they
-are.  This is ideal for presenting program code or model text.
-\item \verb|\begin{quote} ... \end{quote}| indents the enclosed
-  material to the same extent as an itemized or enumerated list.
-\end{itemize}
-The {\LaTeX} \verb|description| environment is also available, but is
-a little awkward in comparison to those above.  A better solution may
-be to use a \verb|\subsubsection| or \verb|\paragraph| command to
-introduce each of the items, if you absolutely have to do this.  
-
-\subsection{Figures and tables}
-\label{sec:tabular}
-
-Figures and tables are \emph{floats} in \LaTeX: they will appear near
-to the surrounding text if they can, but they might also float away
-only to wash up later in the document.  
-\begin{itemize}\raggedright
-\item A figure environment can be used to import a graphic into the
-  document (don't use the archaic {\LaTeX} drawing commands unless you
-  have a good reason to).  Any graphic will do, and you shouldn't
-  need to specify an extension.  
-\begin{verbatim}
-  \begin{figure}[t]
-    \centering
-    \includegraphics{layercake}
-
-    \caption{How to have your cake and eat it}
-    \label{fig:layercake}
-  \end{figure}
-\end{verbatim}
-  The \verb|t| option says `put this at the top of a page'.  \verb|h|
-  says `put it here instead'.  You can add an exclamation mark in each
-  case to (try to) insist: e.g. \verb|t!|.  You shouldn't have to,
-  though. 
-
-  The \verb|\caption| command creates a caption using the supplied
-  text, and the \verb|\label| command defines a label for referring to
-  this figure in the text (see Section~\ref{sec:labelling} below).
-\item The \verb|\includegraphics| command accepts optional arguments
-  in square brackets before the name of the graphic file.  These can
-  be used to determine the size and orientation of the picture.  The
-  most useful are:
-  \begin{itemize}
-  \item \verb|\includegraphics[scale=0.8]{...}| to scale the graphic
-    by, for example, \verb|0.8|, or 80\%.
-  \item \verb|\includegraphics[width=6cm]{...}| to set the
-    width of the graphic to, for example, 6cm.  
-  \item \verb|\includegraphics[height=6cm]{...}| to set the
-    height of the graphic to, for example, 6cm.  
-  \end{itemize}
-\item A table environment is pretty much the same thing, although
-  you're quite likely to be using {\LaTeX}'s table making commands
-  instead of importing a table drawn in another package and exported
-  as a graphic.  
-\begin{verbatim}
-  \begin{table}[t]
-    \centering
-    \begin{tabular}{l|l}
-      Person & Score \\ \hline
-      Susan & 30 \\
-      Peter & 40 
-    \end{tabular}
-    \caption{Tennis score when rain stopped play}
-    \label{tab:tennis}
-  \end{table}
-\end{verbatim}
-\item You can also set tables as displayed material in running text:
-  in this case, you want to use the \verb|tabular| environment,
-  perhaps inserted within a \verb|quote| environment or a
-  \verb|center| environment (note the spelling) to get the alignment
-  correct.
-\begin{verbatim}
-  \begin{quote}
-    \begin{tabular}{l|l}
-      Person & Score \\ \hline
-      Susan & 30 \\
-      Peter & 40 
-    \end{tabular}
-    \caption{Tennis score when rain stopped play}
-    \label{tab:tennis}
-  \end{quote}
-\end{verbatim}
-  produces: 
-  \begin{quote}
-    \begin{tabular}{l|l}
-      Person & Score \\ \hline
-      Susan & 30 \\
-      Peter & 40 
-    \end{tabular}
-  \end{quote}
-  Note that there is no caption here, nor is there a label. 
-\item The \verb|tabular| command takes a `table specification' as a
-  mandatory argument:
-  \begin{itemize}
-  \item \verb|l|, \verb|c|, and \verb|r| declare columns with material
-    to be aligned to the left, centred, and aligned to the right,
-    respectively.
-  \item \verb+|+ denotes a vertical line.
-  \end{itemize}
-  After this argument comes the beginning of the first row. 
-
-  Each row can contain up to $n - 1$ ampersands (`\verb|&|'), where
-  $n$ is the number of columns declared: these act as delimiters
-  between column material.  A row is ended by a double backslash
-  (`\verb|\\|'), which takes an optional argument indicating any
-  additional vertical space required before the next row:
-  e.g. \verb|\\[2cm]|.  A \verb|\hline| after \verb|\\| produces a
-  horizontal rule across all of the columns before the next row.  You
-  can use two adjacent \verb|\hline| commands to produce a double
-  rule.
-\end{itemize}
-
-\section{Sections, labels, references, and citations}
-
-\subsection{Sections}
-
-Your dissertation should be divided into a number of chapters, each
-introduced using a \verb|\chapter| command with a single, mandatory
-argument: the name of the chapter.  For example, this chapter, in the
-appendix of the template document, begins with the command
-\begin{verbatim}
-  \chapter{Notes on \LaTeX}
-\end{verbatim}
-Your chapters can be divided into sections, and into subsections,
-using the \verb|\section| and \verb|subsection| commands,
-respectively.  Again, these take the name of the section or subsection
-as their single, mandatory argument.  
-
-Further levels of sectioning are available---\verb|\subsubsection|,
-\verb|paragraph|, and \verb|subparagraph|---but try not to use these
-unless what you are writing is intended to resemble a reference
-manual.   
-
-\subsection{Labels and (cross-)references}
-\label{sec:labelling}
-
-You should use labels to identify any chapters, sections, subsections,
-items (in enumerated lists), figures, or tables that you wish to refer
-to.  You can do this using the \verb|\label| command, with whatever
-text you wish to use as a key: for example, 
-\begin{verbatim}
-  \chapter{Notes on \LaTeX}
-  \label{chap:latex}
-\end{verbatim}
-might be an appropriate label for this chapter.  You can then refer to
-this chapter by writing 
-\begin{verbatim}
-  Chapter~\ref{chap:latex}
-\end{verbatim}
-and {\LaTeX} will insert the appropriate number (provided that you've
-run it at least once since inserting the corresponding \verb|label|).
-Since we're in the first chapter of the Appendix here, this is going
-to produce 
-\begin{quote}
-  Chapter~\ref{chap:latex}
-\end{quote}
-For floats---figures and tables---you should insert the \verb|\label|
-command after the \verb|\caption|.  Note that since you are referring
-to a specific item, you should capitalise `Chapter', `Section',
-`Figure', or `Table'.  It is sufficient to say `Section' when
-referring to smaller divisions: e.g. subsections. 
-
-\subsection{Citations}
-
-Although you can construct and maintain a bibliography by hand, it is
-far more efficient to make use of the \verb|BibTeX| program.  To do
-this, you create a \verb|.bib| file to hold the references that you
-might wish to use.  You then place the commands
-\begin{verbatim}
-  \bibliographystyle{plain}
-  \bibliography{example}
-\end{verbatim}
-at the appropriate point in your document, where \verb|example| is
-the name of your \verb|.bib| file (the extension is not required). 
-
-Each entry in your \verb|.bib| file will start with a key (after an
-\verb|@| command identifying the document type).  For example,  
-\begin{verbatim}
-@article{exampleref,
-  author = {Barry Andrews},
-  title = {{Preparing an MSc Project Proposal}},
-  journal = {What Project? Monthly},
-  publisher = {Random House},
-  year = {2009}
-}
-\end{verbatim}
-The key here is `\verb|exampleref|'.  We can now `cite' this article
-in our document, simply by using this key as an argument to the
-\verb|\cite| command.   For example,
-\begin{verbatim}
-most of this information will be useful to those preparing a project
-proposal~\cite{exampleref}
-\end{verbatim}
-will produce
-\begin{quote}\raggedright
-  most of this information will be useful to those preparing a project
-  proposal~\cite{exampleref}
-\end{quote}
-To cite more than one reference at the same point, simply include the
-respective keys in the argument to \verb|\cite|, separated by commas.
-
-\section{Extras}
-
-If you want to use mathematics, you should obtain the \verb|zed.sty|
-package: email \url{Jim.Davies@comlab.ox.ac.uk} to ask.  If you want
-to use fonts other than the default \emph{Computer Modern} (CM), then
-you might like to try adding
-\begin{verbatim}
-  \usepackage{times}
-\end{verbatim}
-between then \verb|\documentclass| and \verb|\begin{document}|
-  commands.  \verb|newcent|, \verb|utopia|, \verb|palatino| are other
-  packages that define alternative fontsets.  It's probably best to
-  stick with CM or Times, however.  
 
 \end{document}
 
