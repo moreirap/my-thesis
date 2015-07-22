@@ -1,6 +1,13 @@
 \documentclass[dissertation]{softeng}
 
 \usepackage{times}
+\usepackage[utf8]{inputenc}
+%\PassOptionsToPackage{square,authoryear}{natbib}
+%    \usepackage{natbib}
+\usepackage{csquotes}
+\usepackage[backend=biber,hyperref=false,natbib=true,bibstyle=authoryear,citestyle=authoryear,url=false,isbn=false,doi=false]{biblatex}
+
+\addbibresource{mydissertation.bib}
 
 \title{Extending BDD\\A systematic approach to handling non-functional requirements}
 \author{Pedro Moreira}
@@ -14,15 +21,13 @@
 
 
 \begin{abstract}
-Software engineering methods have evolved from having a prescribed and sequential nature to using more adaptable and iterative approaches. Such is the case with Behaviour Driven Development (BDD)~\cite{North2006,Smart201410}, a recent member of the family of agile methodologies addressing the correct specification of the behaviour characteristics of a system, by focusing on close collaboration and identification of examples.
+Software engineering methods have evolved from having a prescribed and sequential nature to using more adaptable and iterative approaches. Such is the case with Behaviour Driven Development (BDD)~\citep{North2006}, a recent member of the family of agile methodologies addressing the correct specification of the behaviour characteristics of a system, by focusing on close collaboration and identification of examples.
 
-Whilst BDD is very successful in ensuring developed software meets its functional requirements, it is largely silent regarding the systematic treatment of its non-functional counterparts~--- descriptions of how the system should behave with respect to some quality attribute such as performance, reusability, etc.
+Whilst BDD is very successful in ensuring developed software meets its functional requirements, it is largely silent regarding the systematic treatment of its non-functional counterparts, descriptions of how the system should behave with respect to some quality attribute such as performance, reusability, etc.
 
-Historically, the systematic treatment of non-functional requirements (NFRs) in software engineering is categorised as being either product-oriented based on a quantitative approach aimed at evaluating the degree to which a system meets its non-functional requirements or process-oriented, qualitative in nature and where NFRs are used to drive the software design process.
+Historically, the systematic treatment of non-functional requirements (NFRs) in software engineering is categorised as being either product-oriented and based on a quantitative approach aimed at evaluating the degree to which a system meets its NFRs or process-oriented, qualitative in nature and where they are used to drive the software design process. Examples of the latter category, are the NFR Framework~\citep{Chung2000} -- a structured approach to represent and reason about non-functional requirements -- and the goal-oriented requirements language (GRL)~\citep{Amyot2010} that provides support for evaluation and analysis of the most appropriate trade-offs among (often conflicting) goals of stakeholders. 
 
-One example of the latter category, is the NFR Framework~\cite{Chung2000}, a structured approach to represent and reason about non-functional requirements. 
-
-In this thesis, we investigate the extent to which BDD can be integrated with the NFR Framework, with the aim of handling non-functional requirements in an explicit and systematic way whilst respecting the principles and philosophy behind Agile.
+In this thesis, we investigate the extent to which goal-oriented principles can be integrated in BDD, with the aim of handling non-functional requirements in an explicit and systematic way, whilst respecting the principles and philosophy behind agile development.
 \end{abstract}
 
 \clearpage
@@ -31,7 +36,9 @@ In this thesis, we investigate the extent to which BDD can be integrated with th
   I would like to express my deepest gratitude to my supervisor, Dr Jeremy Gibbons, for his
   guidance, support, comments and encouragement.
   
-  I would also like to thank my family for their constant support and love.
+  I would also like to thank my family for their constant support and love, and in particular my wife, Tamara Moreira, for her endless patience whenever I so often disappeared to my office to work on this thesis.
+  
+  \emph{The author confirms that}: this dissertation does not contain material previously submitted for another degree or academic award; and the work presented here is the author's own, except where otherwise stated.
 \end{acknowledgements}
 
 \clearpage
@@ -48,201 +55,103 @@ In this thesis, we investigate the extent to which BDD can be integrated with th
 \pagestyle{myheadings}
 
 \chapter{Introduction}
-This thesis presents an extension to Behaviour Driven Development~(BDD)~\cite{North2006} to support the elicitation, communication, modelling and analysis of non-functional requirements. This extension include concepts and techniques from Goal Oriented Requirements Engineering (GORE)~\cite{Lamsweerde:2001wpba}, and specifically, it allows the specification of goals in BDD and modelling and analysis in Goal Requirements Language (GRL)~\cite{Amyot:2010kd}. This is achieved by integrating goals specifications in Gherkin~\cite{wynne2012cucumber}, a domain specific language for the representation and specification of requirements, and presenting a translator from Gherkin to GRL.
+This thesis presents an extension to Behaviour Driven Development~(BDD)~\citep{North2006} to support the elicitation, communication, modelling and analysis of non-functional requirements. It includes concepts and techniques from goal-oriented requirements engineering (GORE)~\citep{Lamsweerde:2001wpba}, and more specifically, allows the definition of goals in BDD and modelling and analysis in Goal Requirements Language (GRL)~\citep{Amyot2010}. This is achieved by integrating notions of goals in Gherkin~\citep{wynne2012cucumber} -- a domain specific language for the representation and specification of requirements. We also present a translator from Gherkin to GRL, allowing Gherkin-defined actors and goals satisfactions levels to be subject to qualitative and quantitative analysis in a GRL tool.
 
 \section{Motivation}
-The primary measure of success of a software system is the degree to which it meets the purpose for which it was intended~\cite{Nuseibeh:2000ub}. Shortcomings in the ways that people learn about, document, agree upon and modify such statements of intent are known causes to many of the problems in software development~\cite{Wiegers2013}. We informally refer to these statements of intent as Requirements and the engineering process to elicit, document, verify, validate and manage them as Requirements Engineering.
+The primary measure of success of a software system is the degree to which it meets the purpose for which it was intended~\citep{Nuseibeh:2000ub}. Shortcomings in the ways that people learn about, document, agree upon and modify such statements of intent are known causes to many of the problems in software development~\citep{Wiegers2013}. We informally refer to these statements of intent as Requirements and the engineering process to elicit, document, verify, validate and manage them as Requirements Engineering~\footnote{These topics will be explored in depth in Chapter~\ref{ch:Background}}.
 
-The importance of requirements in software engineering cannot be understated. In his essay \emph{No Silver Bullet}~\cite{Brooks1987}, Fred Brooks states that `\emph{The hardest single part of building a software system is deciding precisely what to build}'. More recently, ~\cite{Davis200505} reveals that errors introduced during requirements activities account for 40 to 50 percent of all defects found in a software product.  When arguing for the importance of requirements, \cite{Hull2011} reason that to be well understood by everybody they are generally expressed in natural language and herein lies the challenge: to capture the need or problem completely and unambiguously without resorting to specialist jargon or conventions. The authors follow by positing these needs may not be clearly defined at the start, may conflict or be constrained by factors outside their control or may be influenced by other goals which themselves change in the course of time.
+The importance of requirements in software engineering cannot be understated. In his essay \emph{No Silver Bullet},~\citet{Brooks1987} states that `\emph{The hardest single part of building a software system is deciding precisely what to build}'. More recently, ~\citet{Davis200505} reveals that errors introduced during requirements activities account for 40 to 50 percent of all defects found in a software product.  When arguing for the importance of requirements, \citet{Hull2011} reason that to be well understood by everybody they are generally expressed in natural language and herein lies the challenge: to capture the need or problem completely and unambiguously without resorting to specialist jargon or conventions. The authors follow by positing these needs may not be clearly defined at the start, may conflict or be constrained by factors outside their control or may be influenced by other goals which themselves change in the course of time.
 
-Furthermore, requirements can be classified in multiple and at times conflicting ways. \cite{Glinz:2007ehba} points out that in every current classification scheme there is a distinction between requirements concerning the functionality of a system and all other, often referred to as non-functional requirements. In another paper, the same author arguments why this notion of non-functional requirements is flawed and present a new classification which is based on four facets: \emph{kind} (e.g. function, performance, or constraint), \emph{representation} (e.g. operational, quantitative or qualitative), \emph{satisfaction} (hard or soft), and \emph{role} (e.g. prescriptive or assumptive). The author points out issues with sub-classification, terminology and satisfaction level whereby some requirements are considered \emph{`soft'} in the sense that they can be weakly or strongly satisfied (e.g \emph{The system shall have a good performance}; or \emph{The System shall be secure}). 
+Furthermore, requirements can be classified in multiple and at times conflicting ways. \citet{Glinz:2007ehba} points out that in every current classification scheme there is a distinction between requirements concerning the functionality of a system and all other, often referred to as non-functional requirements. In \citetitle{Glinz:2005unba}, the same author points out issues with current classification schemes such as sub-classification, terminology and satisfaction level whereby some requirements are considered \emph{`soft'} in the sense that they can be weakly or strongly satisfied (e.g \emph{The system shall have a good performance}; or \emph{The System shall be secure}). \citet{Chung:2009vg} contribute that, in spite of this separation, most existing requirement models and requirements specification languages lack a proper treatment of non-functional requirements. 
 
-The context just described applies to both traditional and agile software development processes. Genrically, a software process is defined as a set of activities, methods, practices, and transformations that are used to develop and maintain software and its associated products~\cite{Cugola:1998htba}. Agile software development approaches have become more popular during the last few years. Several methods have been developed with the aim to be able to deliver software faster and to ensure that the software meets customer changing needs. All these approaches share some common principles: Improved customer satisfaction, adopting requirements, frequently to changing delivering working software, and close collaboration of business people and developers~\cite{Paetsch:2003tl}.
+In addition, this separation of functional and non-functional requirements has lead to the latter being either neglected, addressed later in a project or completely ignored. This problem applies to both traditional and agile software development processes. Generically, a software process is defined as a set of activities, methods, practices, and transformations that are used to develop and maintain software and its associated products~\citep{Cugola:1998htba}. Agile software development approaches have become more popular during the last few years. Several methods have been developed with the aim to be able to deliver software faster and to ensure that the software meets customer changing needs. All these approaches share some common principles: Improved customer satisfaction, adopting requirements, frequently to changing delivering working software, and close collaboration of business people and developers~\citep{Paetsch:2003tl}.
+
+One of such agile approaches is Behaviour Driven Development (BDD)~\citep{North2006}. The understanding of BDD is far from clear and unanimous~\citep{Solis0}. Some authors refer to BDD as a development process~\citep{Smart201410}, others state that it is not a fully fledged software development methodology but rather `\emph{supplement other methodologies, provide rigour in specifications and testing, enhance communication between various stakeholders and members of software development teams, reduce unnecessary rework, and facilitate change}'~\citep{Adzic201106}.
+
+In spite of the above mentioned differences of interpretation, it is unanimously accepted that BDD focus on taking business goals into a sufficiently set of software features that contribute to achieve these business goals. This process makes use of Gherkin~\citep{wynne2012cucumber} -- a domain specific language which promotes the use of a ubiquitous language\footnote{\citet{evans2004domain} first introduced that term in \citetitle{evans2004domain}}  that business people can understand -- to describe and model a system. However the focus has been on functionality and quality characteristics such as performance, security, maintainability are not explicitly addressed. To the best of the author's knowledge, the single exception to the above is the work of \citet{barmi2011automated} but with restricted applicability to probabilistic -- those that can be written using probabilistic statements~\citep{grunske2008specification} -- non-functional requirements only.
+
+None of these agile practices however, treat non-functional requirements in a systematic way, certainly not in a way that allows reasoning about which requirements interdependencies may exist, and the positive or negative influences each may have on each other. Among many proposals, goal-oriented approaches were the first to treat non-functional requirements as first-class citizens.~\citet{Mylopoulos:1999jh} observe that goal-oriented requirements engineering is generally complementary to other approaches and, in particular, is well suited to analyzing requirements early in the software development cycle, especially with respect to non-functional requirements and the evaluation of alternatives. 
+
+It seems only logical and expectable that, improvements to the discovery and communication of requirements, and in particular non-functional requirements, will lead to an increase in success rates of software projects.
 
 \section{Aim and limitations of study}
-The context described in the previous section justify research aimed at capturing, documenting and communicating requirements using natural language tools and techniques in a precise, complete and unambiguous way, but also with the flexibility and adaptability to allow those requirements to change and evolve through the course of time.
+The context described in the previous section justify research aimed at capturing, documenting and communicating requirements using natural language tools and techniques in a precise, complete and unambiguous way, but also with the flexibility and adaptability to allow requirements to change and evolve through the course of time.
 
-In this these, we do not address the open research question of requirements classification schemes and the, sometimes flawed\cite{Glinz:2007ehba}, separation of functional and non-functional requirements. Instead, we adopt the notion of goals as an objective the system under consideration should achieve. Goal formulations thus refer to intended properties to be ensured; they are optative statements as opposed to indicative ones, and bounded by the subject matter. Goals also cover different types of concerns: functional which are associated with the services to be provided, and non-functional concerns associated with quality of service --such as safety, security, accuracy, performance, and so forth.\cite{Lamsweerde:2001wpba}
+In this thesis, we investigate the extent to which goal-oriented principles can be integrated in BDD, with the aim of handling non-functional requirements in an explicit and systematic way, whilst respecting the principles and philosophy behind agile development. In particular, we consider how BDD can be extended and in particular Gherkin can be modified to incorporate actor and goal concepts, as defined and treated in GRL.
 
+We do not however investigate the integration of GRL with use case maps (UCM), as part of the User Requirements Notation~\citep{liu2004designing}. UCM targets modelling scenarios of functional or operational requirements and performance and architectural reasoning. This is left as an area for further research.
 
-\underline{\emph{TODO Rephrase:Extracted from Engineering and Managing Software Requirements}}\\
-The main obstacle in decision-driven RE research resides in the desire to solve
-any problem formally and rigorously. This presumes that each problem can be properly described by a formal model and is “solved” just using this model. It equates decision making with finding the optimal solution. According to Roy [51] and Schärlig [57], such thinking was also once dominant in management science and operations research. The reality was that despite enormous progress in optimization and operational research, many questions in the real world could not be answered
-in a satisfactory way. In many real situations, insisting on establishing the ideal model and searching for the numerically optimal solution eventually ends in a deadlock. Such problems have been characterized as “wicked problems” by Rittel and Webber [47].
+We also do not aim at providing another classification scheme and address the, sometimes artificial, separation of functional and non-functional requirements. Instead, we adopt the notion of goals as an objective the system under consideration should achieve and goals formulations as properties to be ensured. We share the view that goals cover different types of concerns: functional which are associated with the services to be provided, and non-functional concerns associated with quality of service such as safety, security, accuracy, performance, and so forth~\citep{Lamsweerde:2001wpba}.
 
-\section{Contributions}
+Finally, we do not apply this technique to a specific non-functional requirement or use any particular taxonomy as our approach is independent of the NFR being addressed or taxonomy chosen.
 
-A reinterpretation of behaviours in BDD as not just specifications of functionality of a system but as statements of goals in the spirit of GORE.
+\section{Significance of the study}
 
-We address the vague nature of early requirements.
+By reinterpreting behaviours in BDD as not just specifications of functionality of a system but as statements of goals, this thesis brings the following contributions to BDD:
+
+\begin{center}
+\begin{itemize}
+\item Allows non-functional requirements to be specified in natural language form in Gherkin
+\item Allows Gherkin specifications to be converted into goal models and imported and used in jUCMNav
+\item Allows BDD to consider all non-functional requirements, not just those that are technical, but still relevant for a successful product delivery
+\item Brings to BDD the capability to perform qualitative and quantitative satisfaction levels of actors and goals 
+\end{itemize}
+\end{center}
+
+By allowing goals to be elicited and specified in Gherkin, this thesis brings the following contributions to goal-oriented requirements engineering:
+
+\begin{center}
+\begin{itemize}
+\item Allows goals elicitation to occur in Gherkin using natural language and therefore more suitable for discussion and fostering communication
+\item Brings the benefits of executable specifications in BDD to goal formulations
+\end{itemize}
+\end{center}
+
 
 \section{Overview of Contents}
 
-\begin{itemize}
-\item Outline the problem
-\item Explain the aim of the research
-\item Set any limits to the scope of the work
-\item Significance of the study
-\item Provide an overview of the thesis structure
-\end{itemize}
+We have now reviewed the motivation for this study, stated the aim of the research and identified the contributions our work brings to BDD and goal-oriented requirements engineering and the research community in general. The rest of the thesis is organised as follows:
 
-\rule{\textwidth}{1pt}
+Chapter~\ref{ch:Background} contains all the necessary background material to understand the remainder of the thesis and includes: section~\ref{ch:Background:sec:agore} on requirements engineering and in particular, the approaches taken by agile processes; section~\ref{ch:Background:sec:bdd} on behaviour-driven development, describing the principles and practices of this popular agile process; section~\ref{ch:Background:sec:nfr_research} presenting an overview of the research concerning ways to handle non-functional requirements in software engineering and section~\ref{ch:Background:sec:gore} on goal-oriented requirements engineering with a focus on GRL and with a description of jUCMNav~\citep{Amyot2010}, an editor for GRL models.
 
-\begin{itemize}
-\item Define Requirements Engineering
-\item Define Software Practices and contrast Traditional vs Agile
-\item Expand on Agile RE
-\item Introduce BDD
-\item Highlight issues with current approaches for RE and BDD
-\item Expand on Functional vs Non-Functional Requirements
-\item Highlight approaches for handling NFRs
-\item Describe GORE and highlight benefits
-\item List Research questions
-\item Describe Thesis Structure 
-\end{itemize}
+Chapter~\ref{ch:Extendingbdd} is the core of the thesis and contains details of extensions to Gherkin; mapping of Gherkin elements to GRL such as actors and intentional elements and a description of a translator from Gherkin to an XML-based interchange format to be used in jUCMNav.
 
-
-
+Chapter~\ref{ch:Conclusion} contains implications of findings, concluding thoughts, identifies limitations of study and suggests topics for future research.
 
 \chapter{Background}
 \label{ch:Background}
-\underline{Start of chapter}
-\paragraph{Link back to previous parts in particular previous chapter}
-\paragraph{State the aim of the chapter}
-\paragraph{Outline how you intend to achieve this aim in the form of an overview of contents}
 
 \section{Agile Requirements Engineering}
+\label{ch:Background:sec:agore}
 
 \section{BDD}
+\label{ch:Background:sec:bdd}
 
 \section{NFR Research Overview}
+\label{ch:Background:sec:nfr_research}
 
 \section{Goal Oriented Requirements Engineering}
+\label{ch:Background:sec:gore}
 
-
-\paragraph*{\underline{On Non-Functional Requirements}}~\cite{Glinz:2007ehba}
-\begin{itemize}
-\item Definition of Requirements Engineering
-\item Multiple Requirements Classification
-\item Formal vs Informal specifications
-\item Functional vs Non-Functional Requirements
-\item Definition of N FRs
-\item Issues with current definition of NFRs
-\paragraph{Definition}
-\begin{itemize}
-\item Terminology
-\item Scope
-\item Misconceptions
-\end{itemize}
-\paragraph{Classification}
-\begin{itemize}
-\item Sub-Classification
-\item Concepts
-\end{itemize}
-\paragraph{Representation}
-\begin{itemize}
-\item Representation-Dependant
-\item Location
-\item Traceability
-\end{itemize}
-\end{itemize}
 \pagebreak
 
-\paragraph*{\underline{A Survey of Non-Functional Requirements in Software Development Process}}~\cite{Matoussi:2008wr}
-\begin{itemize}
-\item Definition of Requirements Engineering
-\item Formal vs Informal specifications
-\item Definition of NFRs
-\item Issues with current definition of NFRs
+\chapter{Extending behaviour-driven development}
+\label{ch:Extendingbdd}
 
-\paragraph{NFR Background Information}
-\subparagraph{Requirements Analysis and Specification Level}
-\begin{itemize}
-\item Informal and semi-formal
-\begin{itemize}
-\item NFR Framework
-\item Dissatisfaction driven approach
-\item CEI's Quality Attribute Taxonomy
-\item Use Cases based
-\item PREM
-\item Misuse Cases
-\item KAOS
-\end{itemize}
-\item Formal
-\begin{itemize}
-\item FDAF (Formal Design Analysis Framework)
-\item Specification Languages 
-\item NoFun
-\item Z
-\end{itemize}
-\end{itemize}
-\subparagraph{Design Level}
-\begin{itemize}
-\item Use Cases and Goal Driven 
-\item OONFR
-\item UML based
-\end{itemize}
-\subparagraph{Implementation Level}
-\begin{itemize}
-\item Constraint and Object Oriented Programming
-\item ADA
-\item Exception Handling
-\item Combining Rules and Object Orientation
-\end{itemize}
-\subparagraph{Complete approaches}
-\begin{itemize}
-\item FRIDA
-\item NFR Reuse Process
-\item BMethod
-\item Tropos / Formal Tropos
-\end{itemize}
-\end{itemize}
-\pagebreak
+\chapter{Conclusion}
+\label{ch:Conclusion}
 
-\paragraph*{\underline{On non-functional requirements in software engineering}}~\cite{Chung:2009vg}
-\begin{itemize}
-\item Functional vs Non-Functional Requirements
-\item Definition of NFRs
-\item{Classification Schemes}
-\begin{itemize}
-\item Basic and extra quality
-\item Concerns
-\item ISO/IEC 9126
-\item NFR Frameowork based
-\item Roman's Taxonomy
-\item Software Quality Trees
-\item FURPS
-\end{itemize}
-\item Issues with Classification Schemes
-\item{Representations}
-\subparagraph{Textual}
-\begin{itemize}
-\item IEEE 830
-\item Volere
-\item System Analysis (SADT)
-\end{itemize}
-\subparagraph{Trees and Lists}
-\subparagraph{Use Cases and Misuse Cases}
-\subparagraph{Restrictions over Scenarios}
-\subparagraph{Goal oriented approaches}
-\begin{itemize}
-\item KAOS
-\item NFR Framework
-\item{i* Family}
-\begin{itemize}
-\item i*
-\item Tropos
-\item GRL
-\end{itemize}
-\end{itemize}
-\end{itemize}
+\appendix
 
-\underline{End of chapter}
+\chapter{TO be Removed: typical chapter contents}
+
+\underline{Start of chapter}
 \paragraph{General advice}
-Start with a strong summary of the main findings of this chapter with academic references and relate it with current theory.
-Relates this chapter results to earlier analysis.
-End with a strong lead into next chapter.
+Link back to previous parts in particular previous chapter\\
+State the aim of the chapter\\
+Outline how you intend to achieve this aim in the form of an overview of contents\\
 
+\noindent\underline{Contents}
 \paragraph{Discussion or Analysis}
 \begin{itemize}
 \item What's important
@@ -255,23 +164,15 @@ End with a strong lead into next chapter.
 \begin{itemize}
 \item Replies to the introduction by briefly identifying the chapter's achievements and sets the scene for the next chapter
 \end{itemize}
-\pagebreak
 
-\chapter{Application and reflection}
+\noindent\underline{End of chapter}
+\paragraph{General advice}
+Start with a strong summary of the main findings of this chapter with academic references and relate it with current theory.\\
+Relates this chapter results to earlier analysis.\\
+End with a strong lead into next chapter.\\
 
-\chapter{Conclusion}
-
-\begin{itemize}
-
-\item Benefits of new terminology defined ~\cite{Glinz:2007ehba}  
-\item Benefits of Reuse Process~\cite{Leite:2005wpba}
-
-\end{itemize}
-
-\bibliographystyle{apalike}
-\bibliography{mydissertation}
-
-\appendix
+%\bibliographystyle{plain}
+%\bibliography{mydissertation}
+\printbibliography
 
 \end{document}
-
