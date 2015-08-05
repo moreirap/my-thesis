@@ -1,0 +1,3 @@
+Relationships among features, user requirements, and functional requirements
+
+illustrates a feature tree, an analysis model that shows how a feature can be hierarchically decomposed into a set of smaller features, which relate to specific user requirements and lead to specifying sets of functional requirements

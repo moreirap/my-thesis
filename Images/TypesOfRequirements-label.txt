@@ -1,0 +1,1 @@
+Relationships among several types of requirements information. Solid arrows mean “are stored in”; dotted arrows mean “are the origin of” or “influence”.
