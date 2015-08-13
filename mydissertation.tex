@@ -1,4 +1,5 @@
-\documentclass[dissertation]{softeng}
+%\documentclass[dissertation,draft]{softeng}
+\documentclass[dissertation,final]{softeng}
 
 \usepackage{times}
 \usepackage[utf8]{inputenc}
@@ -47,6 +48,7 @@
 \usepackage{array}
 \usepackage{colortbl}
 \usepackage{tabularx}
+\usepackage{rotating}
 \usepackage{graphicx} %package to manage images
 \graphicspath{ {Images/} }
 
@@ -64,17 +66,49 @@
             
 \uchyph=0 % Prevent hyphenation of all uppercase words (normally acronyms)
 
+\usepackage[outputdir=Temp,newfloat=true]{minted}
+\setminted[gherkin]{frame=lines,
+                    framesep=2mm,
+                    fontsize=\footnotesize,
+                    baselinestretch=1.2,
+                    samepage=true,
+                    stripnl=false}
+\usemintedstyle{bw}
+\SetupFloatingEnvironment{listing}{name=Feature}
+\SetupFloatingEnvironment{listing}{listname=List of Features}
+
+% Used for Listings of Features
+\newsavebox{\featurebox} 
+\newenvironment{featurecode}[1]
+{ \lrbox\featurebox \begin{adjustbox}{width=#1\textwidth,minipage=\textwidth,center} }
+{ \end{adjustbox}\endlrbox}
+
+\newenvironment{featurelist}[2]
+{
+\newcommand{\setcaption}{\caption{#1}}
+\newcommand{\setlabel}{\label{#2}}
+}
+{\begin{listing}\centering\usebox\featurebox\setcaption\setlabel\end{listing}}
+\usepackage{caption}
+
+\usepackage{adjustbox}
+
+%\renewcommand\listoflistingscaption{List of source code}
+%\renewcommand{\listingscaption}{Source code}
+
+
+
 \begin{document}
 
 \maketitle
 
 
 \begin{abstract}
-Software engineering methods have evolved from having a prescribed and sequential nature to using more adaptable and iterative approaches. Such is the case with Behaviour Driven Development (BDD)~\citep{North2006,Smart201410}, a recent member of the family of agile methodologies addressing the correct specification of the behaviour characteristics of a system, by focusing on close collaboration and identification of examples.
+Software engineering methods have evolved from having a prescribed and sequential nature to using more adaptable and iterative approaches. Such is the case with Behaviour Driven Development (BDD), a recent member of the family of agile methodologies addressing the correct specification of the behaviour characteristics of a system, by focusing on close collaboration and identification of examples.
 
 Whilst BDD is very successful in ensuring developed software meets its functional requirements, it is largely silent regarding the systematic treatment of its non-functional counterparts, descriptions of how the system should behave with respect to some quality attribute such as performance, reusability, etc.
 
-Historically, the systematic treatment of non-functional requirements (NFRs) in software engineering is categorised as being either product-oriented and based on a quantitative approach aimed at evaluating the degree to which a system meets its NFRs or process-oriented, qualitative in nature and where they are used to drive the software design process. Examples of the latter category, are the NFR Framework~\citep{Chung2000} -- a structured approach to represent and reason about non-functional requirements -- and the goal-oriented requirements language (GRL)~\citep{Amyot2010} that provides support for evaluation and analysis of the most appropriate trade-offs among (often conflicting) goals of stakeholders. 
+Historically, the systematic treatment of non-functional requirements (NFRs) in software engineering is categorised as being either product-oriented and based on a quantitative approach aimed at evaluating the degree to which a system meets its NFRs or process-oriented, qualitative in nature and where they are used to drive the software design process. Examples of the latter category, are the NFR Framework -- a structured approach to represent and reason about non-functional requirements -- and the goal-oriented requirements language (GRL) that provides support for evaluation and analysis of the most appropriate trade-offs among (often conflicting) goals of stakeholders. 
 
 In this thesis, we investigate the extent to which goal-oriented principles can be integrated in BDD, with the aim of handling non-functional requirements in an explicit and systematic way, whilst respecting the principles and philosophy behind agile development.
 \end{abstract}
@@ -99,13 +133,14 @@ In this thesis, we investigate the extent to which goal-oriented principles can 
 
 \listoffigures
 \listoftables
+\listoflistings
 
 \pagenumbering{arabic}
 \pagestyle{myheadings}
 
 \chapter{Introduction}
 \label{ch:Introduction}
-This thesis presents an extension to Behaviour Driven Development~(BDD)~\citep{North2006} to support the elicitation, communication, modelling and analysis of non-functional requirements. It includes concepts and techniques from goal-oriented requirements engineering (GORE)~\citep{Lamsweerde:2001wpba}, and more specifically, allows the definition of goals in BDD and modelling and analysis in Goal Requirements Language (GRL)~\citep{Amyot2010}. This is achieved by integrating notions of goals in Gherkin~\citep{wynne2012cucumber} -- a domain specific language for the representation and specification of requirements. We also present a translator from Gherkin to GRL, allowing Gherkin-defined actors and goals satisfactions levels to be subject to qualitative and quantitative analysis in a GRL tool.
+This thesis presents an extension to Behaviour Driven Development~(BDD)~\citep{North2006,Smart201410} to support the elicitation, communication, modelling and analysis of non-functional requirements. It includes concepts and techniques from goal-oriented requirements engineering (GORE)~\citep{Lamsweerde:2001wpba}, and more specifically, allows the definition of goals in BDD and modelling and analysis in Goal Requirements Language (GRL)~\citep{Amyot2010}. This is achieved by integrating notions of goals in Gherkin~\citep{wynne2012cucumber} -- a domain specific language for the representation and specification of requirements. We also present a translator from Gherkin to GRL, allowing Gherkin-defined actors and goals satisfactions levels to be subject to qualitative and quantitative analysis in a GRL tool.
 
 \section{Motivation}
 The primary measure of success of a software system is the degree to which it meets the purpose for which it was intended~\citep{Nuseibeh:2000ub}. Shortcomings in the ways that people learn about, document, agree upon and modify such statements of intent are known causes to many of the problems in software development~\citep{Wiegers2013}. We informally refer to these statements of intent as Requirements and the engineering process to elicit, document, verify, validate and manage them as Requirements Engineering~\footnote{These topics will be explored in depth in Chapter~\ref{ch:Background}}.
@@ -119,7 +154,7 @@ Furthermore, requirements can be classified in multiple and at times conflicting
 
 A software process is generically defined as a set of activities, methods, practices, and transformations that are used to develop and maintain software and its associated products~\citep{Cugola:1998htba}. Agile software development approaches have become more popular during the last few years. Several methods have been developed with the aim of delivering software faster and to ensure that the software meets customer changing needs. All these approaches share some common principles: Improved customer satisfaction, adopting requirements, frequently to changing delivering working software, and close collaboration of business people and developers~\citep{Paetsch:2003tl}.
 
-One of such agile approaches is Behaviour Driven Development (BDD)~\citep{North2006}. The understanding of BDD is far from clear and unanimous~\citep{Solis0}. Some authors refer to BDD as a development process~\citep{Smart201410}, others state that it is not a fully fledged software development methodology but rather \emph{\textcquote{Adzic201106}{supplement other methodologies, provide rigour in specifications and testing, enhance communication between various stakeholders and members of software development teams, reduce unnecessary rework, and facilitate change.}}
+One of such agile approaches is Behaviour Driven Development (BDD). The understanding of BDD is far from clear and unanimous~\citep{Solis0}. Some authors refer to BDD as a development process~\citep{Smart201410}, others state that it is not a fully fledged software development methodology but rather \emph{\textcquote{Adzic201106}{supplement other methodologies, provide rigour in specifications and testing, enhance communication between various stakeholders and members of software development teams, reduce unnecessary rework, and facilitate change.}}
 
 In spite of the above mentioned differences of interpretation, it is unanimously accepted that BDD focus on deriving from  business goals, a sufficiently set of software features that contribute to achieve these business goals. This process makes use of Gherkin~\citep{wynne2012cucumber} -- a domain specific language which promotes the use of a ubiquitous language~\footnote{ Eric Evans first introduced that term in \citetitle{evans2004domain} \citet{evans2004domain}}  that business people can understand -- to describe and model a system. However the focus has been on functionality and quality characteristics such as performance, security, maintainability are not explicitly addressed. To the best of our knowledge, the single exception to the above, is the work of \citet{barmi2011automated}, but with restricted applicability to probabilistic -- those that can be written using probabilistic statements~\citep{grunske2008specification} -- non-functional requirements only.
 
@@ -173,7 +208,7 @@ Chapter~\ref{ch:Conclusion} contains implications of findings, concluding though
 
 \chapter{From traditional to agile requirements engineering}
 \label{ch:Background}
-In Chapter~\ref{ch:Introduction} we have outlined and situated our study around insufficiencies in current approaches to handling non-functional requirements in agile development methods, and behaviour driven development (BDD) in particular. 
+In Chapter~\ref{ch:Introduction} we have outlined and situated our study around insufficiencies in current approaches to handling non-functional requirements in agile development methods, and behaviour driven development in particular. 
 
 In this chapter, we'll reflect on how fast-changing technology and increased competition are placing ever increasing pressure on the development process. We will first review the notions of requirements and requirements engineering, highlighting the most used processes and activities, regardless of the software development method in use. We will then follow with a description of requirements engineering practices in agile methods and finish with a presentation of behaviour driven development (BDD) key concepts, contextualising BDD as an instance of \emph{Specification by Example}~\citep{Adzic201106}.
 
@@ -269,12 +304,19 @@ Requirements can also be categorised as either \emph{product} or \emph{project} 
 \label{sec:requirements_eng}
 The \emph{\citefield{SWEBOK}{maintitle}}~(\citetitle{SWEBOK}, \citeyear{SWEBOK}) identifies topics that pertain to software requirements knowledge, which concern the elicitation, analysis, specification, and validation of software requirements as well as their management during the whole life cycle of a software product.
 
-\begin{figure}[h]
-\includegraphics[width=0.9\textwidth]{swebooksoftwarerequirements}
+%\begin{figure}[h]
+%\includegraphics[width=0.9\textwidth]{swebooksoftwarerequirements}
+%\centering
+%\caption[Topics for software requirements]{Topics for the Software Requirements knowledge area~(\citetitle{SWEBOK}, \citeyear{SWEBOK})}
+%\label{fig:swebook_software_requirements}
+%\end{figure}
+
+\begin{sidewaysfigure}
+\includegraphics[width=\columnwidth]{swebooksoftwarerequirements}
 \centering
 \caption[Topics for software requirements]{Topics for the Software Requirements knowledge area~(\citetitle{SWEBOK}, \citeyear{SWEBOK})}
 \label{fig:swebook_software_requirements}
-\end{figure}
+\end{sidewaysfigure}
 
 This section defines requirements engineering and breaks it down into its core processes and activities. We will not cover all topics contained in Figure~\ref{fig:swebook_software_requirements}, but instead focus on the more relevant ones, from the point of view of the work described in this thesis. 
 
@@ -452,9 +494,9 @@ In the context of this thesis, \emph{Team} and \emph{Program} levels are the mos
 
 The meta-model defines the concept of a \emph{Backlog Item} -- an abstract entity representing something that needs to be done, either a user story or another work item -- and a \emph{Backlog}, a repository of all the work items the team has identified. This backlog is the one and only definitive source of work for the team. A \emph{Story} is the rough equivalent of a software requirement in agile and, at the \emph{Team} level, we distinguish two types: a \emph{User Story} -- used to define the system behaviour and determine value for the user -- and \emph{other work items} such as defects, documentation, support and maintenance activities, infra-structure work and so on. \citet{Leffingwell2011} defines \emph{Story} as \emph{`a work item contained in the team's backlog`} and \emph{User Story} as \emph{`a brief statement of intent that describes something the system needs to do for the user'}.
 
-\emph{Tasks} are used to breakdown a \emph{Story} in work activities required to its implementation. Note that \emph{Tasks} can exist on their own and without an associated story, if the work activity is considered independent and can standalone. Also, a \emph{Story} requires one or more tasks for its implementation and is only complete when it passes one or more \emph{acceptance tests} -- tests that validate the implementation meets the full intent of the \emph{Story}. A \emph{Story} could also be subject to \emph{unit tests} to confirm that the lowest-level module of an application or module of an application works as intended.
+\emph{Tasks} are used to breakdown a \emph{Story} in work activities required to its implementation. Note that \emph{Tasks} can exist on their own and without an associated \emph{Story}, if the work activity is considered independent and can standalone. Also, a \emph{Story} requires one or more tasks for its implementation and is only complete when it passes one or more \emph{acceptance tests}. A \emph{Story} could also be subject to \emph{unit tests} to confirm that the lowest-level module of an application or module of an application works as intended.
 
-\begin{figure}[h]
+\begin{figure}[!h]
 \includegraphics[width=0.50\textwidth]{metamodel_features2}
 \centering
 \caption{Agile requirements meta-model (\emph{Features})}
@@ -463,16 +505,14 @@ The meta-model defines the concept of a \emph{Backlog Item} -- an abstract entit
 
 At \emph{Program} level, the backlog contains a prioritized set of \emph{features} intended to deliver benefits to the users. \citet{Leffingwell2011} defines \emph{Features} as \emph{`services provided by the system that fulfil stakeholder needs'}. \emph{Features} are a kind of backlog item as can be seen in figure~\ref{fig:metamodel_features}. \emph{Features} are at a higher level of abstraction than \emph{Stories} and sit between needs of users and software requirements, expressed in agile as \emph{Stories}. A given \emph{Feature} is realised by one or more \emph{Stories}.
 
-\begin{figure}[!h]
+\begin{figure}[h]
 \includegraphics[width=0.50\textwidth]{metamodel_features_tests}
 \centering
 \caption{Agile requirements meta-model (\emph{Features} and \emph{Acceptance Tests})}
 \label{fig:metamodel_features_tests}
 \end{figure}
 
-Similar to \emph{Stories}, \emph{Features} also require acceptance tests to ensure all stories that realise it are complete. Note that a \emph{Feature acceptance test} is not a composition of \emph{Story acceptance tests}, as they should focus on other types of tests such as performance, `what-if' scenarios, etc.
-
-\emph{Features} and \emph{Stories} are used to specify the functionality of a system but we should not ignore non-functional requirements. The model in figure~\ref{fig:metamodel_nfrs} we see first that some backlog items may be constrained by non-functional requirements, and some are not. We also see that non-functional requirements may not apply to backlog items, meaning that they stand independently and apply to the system as a whole~\citep{Leffingwell2011}.
+Similar to \emph{Stories}, \emph{Features} also require acceptance tests to ensure all stories that realise it are complete. Note that a \emph{Feature acceptance test} is not a composition of \emph{Story acceptance tests}, as they should focus on other types of tests such as performance, `what-if' scenarios, etc. \emph{Features} and \emph{Stories} are used to specify the functionality of a system but we should not ignore non-functional requirements. The model in figure~\ref{fig:metamodel_nfrs} we see first that some backlog items may be constrained by non-functional requirements, and some are not. We also see that non-functional requirements may not apply to backlog items, meaning that they stand independently and apply to the system as a whole~\citep{Leffingwell2011}.
 
 \begin{figure}[h]
 \includegraphics[width=0.55\textwidth]{metamodel_nfrs}
@@ -485,7 +525,7 @@ It is important to note that a non-functional requirement constrains a \emph{Bac
 
 \subsection{Behaviour driven development~(BDD)}
 \label{ch:Background:sec:bdd}
-\citet{Hull2011} advocates the use of modelling techniques as a mechanism of fostering understanding and communication of ideas associated with system development. A good model is one which is easily communicated. They need to be used for communication within a development team, and also to an organisation as a whole including the stakeholders. The uses of a model can be diverse and cover a wide spectrum. It might be to model the activities of an entire organisation or to model a specific functional requirement of a system. It is this latter use that receives the attention of Behaviour Driven Development (BDD) which is, in its essence, an approach to derive the functionality of a system or component from business goals using concrete examples.
+\citet{Hull2011} advocates the use of modelling techniques as a mechanism of fostering understanding and communication of ideas associated with system development. A good model is one which is easily communicated. They need to be used for communication within a development team, and also to an organisation as a whole including the stakeholders. The uses of a model can be diverse and cover a wide spectrum. It might be to model the activities of an entire organisation or to model a specific functional requirement of a system. It is this latter use that receives the attention of Behaviour Driven Development which is, in its essence, an approach to derive the functionality of a system or component from business goals using concrete examples~(see figure~\ref{fig:bdd_from_goals_to_specs}).
 
 In the foreword to \citetitle{Smart201410}, Dan North the creator of BDD states the following \emph{`... (BDD) was a response to a triple conundrum: programmers didn't want to write tests; testers didn't want programmers writing tests; and business stakeholders didn't see any value in anything that wasn't production code'}.
 
@@ -498,10 +538,10 @@ BDD applies at all levels of software development, from high-level requirements 
 \label{fig:bdd_from_goals_to_specs}
 \end{figure}
 
-BDD helps teams focus their efforts on identifying, understanding, and building valuable features that matter to businesses, and it makes sure that these features are well designed and well implemented~\citep{Smart201410}. BDD practitioners use conversations around concrete examples of system behaviour to help understand how features will provide value to the business. Furthermore, it encourages business analysts, software developers, and testers to collaborate more closely by enabling them to express requirements in a more testable way, in a form that both the development team and business stakeholders can easily understand. Tools exist that can help turn these requirements into automated tests that help guide the developer, verify the feature, and document what the application does~\cite{Smart201410,wynne2012cucumber}. Figure~\ref{fig:bdd_from_goals_to_specs} depicts the typical flow of information in BDD, from business goals to features, followed by concrete examples, all part of a specification that gets tested and verified against initial business goals stated.
+BDD helps teams focus their efforts on identifying, understanding, and building valuable features that matter to businesses, and it makes sure that these features are well designed and well implemented~\citep{Smart201410}. BDD practitioners use conversations around concrete examples of system behaviour to help understand how features will provide value to the business. Furthermore, it encourages business analysts, software developers, and testers to collaborate more closely by enabling them to express requirements in a more testable way, in a form that both the development team and business stakeholders can easily understand. Tools exist that can help turn these requirements into automated tests that help guide the developer, verify the feature, and document what the application does~\citep{Smart201410,wynne2012cucumber}. Figure~\ref{fig:bdd_from_goals_to_specs} depicts the typical flow of information in BDD, from business goals to features, followed by identification of concrete examples, all part of a specification that gets tested and verified against initial business goals stated.
 
 \begin{figure}[h]
-\includegraphics[width=0.85\textwidth]{communication_in_bdd}
+\includegraphics[width=0.95\textwidth]{communication_in_bdd}
 \centering
 \caption[Improved communication in BDD]{Improved communication in BDD~\citep{Smart201410}}
 \label{fig:communication_in_bdd}
@@ -514,7 +554,7 @@ It is important to note that BDD was developed as a mechanism for fostering coll
 BDD can also be seen as an instance of \emph{Specification by Example}~\citep{Adzic201106} as they share a common set of principles and practices. \emph{Specification by example} introduces a consistent and coherent language for patterns, ideas and artefacts used for teams who derive \emph{executable specifications} and \emph{living documentation} from \emph{business goals}. The practices of \emph{Specification by Example} do not form a fully fledged software development methodology but rather supplement other methodologies -- both iterative and flow based -- to provide rigour in specifications and testing, enhance communication between various stakeholders and members of the software development team~\citep{Adzic201106}.
 
 \begin{figure}[h]
-\includegraphics[width=0.75\textwidth]{SpecificationbyExample}
+\includegraphics[width=0.9\textwidth]{SpecificationbyExample}
 \centering
 \caption[Specification by Example]{Process patterns of \emph{Specification by Example}~\citep{Adzic201106}}
 \label{fig:specification_by_example}
@@ -528,11 +568,51 @@ Teams \emph{illustrate specifications using examples}. The team works with the b
 
 Once a team agrees on \emph{specifications with examples} and refines them, the team can use them as a target for implementation and a means to validate the product. To get the most out of key examples, successful teams automate validation without changing the information. As they\emph{ automate validation without changing specifications}, the key examples are always comprehensible and accessible to all team members. An automated \emph{Specification with examples} that is comprehensible and accessible to all team members becomes an \emph{executable specification}. We can use it as a target for development and easily check if the system does what was agreed on, and we can use that same document to get clarification from business users~\citep{Adzic201106}.
 
-\emph{validating frequently} executable specifications against the system ensures we can discover any differences between the system and the specifications and keep both synchronised in face of changes to requirements or implementation. Not only do teams validate frequently, they also ensure that specifications are actual, current and consistent, effectively turning them into \emph{living documentation}.
+\emph{Validating frequently} executable specifications against the system ensures we can discover any differences between the system and the specifications and keep both synchronised in face of changes to requirements or implementation. Not only do teams validate frequently, they also ensure that specifications are actual, current and consistent, effectively turning them into \emph{living documentation}.
 
-In BDD, and other agile approaches in general, handling of non-functional requirements is ill defined. Customers or users talking about what they want the system to do normally do not think about resources, maintainability, portability, safety or performance~\citep{Paetsch:2003tl}. 
+In BDD, \emph{executable specifications} are expressed using \emph{Gherkin}~\citep{wynne2012cucumber}, a domain specific language used to specify features of the system or application being built. 
 
-In the next chapter we will explore further the notion of non-functional requirements and methods used for their elicitation and analysis, with a focus on goal-oriented approaches and GRL~\citep{Amyot2010}, in particular.
+\begin{featurelist}{Example of a feature file in Gherkin~\citep{wynne2012cucumber}}{lst:feature_example}
+\begin{featurecode}{0.7}
+\begin{minted}{Gherkin}
+Feature: Feedback when entering invalid credit card details
+
+  In user testing we've seen a lot of people who made mistakes
+  entering their credit card. We need to be as helpful as possible
+  here to avoid losing users at this crucial stage of the
+  transaction.
+
+  Background:
+    Given I have chosen some items to buy
+    And I am about to enter my credit card details
+
+  Scenario: Credit card number too short
+    When I enter a card number that's only 15 digits long
+    And all the other details are correct
+    And I submit the form
+    Then the form should be redisplayed
+    And I should see a message advising me of the correct number of digits
+
+  Scenario: Expiry date invalid
+    When I enter a card expiry date that's in the past
+    And all the other details are correct
+    And I submit the form
+    Then the form should be redisplayed
+    And I should see a message telling me the expiry date must be wrong
+\end{minted}
+\end{featurecode}
+\end{featurelist}
+
+\emph{Gherkin} specifications are  defined from plain-language text files called \emph{feature files}, containing scenarios to implement and test, representing concrete examples of the features being specified. Each scenario is a list of steps for a BDD tool such as Cucumber to work through~\citep{wynne2012cucumber}. These tools parse feature files turning each scenario step into source code, typically a method call in one of the tool's supported languages. 
+Feature~\ref{lst:feature_example} displays a feature file, specified in \emph{Gherkin}, for a credit card application containing two scenarios with concrete examples of credit card validation rules. In Gherkin, we use the \emph{Feature} keyword to name (text after \emph{Feature} keyword, excluding colon character) and describe (all remaining text until the next keyword) a feature. Gherkin uses the \emph{Background} keyword to specify a set of steps that are common to every scenario, within each scenario \emph{Given} is used to set up the context where the scenario happens, \emph{When} to interact with the system somehow and \emph{Then} to check that the outcome of that interaction was what we expected. \emph{And} and \emph{But} keywords are used to make specifications more readable and take the same role as the keyword in the previous line. For example, in feature~\ref{lst:feature_example} the second line in the fist scenario 'And all the other details are correct' is equivalent to 'When all the other details are correct'.
+
+\subsection{Summary}
+
+In this chapter we have started by providing definitions of requirements and presented them within the context of a wider requirements engineering discipline. We proceeded by doing an analysis of the activities that are part of requirements engineering and described how they manifest in the context of agile development methods. We finished by introducing BDD in the context of \emph{Specification by Example} and gave an example of how features for an application or system are produced in Gherkin.
+
+At this moment, we would like to state that in BDD, and other agile approaches in general, handling of non-functional requirements is ill defined. Customers or users talking about what they want the system to do normally do not think about resources, maintainability, portability, safety or performance~\citep{Paetsch:2003tl}. 
+
+In the next chapter we will explore further the notion of non-functional requirements, present some well known classification schemes, and methods used for their elicitation and analysis with a focus on goal-oriented approaches and GRL~\citep{Amyot2010}, in particular.
 
 \chapter{On non-functional requirements}
 \label{ch:nfr_research}
@@ -550,7 +630,7 @@ In this thesis, rather than worry about precisely what to call these sorts of in
 
 \section{Requirements as Goals}
 \label{ch:gore}
-The use of goals in requirements engine has received increasing attention over the past few years. Such recognition has led to a whole stream of research on goal modelling, goal specification, and goal-based reasoning for multiple purposes, such as requirements elaboration, verification or conflict management, and under multiple forms, from informal to qualitative to formal~\citep{Lamsweerde:2001wpba}.
+The use of goals in requirements engineering has received increasing attention over the past few years. Such recognition has led to a whole stream of research on goal modelling, goal specification, and goal-based reasoning for multiple purposes, such as requirements elaboration, verification or conflict management, and under multiple forms, from informal to qualitative to formal~\citep{Lamsweerde:2001wpba}.
 
 In addition, the requirements engineer needs to explore alternatives and evaluate their feasibility and desirability with respect to business goals. We share the view that goal-oriented analysis complements and strengthens traditional requirements engineering techniques by offering a means for capturing and evaluating alternative ways of meeting business goals~\citep{MylopoulosExpl2001}.
 
