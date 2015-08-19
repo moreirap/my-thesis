@@ -1,5 +1,8 @@
 %\documentclass[dissertation,draft]{softeng}
 \documentclass[dissertation,final]{softeng}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
 
 \usepackage{times}
 \usepackage[utf8]{inputenc}
@@ -63,6 +66,7 @@
             \arrayrulecolor{white}\specialrule{\belowrulesep}{0pt}{-3pt}%
             \arrayrulecolor{black}
             }
+\usepackage{multirow}
             
 \uchyph=0 % Prevent hyphenation of all uppercase words (normally acronyms)
 
@@ -156,7 +160,7 @@ A software process is generically defined as a set of activities, methods, pract
 
 One of such agile approaches is Behaviour Driven Development (BDD). The understanding of BDD is far from clear and unanimous~\citep{Solis0}. Some authors refer to BDD as a development process~\citep{Smart201410}, others state that it is not a fully fledged software development methodology but rather \emph{\textcquote{Adzic201106}{supplement other methodologies, provide rigour in specifications and testing, enhance communication between various stakeholders and members of software development teams, reduce unnecessary rework, and facilitate change.}}
 
-In spite of the above mentioned differences of interpretation, it is unanimously accepted that BDD focus on deriving from  business goals, a sufficiently set of software features that contribute to achieve these business goals. This process makes use of Gherkin~\citep{wynne2012cucumber} -- a domain specific language which promotes the use of a ubiquitous language~\footnote{ Eric Evans first introduced that term in \citetitle{evans2004domain} \citet{evans2004domain}}  that business people can understand -- to describe and model a system. However the focus has been on functionality and quality characteristics such as performance, security, maintainability are not explicitly addressed. To the best of our knowledge, the single exception to the above, is the work of \citet{barmi2011automated}, but with restricted applicability to probabilistic -- those that can be written using probabilistic statements~\citep{grunske2008specification} -- non-functional requirements only.
+In spite of the above mentioned differences of interpretation, it is unanimously accepted that BDD focus on deriving from  business goals, a sufficiently set of software features that contribute to achieve these business goals. This process makes use of Gherkin~\citep{wynne2012cucumber} -- a domain specific language which promotes the use of a ubiquitous language~\footnote{~Eric Evans first introduced that term in \citetitle{evans2004domain} \citet{evans2004domain}}  that business people can understand -- to describe and model a system. However the focus has been on functionality and quality characteristics such as performance, security, maintainability are not explicitly addressed. To the best of our knowledge, the single exception to the above, is the work of \citet{barmi2011automated}, but with restricted applicability to probabilistic -- those that can be written using probabilistic statements~\citep{grunske2008specification} -- non-functional requirements only.
 
 None of these agile practices, treat non-functional requirements in a systematic way, certainly not in a way that allows reasoning about which requirements interdependencies may exist, and the positive or negative influences each may have on each other. Among many proposals, goal-oriented approaches were the first to treat non-functional requirements as first-class citizens.~\citet{Mylopoulos:1999jh} observed that goal-oriented requirements engineering is generally complementary to other approaches and, in particular, is well suited to analysing requirements early in the software development cycle, especially with respect to non-functional requirements and the evaluation of alternatives. 
 
@@ -208,26 +212,24 @@ Chapter~\ref{ch:Conclusion} contains implications of findings, concluding though
 
 \chapter{From traditional to agile requirements engineering}
 \label{ch:Background}
-In Chapter~\ref{ch:Introduction} we have outlined and situated our study around insufficiencies in current approaches to handling non-functional requirements in agile development methods, and behaviour driven development in particular. 
+In Chapter~\ref{ch:Introduction} we have outlined and situated our study around insufficiencies in current approaches to handling non-functional requirements in agile development methods, and behaviour-driven development in particular. 
 
-In this chapter, we'll reflect on how fast-changing technology and increased competition are placing ever increasing pressure on the development process. We will first review the notions of requirements and requirements engineering, highlighting the most used processes and activities, regardless of the software development method in use. We will then follow with a description of requirements engineering practices in agile methods and finish with a presentation of behaviour driven development (BDD) key concepts, contextualising BDD as an instance of \emph{Specification by Example}~\citep{Adzic201106}.
+In this chapter, we reflect on how fast-changing technology and increased competition are placing an ever increasing pressure on the development process. We first review the notions of requirements and requirements engineering, highlighting the most used processes and activities, regardless of the software development method in use. We follow with a description of requirements engineering practices in agile methods and finish with a presentation of key concepts of behaviour-driven development (BDD), contextualising BDD as an instance of \emph{Specification by Example}~\citep{Adzic201106}.
 
 \section{Requirements}
 \label{sec:requirements}
-Despite decades of industry experience, many software organizations struggle to understand, document, and manage their product requirements. Inadequate user input, incomplete requirements, changing requirements, and misunderstood business objectives are major reasons why so many information technology projects are less than fully successful. Some software teams aren't proficient at eliciting requirements from customers and other sources. Customers often don't have the time or patience to participate in requirements activities~\citep{Wiegers2013}. 
+Despite decades of industry experience, many software organizations struggle to understand, document, and manage their product requirements. Inadequate user input, incomplete requirements, changing requirements, and misunderstood business objectives are major reasons why so many information technology projects are less than fully successful. Some software teams lack the proficiency of eliciting requirements from customers and other sources. Customers often don't have the time or patience to participate in requirements activities~\citep{Wiegers2013}. 
 
-Effective requirements engineering is crucial to delivering products and services aligned to the goals and objectives for which they were initially conceived. \citet{Hull2011} states that software is the most powerful force behind changes of new products and is mostly driven by three factors: \emph{arbitrary complexity}, due to most products having software at its core and being often complex; \emph{instant distribution} -- new products or changes to existing products can be distributed to its clients in a matter of seconds or minutes, usually the time it takes to download, install and configure a new software version~-- and \emph{off-the-shelf components}, as most systems can now be built from ready-made components, greatly reducing the product development cycle.
+Effective requirements engineering is crucial to delivering products and services aligned to the goals and objectives for which they were initially conceived. \citet{Hull2011} state that software is the most powerful force behind changes of new products and is mostly driven by three factors: \emph{arbitrary complexity}, due to most products having software at its core and being often complex; \emph{instant distribution} -- new products or changes to existing products can be distributed to its clients in a matter of seconds or minutes, usually the time it takes to download, install and configure a new software version -- and \emph{off-the-shelf components}, as most systems can now be built from ready-made components, greatly reducing the product development cycle.
 
 \subsection{Definition}
-Many problems in the software world arise from shortcomings in the ways that people learn about, document, agree upon and modify a product's requirements. Common problem~areas are informal information gathering, implied functionality, miscommunicated assumptions, poorly specified requirements, and a casual change process~\citep{Wiegers2013}. Various studies suggest that errors introduced during requirements activities account for 40 to 50 percent of all defects found in a software product~\citep{Davis200505}. Inadequate user input and shortcomings in specifying and managing customer requirements are major contributors to unsuccessful projects. Despite this evidence, many organizations still practice ineffective requirements methods. There is no definitive definition of requirements that satisfies all purposes and concerns, but the ones we provide next, are some of the more consensual ones~\citep{Wiegers2013}.
+Many problems in the software world arise from shortcomings in the ways that people learn about, document, agree upon and modify product's requirements. Common problem areas are informal information gathering, implied functionality, miscommunicated assumptions, poorly specified requirements, and a casual change process~\citep{Wiegers2013}. Various studies suggest that errors introduced during requirements activities account for 40 to 50 percent of all defects found in a software product~\citep{Davis200505}. Inadequate user input and shortcomings in specifying and managing customer requirements are major contributors to unsuccessful projects. Despite this evidence, many organizations still practice ineffective requirements methods. There is no definitive definition of requirements that satisfies all purposes and concerns, but the ones we provide next, are some of the more consensual ones~\citep{Wiegers2013}.
 
 The difficulty with defining requirements, arises mostly due to a terminology problem. Different observers might describe a single statement as being a user requirement, software requirement, business requirement, functional requirement, system requirement, product requirement, project requirement, user story, feature, or constraint~\citep{Wiegers2013}. Because of the inter-connectedness of requirements with other aspects of systems engineering and project management, it is quite challenging to find a satisfactory scope for a definition of requirements engineering~\citep{Hull2011}. A typical definition of requirement can be found in ~\citefield{ieee_std_29148}{journaltitle}
 \begin{displayquote}
 A statement that identifies a product or process operational, functional, or design characteristic or constraint, which is unambiguous, testable or measurable, and necessary for product or process acceptability (by consumers or internal quality assurance guidelines)
 \end{displayquote}
-It is worth breaking down this definition into its constituents words. A requirement comes mostly in a textual representation~(\emph{statement}) even though there are other complementary or alternative forms such visual forms, formal methods and domain specific languages. Requirements may define what is to be built in response to requirements~(\emph{product requirements}) but also procedures for using what will be built~(\emph{process requirements}). In addition, there may be requirements that stipulate how the product should be developed, usually for quality control purposes. The definition also allures for the existence of many different kinds of requirements, such as \emph{operational, functional, or design characteristic or constraint}, giving rise to different kinds of language, analysis, modelling, process and solution. It states that a requirement should lend itself to a clear, single understanding, common to all parties involved~(\emph{unambiguous}). It should also be quantifiable, thus providing a means of measuring and testing the solution against it. Finally, requirements play a multi-dimensional role and come from a multitude of sources. 
-
-\citet{Sommerville:1997} gives us a simpler, but nevertheless, useful definition
+It is worth breaking down this definition into its constituents words. A requirement comes mostly in a textual representation~(\emph{statement}) even though there are other complementary or alternative forms such visual forms, formal methods and domain specific languages. Requirements may define what is to be built in response to requirements~(\emph{product requirements}) but also procedures for using what will be built~(\emph{process requirements}). In addition, there may be requirements that stipulate how the product should be developed, usually for quality control purposes. The definition also allures for the existence of many different kinds of requirements, such as \emph{operational, functional, or design characteristic or constraint}, giving rise to different kinds of language, analysis, modelling, process and solution. It states that a requirement should lend itself to a clear, single understanding, common to all parties involved~(\emph{unambiguous}). It should also be quantifiable, thus providing a means of measuring and testing the solution against it. Finally, requirements play a multi-dimensional role and come from a multitude of sources. \citet{Sommerville:1997} shares a simpler, but nevertheless, useful definition
 \begin{displayquote}
 Requirements are a specification of what should be implemented. They are descriptions of how the system should behave, or of a system property or attribute. They may be a constraint on the development process of the system.
 \end{displayquote}
@@ -297,7 +299,7 @@ We have identified three major requirements deliverables: a vision and scope doc
 
 Requirements can also be categorised as either \emph{product} or \emph{project} requirements. Product requirements are those that describe properties of a software system to be built. Projects certainly do have other expectations and deliverables that are not a part of the software the team implements, but that are necessary to the successful completion of the project as a whole. These are project requirements but not product requirements. An SRS houses the product requirements, but it should not include design or implementation details (other than known constraints), project or test plans, or similar information.
 
-\citet{Hull2011} makes an important distinction between requirements being defined in either a \emph{problem} or \emph{solution} domain. In the context of requirements existing at different layers of abstraction, those at higher layers, representative of statements of need, usage modelling and stakeholder requirements, pertain to the problem domain, whereas those in lower layers, starting with system requirements, operate in the solution domain. The use of multiple levels of abstraction promotes separation of concerns and allows views of stakeholders, analysts and developers to be taken in consideration. Stakeholder requirements should specify only what they want to achieve and avoid any reference to particular solutions. System requirements, on the other hand, should abstractly specify what the system will do to meet the stakeholder requirements, whilst avoiding any references to any particular design. Finally, subsystem and component requirements, part of architectural designs, will specify how this design meets the system requirements.
+\citet{Hull2011} make an important distinction between requirements being defined in either a \emph{problem} or \emph{solution} domain. In the context of requirements existing at different layers of abstraction, those at higher layers, representative of statements of need, usage modelling and stakeholder requirements, pertain to the problem domain, whereas those in lower layers, starting with system requirements, operate in the solution domain. The use of multiple levels of abstraction promotes separation of concerns and allows views of stakeholders, analysts and developers to be taken in consideration. Stakeholder requirements should specify only what they want to achieve and avoid any reference to particular solutions. System requirements, on the other hand, should abstractly specify what the system will do to meet the stakeholder requirements, whilst avoiding any references to any particular design. Finally, subsystem and component requirements, part of architectural designs, will specify how this design meets the system requirements.
 
 
 \section{Requirements Engineering}
@@ -341,7 +343,7 @@ Requirements engineering is the branch of software engineering concerned with th
 Requirements engineering is the subset of systems engineering concerned with the discovery, development, trace, analysis, qualification, communication and management of requirements that define the system at successive levels of abstraction
 \end{displaycquote}
 
-The authors argue the above definition is a better reflection that requirements exist at multiple levels of development, and also list key activities that are considered proper to requirements engineering. Similarly to what we have done for the definition of requirement, it is worth breaking this definition into its constituent parts. \emph{Discovery}, refers to activities related to the elicitation and capture of requirements; \emph{trace} allows setting up links to and from requirements to other artefacts; \emph{qualification} refers to all kinds of testing activities and avoids the often confusing terms \emph{validation} -- checking formal expressions of requirements against informal needs -- and \emph{verification}, often linked with checks of requirements internal consistency within and between layers of abstraction; \emph{communication} reflects the notion that requirements are part of a human activity, through which all stakeholders agree on what is to be achieved. Finally, the word \emph{abstraction} makes reference to the practice of organizing requirements into layers and of tracing the satisfaction relationship between those layers.
+They argue the above definition is a better reflection that requirements exist at multiple levels of development, and also list key activities that are considered proper to requirements engineering. Similarly to what we have done for the definition of requirement, it is worth breaking this definition into its constituent parts. \emph{Discovery}, refers to activities related to the elicitation and capture of requirements; \emph{trace} allows setting up links to and from requirements to other artefacts; \emph{qualification} refers to all kinds of testing activities and avoids the often confusing terms \emph{validation} -- checking formal expressions of requirements against informal needs -- and \emph{verification}, often linked with checks of requirements internal consistency within and between layers of abstraction; \emph{communication} reflects the notion that requirements are part of a human activity, through which all stakeholders agree on what is to be achieved. Finally, the word \emph{abstraction} makes reference to the practice of organizing requirements into layers and of tracing the satisfaction relationship between those layers.
 
 \citet{Hull2011} makes a useful extension to software requirements that applies to complete systems -- a collection of components, machine, software and human, which co-operate in an organised way to achieve some desired result. Since components must co-operate, interfaces between components are a vital consideration in system (and requirements) engineering, that is, interfaces between people and machine components, between machine components, and between software components.
 
@@ -357,15 +359,15 @@ Without loss of generality, we can say that requirements engineering can be spli
 
 Regardless of the development life cycle followed -- be it pure waterfall, iterative, incremental, agile, or other -- these activities will be present, perhaps at different times in the project and to varying degrees of detail~\citep{Wiegers2013}. Following, are the essential actions in each sub-discipline
 
-\emph{Requirements elicitation} encompasses all of the activities involved with discovering requirements, such as interviews, workshops, document analysis and others. It is a process through which, those who acquire and those who supply a given system, discover, review, articulate, understand, and document the requirements on the system and the life cycle processes~(\citefield{ieee_std_29148}{journaltitle}). It typically takes either a usage-centric or a product-centric approach, although other strategies are also possible. The usage-centric strategy emphasizes understanding and exploring user goals to derive the necessary system functionality. The product-centric approach focuses on defining features that you expect will lead to marketplace or business success~\citep{Wiegers2013}.
+\emph{Requirements elicitation} encompasses all of the activities involved with discovering requirements, such as interviews, workshops, document analysis and others. It is a process through which, those who acquire and those who supply a given system, discover, review, articulate, understand, and document the requirements on the system and the life cycle processes~(\citefield{ieee_std_29148}{journaltitle}). It typically assumes either a usage-centric or a product-centric approach, although other strategies are also possible. The usage-centric strategy emphasizes understanding and exploring user goals to derive the necessary system functionality. The product-centric approach focuses on defining features that you expect will lead to marketplace or business success~\citep{Wiegers2013}.
 
-The same IEEE standard defines \emph{requirements analysis} as a process that transforms stakeholder and requirement-driven views of desired services into technical views of products that could deliver those services. The main goal is to obtain a precise understanding of each requirement and representing sets of requirements in appropriate ways. This is done by distinguishing user's goals from functional requirements, determining quality expectations, business rules, suggested solutions, and other information. Through this process high-level requirements are broken down into an appropriate level of detail, the relative importance of quality attributes is assessed and requirements are allocated to software components defined in the system architecture~\citep{Wiegers2013}.
+The same standard defines \emph{requirements analysis} as a process that transforms stakeholder and requirement-driven views of desired services into technical views of products that could deliver those services. The main goal is to obtain a precise understanding of each requirement and representing sets of requirements in appropriate ways. This is done by distinguishing user's goals from functional requirements, determining quality expectations, business rules, suggested solutions, and other information~\citep{Wiegers2013}.
 
 \emph{Requirements specification} involves representing and storing the collected knowledge and information in a persistent and well-organized fashion. The principal activity is translating the collected user needs into written requirements and, optionally visual models, suitable for comprehension, review and use by their intended audiences~\citep{Wiegers2013}.
 
 \citefield{ieee_std_29148}{journaltitle} defines \emph{requirements validation} as a confirmation by examination that requirements (individually and as a set) define the right system as intended by the stakeholders. It confirms that information gathered will enable developers to build a solution that satisfies the business objectives. The central activities are reviewing the documented requirements to correct any problems before the development group accepts them; developing acceptance tests and criteria to confirm that a product based on the requirements would meet customer needs and achieve the business objectives~\citep{Wiegers2013}.
 
-\citet{Wiegers2013} alludes that, from a practical point of view, the goal of \emph{requirements development} is to accumulate a shared understanding of requirements that is good enough to allow construction of the next portion of the product -- be that 1 percent or 100 percent of the entire product -- to proceed at an acceptable level of risk. It is in line with what~\citefield{ieee_std_29148}{journaltitle} refers to as a \emph{baseline} set of requirements, that is, \emph{'a specification or product that has been formally reviewed and agreed upon, that thereafter serves as the basis for further development, and that can be changed only through formal change control procedures'}. The major risk is that, if not performed properly, having to do excessive unplanned rework because of insufficient understanding of the requirements for the next chunk of work before starting design and construction~\citep{Wiegers2013}.
+\citet{Wiegers2013} allude that, from a practical point of view, the goal of \emph{requirements development} is to accumulate a shared understanding of requirements that is good enough to allow construction of the next portion of the product, be that 1 or 100 percent of the entire product, to proceed at an acceptable level of risk. It is in line with what~\citefield{ieee_std_29148}{journaltitle} refers to as a \emph{baseline} set of requirements, that is, \emph{'a specification or product that has been formally reviewed and agreed upon, that thereafter serves as the basis for further development, and that can be changed only through formal change control procedures'}. The major risk is that, if not performed properly, having to do excessive unplanned rework because of insufficient understanding of the requirements for the next chunk of work before starting design and construction~\citep{Wiegers2013}.
 
 \citefield{ieee_std_29148}{journaltitle} identifies processes and activities within, that are named differently, but that are in essence similar to the ones just described. The principal processes identified are \emph{stakeholder requirements definition} and \emph{requirements analysis} or \emph{system requirements analysis}. These two processes result in a baseline set of requirements, with a nature similar to the mentioned before. The architectural design process includes allocation and decomposition of requirements that triggers the recursive application of the requirements processes, for the definition of system element requirements and the iterative application of the requirements analysis process for derived requirements.
 
@@ -379,11 +381,11 @@ There is a common misconception that requirements engineering is just a single p
 
 If requirements are to play such a central role in systems development, they need to be maintained. Hence requirements engineering connects strongly with change management. Independently of where new or changed requirements come from, the impact of that change on quality, cost and schedule needs to be assessed. This assessment informs decisions to either accept or reject a change; negotiate the cost of change and organise and assign work to development teams~\citep{Hull2011}. The purpose of \emph{requirements management} is to anticipate and accommodate requirements changes, so as to minimize their disruptive impact on the project. Core requirements management activities include defining the requirements baseline; evaluating the impact of proposed requirements changes; establishing any relationships and dependencies between requirements and tracking requirements status and change activity throughout the project~\citep{Wiegers2013}.
 
-The key concept that enables this kind of impact analysis is requirements tracing, primarily concerned with understanding how high-level requirements -- objectives, goals, aims, aspirations, expectations, needs -- are turned into low-level requirements. It is therefore primarily concerned with the relationships between layers of information. For example, in a business context the concern is how a business vision determines a set of objectives and how these may be implemented as changes to the organisation and processes. In a systems development context, the focus is in determining how stakeholder requirements are met by system requirements and their breakdown in subsystems and components. Requirements tracing allow measuring the impact of change, track progress against a set of requirements and assess benefit against cost of implementation~\citep{Hull2011}.
+The key concept that enables this kind of impact analysis is requirements tracing, primarily concerned with understanding how high-level requirements -- objectives, goals, aims, aspirations, expectations, needs -- are turned into low-level requirements. It is therefore primarily concerned with the relationships between layers of information. Requirements tracing allow measuring the impact of change, track progress against a set of requirements and assess benefit against cost of implementation~\citep{Hull2011}.
 
 \section{Agile Requirements Engineering}
 \label{sec:agile_requirements}
-Traditional software development methods, such as waterfall~\footnote{~\citet{royce1970managing} is known to have first described the waterfall process, even though he did not refer to that term}, advocate a simple top-down flow of requirements information (see figure~\ref{fig:waterfall}). In this model, software development occurs in an orderly series of sequential stages. Requirements are agreed to, a design is created, and code follows thereafter. Lastly, the software is tested to verify its conformance to its requirements and design, and deployed to its users upon successful verification~\citep{Leffingwell2011}.
+Traditional software development methods, such as waterfall~\footnote{~\citet{royce1970managing} is known to have first described the waterfall process, even though he did not use that term}, advocate a simple top-down flow of requirements information (see figure~\ref{fig:waterfall}). In this model, software development occurs in an orderly series of sequential stages. Requirements are agreed to, a design is created, and code follows thereafter. Lastly, the software is tested to verify its conformance to its requirements and design, and deployed to its users upon successful verification~\citep{Leffingwell2011}.
 
 \begin{figure}[h!]
 \includegraphics[width=0.60\textwidth]{waterfall2}
@@ -394,7 +396,7 @@ Traditional software development methods, such as waterfall~\footnote{~\citet{ro
 
 The past decade has seen a movement to more lightweight and increasingly agile methods. Software technology has moved from supporting business operations to becoming a critical component of business strategy~\citep{Highsmith:2000:ASD:323922}. The move towards agile methods was driven by the same causes that led manufacturers to transition from mass production to lean production techniques, namely a focus on quality, cost reduction and an increase in speed to market.
 
-We will not detail an historical perspective on the evolution from predictive, waterfall-like methods to iterative and incremental processes (e.g RUP~\footnote{~see \citetitle{Kruchten2003},~ \citet{Kruchten2003} for details}) to the more recent agile and lean development methods~\citep{Leffingwell2011,Larman2003}. Instead, we describe an agile requirements artefact model and corresponding agile practices and principles, that compose the agile requirements approach found in current agile methods. In addition, we introduce BDD and explain it in the context of \emph{Specification by Example}~\citep{Adzic201106} practices and principles.
+We will not detail an historical perspective of the evolution from predictive, waterfall-like methods to iterative and incremental processes (e.g RUP~\footnote{~see \citetitle{Kruchten2003},~\citet{Kruchten2003} for details}) to the more recent agile and lean development methods~\citep{Leffingwell2011,Larman2003}. Instead, we describe an agile requirements artefact model and corresponding agile practices and principles, that compose the agile requirements approach found in current agile methods. In addition, we introduce BDD and explain it in the context of \emph{Specification by Example}~\citep{Adzic201106} practices and principles.
 
 \subsection{Agile practices and principles}
 The agile manifesto~\footnote{~see http://www.agilemanifesto.org/ for details} declares that: 
@@ -457,7 +459,7 @@ User Stories & Are created as specifications of the customer requirements. User 
 All agile processes place focus on \emph{verification and validation} of requirements, using testing techniques such as unit, integration and regression testing. Other quality review techniques are also used such as design and code inspections, retrospectives and code quality reviews. They also foster team communication and collaborative work by doing daily 'stand ups' -- started in Scrum and now widely accepted as common practice, where all team members stand up around a circle, hence the name 'stand ups', for about 10 to 15 minutes and discuss what they have been doing since the last time they met and any issues or blockers they may be faced with -- and use of code standards for facilitating exchange of information among team members.
 
 \subsection{Agile requirements artefact model}
-Nowadays, a significant number of organizations have made the transition to agile and that has brought to light common patterns for agile software processes. ~\citet{Leffingwell2011} introduces the idea of the \emph{Agile Enterprise Big Picture} (see figure~\ref{fig:scaled_agile_framework}) with the goal of sharing a language for discussion, a set of abstractions, and a visual model that describes agile software development and delivery process mechanisms, the teams and organizational units, and some of the roles key individuals play in the new agile paradigm. The vocabulary introduced is a method-independent set of constructs widely used in the industry and generally accepted as the norm in current agile development practices.
+Nowadays, a significant number of organizations have made the transition to agile and that has brought to light common patterns for agile software processes. ~\citet{Leffingwell2011} introduces the idea of the \emph{Agile Enterprise Big Picture} (see figure~\ref{fig:scaled_agile_framework}) with the goal of sharing a language for discussion, a set of abstractions, and a visual model that describes agile software development and delivery process mechanisms, the teams and organizational units, and some of the roles key individuals play in the new agile paradigm. The vocabulary introduced is a method-independent set of constructs widely used in the industry and generally accepted in current agile development practices.
 
 \begin{figure}[h]
 \includegraphics[width=0.95\textwidth]{ScaledAgileFrameworkbw}
@@ -483,7 +485,7 @@ At the \emph{Portfolio} level
 ... a mix of themes are used to drive the investment priorities for the enterprise. That construct assures that the work being performed is the work necessary for the enterprise to deliver on its chosen business strategy. Investment themes drive the portfolio vision, which is expressed as a series of larger, epic-scale initiatives, which will be allocated to various release trains over time
 \end{displaycquote}
 
-In the context of this thesis, \emph{Team} and \emph{Program} levels are the most relevant. In addition, together with an agile requirements artefact meta-model (see figure~\ref{fig:metamodel_partial}), we have an unambiguous and coherent language for doing research in agile requirements engineering. We will delve less into the organisational and team composition aspects of the model, but instead focus on the elements introduced by the meta-model.
+In the context of this thesis, \emph{Team} and \emph{Program} levels are the most relevant. In addition, together with an agile requirements artefact meta-model (see figure~\ref{fig:metamodel_partial}), we are in possession of an unambiguous and coherent language for doing research in agile requirements engineering. We will delve less into the organisational and team composition aspects of the model, but instead focus on the elements introduced by the meta-model.
 
 \begin{figure}[h]
 \includegraphics[width=0.65\textwidth]{metamodel_partial2}
@@ -512,7 +514,9 @@ At \emph{Program} level, the backlog contains a prioritized set of \emph{feature
 \label{fig:metamodel_features_tests}
 \end{figure}
 
-Similar to \emph{Stories}, \emph{Features} also require acceptance tests to ensure all stories that realise it are complete. Note that a \emph{Feature acceptance test} is not a composition of \emph{Story acceptance tests}, as they should focus on other types of tests such as performance, `what-if' scenarios, etc. \emph{Features} and \emph{Stories} are used to specify the functionality of a system but we should not ignore non-functional requirements. The model in figure~\ref{fig:metamodel_nfrs} we see first that some backlog items may be constrained by non-functional requirements, and some are not. We also see that non-functional requirements may not apply to backlog items, meaning that they stand independently and apply to the system as a whole~\citep{Leffingwell2011}.
+Similar to \emph{Stories}, \emph{Features} also require acceptance tests to ensure all stories that realise it are complete. Note that a \emph{Feature acceptance test} is not a composition of \emph{Story acceptance tests}, as they should focus on other types of tests such as performance, `what-if' scenarios, etc. 
+
+\emph{Features} and \emph{Stories} are used to specify the functionality of a system but we should not ignore non-functional requirements. In the model in figure~\ref{fig:metamodel_nfrs}, we see first that some backlog items may be constrained by non-functional requirements, and some may not. We also see that non-functional requirements may not apply to backlog items, meaning that they stand independently and apply to the system as a whole~\citep{Leffingwell2011}.
 
 \begin{figure}[h]
 \includegraphics[width=0.55\textwidth]{metamodel_nfrs}
@@ -551,7 +555,7 @@ Some authors and practitioners do not consider BDD a software development method
 
 It is important to note that BDD was developed as a mechanism for fostering collaboration, improving communication and requirements discovery through examples. In traditional development methods, requirements follow a sequential set of activities where typically a business owner informs an analyst of his needs and goals, who in turn will write a requirements document that a developer translates into software. Simultaneously, or upon development is complete, a tester translates the same requirements document into test cases which, if executed with success, lead to user and technical documentation being produced and the software being deployed to end-users. In BDD the focus is on collaboration, with all interested parties sharing a structured specification that is used to simultaneously, specify features to be implemented and tests to be executed.
 
-BDD can also be seen as an instance of \emph{Specification by Example}~\citep{Adzic201106} as they share a common set of principles and practices. \emph{Specification by example} introduces a consistent and coherent language for patterns, ideas and artefacts used for teams who derive \emph{executable specifications} and \emph{living documentation} from \emph{business goals}. The practices of \emph{Specification by Example} do not form a fully fledged software development methodology but rather supplement other methodologies -- both iterative and flow based -- to provide rigour in specifications and testing, enhance communication between various stakeholders and members of the software development team~\citep{Adzic201106}.
+BDD can also be seen as an instance of \emph{Specification by Example}~\citep{Adzic201106} as they both share a common set of principles and practices. \emph{Specification by example} introduces a consistent and coherent language for patterns, ideas and artefacts used for teams who derive \emph{executable specifications} and \emph{living documentation} from \emph{business goals}. The practices of \emph{Specification by Example} do not form a fully fledged software development methodology but rather supplement other methodologies -- both iterative and flow based -- to provide rigour in specifications and testing, enhance communication between various stakeholders and members of the software development team~\citep{Adzic201106}.
 
 \begin{figure}[h]
 \includegraphics[width=0.9\textwidth]{SpecificationbyExample}
@@ -562,7 +566,7 @@ BDD can also be seen as an instance of \emph{Specification by Example}~\citep{Ad
 
 Instead of relying on users to provide requirements, teams \emph{derive scope from goals}, taking customer's business goals and defining the scope in terms of the set of features that achieve those goals. This is done collaboratively with business users and team members, to improve communication and reduce unnecessary rework. \emph{Specifying collaboratively} they are able to harness the knowledge and experience of all team members. It also creates a collective ownership of specifications, making everyone more engaged in the delivery process~\citep{Adzic201106}.
 
-Teams \emph{illustrate specifications using examples}. The team works with the business users to identify key examples that describe the expected functionality, flushing out functional gaps and inconsistencies and ensuring that everyone involved has a shared understanding of what needs to be delivered, avoiding rework that results from misinterpretation and translation~\citep{Adzic201106}.
+Teams \emph{illustrate specifications using examples}. The team works with business users to identify key examples describing expected functionality, flushing out functional gaps and inconsistencies and ensuring that everyone involved has a shared understanding of what needs to be delivered, avoiding rework that results from misinterpretation and translation~\citep{Adzic201106}.
 
 \emph{Key examples} must be concise to be useful. By \emph{refining the specification}, successful teams remove extraneous information and create a concrete and precise context for development and testing. They define the target with the right amount of detail to implement and verify it. They identify what the software is supposed to do, not how it does it~\citep{Adzic201106}.
 
@@ -570,7 +574,7 @@ Once a team agrees on \emph{specifications with examples} and refines them, the 
 
 \emph{Validating frequently} executable specifications against the system ensures we can discover any differences between the system and the specifications and keep both synchronised in face of changes to requirements or implementation. Not only do teams validate frequently, they also ensure that specifications are actual, current and consistent, effectively turning them into \emph{living documentation}.
 
-In BDD, \emph{executable specifications} are expressed using \emph{Gherkin}~\citep{wynne2012cucumber}, a domain specific language used to specify features of the system or application being built. 
+In BDD, \emph{executable specifications} are expressed using \emph{Gherkin}~\citep{wynne2012cucumber}, a domain specific language used to specify desired features of a system or application (see feature~\ref{lst:feature_example} for an example of a specification in Gherkin). 
 
 \begin{featurelist}{Example of a feature file in Gherkin~\citep{wynne2012cucumber}}{lst:feature_example}
 \begin{featurecode}{0.7}
@@ -604,46 +608,317 @@ Feature: Feedback when entering invalid credit card details
 \end{featurelist}
 
 \emph{Gherkin} specifications are  defined from plain-language text files called \emph{feature files}, containing scenarios to implement and test, representing concrete examples of the features being specified. Each scenario is a list of steps for a BDD tool such as Cucumber to work through~\citep{wynne2012cucumber}. These tools parse feature files turning each scenario step into source code, typically a method call in one of the tool's supported languages. 
-Feature~\ref{lst:feature_example} displays a feature file, specified in \emph{Gherkin}, for a credit card application containing two scenarios with concrete examples of credit card validation rules. In Gherkin, we use the \emph{Feature} keyword to name (text after \emph{Feature} keyword, excluding colon character) and describe (all remaining text until the next keyword) a feature. Gherkin uses the \emph{Background} keyword to specify a set of steps that are common to every scenario, within each scenario \emph{Given} is used to set up the context where the scenario happens, \emph{When} to interact with the system somehow and \emph{Then} to check that the outcome of that interaction was what we expected. \emph{And} and \emph{But} keywords are used to make specifications more readable and take the same role as the keyword in the previous line. For example, in feature~\ref{lst:feature_example} the second line in the fist scenario 'And all the other details are correct' is equivalent to 'When all the other details are correct'.
+Feature~\ref{lst:feature_example} displays a feature file, specified in \emph{Gherkin}, for a credit card application containing two scenarios with concrete examples of credit card validation rules. In Gherkin, we use the \emph{Feature} keyword to name (text after \emph{Feature} keyword, excluding colon character) and describe (all remaining text until the next keyword) a feature. Gherkin uses the \emph{Background} keyword to specify a set of steps that are common to every scenario and within each scenario \emph{Given} is used to set up the context where the scenario happens, \emph{When} to interact with the system somehow and \emph{Then} to check that the outcome of that interaction was what we expected. \emph{And} and \emph{But} keywords are used to make specifications more readable and take the same role as the keyword in the previous line.
 
 \subsection{Summary}
 
-In this chapter we have started by providing definitions of requirements and presented them within the context of a wider requirements engineering discipline. We proceeded by doing an analysis of the activities that are part of requirements engineering and described how they manifest in the context of agile development methods. We finished by introducing BDD in the context of \emph{Specification by Example} and gave an example of how features for an application or system are produced in Gherkin.
+In this chapter we have provided definitions of requirements and presented them within the context of requirements engineering. We followed with an analysis of core activities of requirements engineering and described how they manifest in the context of agile development methods. Finally, we introduced BDD in context with \emph{Specification by Example} and gave an example a feature specification in Gherkin.
 
-At this moment, we would like to state that in BDD, and other agile approaches in general, handling of non-functional requirements is ill defined. Customers or users talking about what they want the system to do normally do not think about resources, maintainability, portability, safety or performance~\citep{Paetsch:2003tl}. 
-
-In the next chapter we will explore further the notion of non-functional requirements, present some well known classification schemes, and methods used for their elicitation and analysis with a focus on goal-oriented approaches and GRL~\citep{Amyot2010}, in particular.
+It is important to state that in BDD, and other agile approaches in general, handling of non-functional requirements is ill defined. Customers or users talking about what they want the system to do normally do not think about resources, maintainability, portability or performance~\citep{Paetsch:2003tl}. In the next chapter we will explore further the notion of non-functional requirements, present some well known classification schemes, and methods used for their elicitation and analysis with a focus on goal-oriented approaches and GRL~\citep{Amyot2010}, in particular.
 
 \chapter{On non-functional requirements}
 \label{ch:nfr_research}
-For many years, the requirements for a software product have been classified broadly as either functional or non-functional. The functional requirements are evident: they describe the observable behaviour of the system under various conditions. However, many people dislike the term 'non-functional'. That adjective says what the requirements are not, but it doesn't say what they are. We are sympathetic to the problem, but we lack a perfect solution~\citep{Wiegers2013}.
+In the previous chapter we have followed a generic approach to requirements engineering, without focusing on any particular requirement type. In this chapter, we take a different view and focus on the concept of non-functionality in requirements engineering.
 
-Other-than-functional requirements might specify not what the system does, but rather how well it does those things. They could describe important characteristics or properties of the system. These include the system's availability, usability, security, performance, and many other characteristics. Some people consider non-functional requirements to be synonymous with quality attributes, but that is overly restrictive. For example, design and implementation constraints are also non-functional requirements, as are external interface requirements~\citep{Wiegers2013}.
+It is consensual that a system's utility is determined by both its functional and non-functional characteristics, such as usability, flexibility and performance~\citep{Chung:2009vg}.
 
-Still other non-functional requirements address the environment in which the system operates, such as platform, portability, compatibility, and constraints. Many products are also affected by compliance, regulatory, and certification requirements. There could be localization requirements for products that must take into account the cultures, languages, laws, currencies, terminology, spelling, and other characteristics of users. Though such requirements are specified in non-functional terms, the business analyst typically will derive numerous bits of functionality to ensure that the system possesses all the desired behaviours and properties~\citep{Wiegers2013}.
+The perception of quality is determined by these two characteristic sets, and therefore, they must be taken into consideration in the development of software systems. However, most of the attention in software engineering in the past has been centred on notations and techniques for defining and providing the functions of a software system~\citep{Chung:2009vg}. Additionally, in the occasions where non-functionality is taken into consideration, the needed quality characteristics are treated only as technical issues related mostly to the detailed design or testing of an implemented system~\citep{Chung:2009vg}.
 
-In this thesis, rather than worry about precisely what to call these sorts of information, best practice is to ensure that they are part of requirements elicitation and analysis activities. A product can be delivered with all the desired functionality but that users hate because it doesn't match their (often unstated) quality expectations~\citep{Wiegers2013}.
+\citet{Chung:2009vg} noted that real-world problems are more non-functionally oriented than they are functionally oriented, e.g., poor productivity, slow processing, high cost, low quality and unhappy customers. Rather than worry about precisely how to refer to these information types, it is more pertinent to ensure they are part of requirements elicitation and analysis activities. A product can be delivered with the desired functionality but that users hate because it doesn't match their (often unstated) quality expectations~\citep{Wiegers2013}.
 
+In the remainder of this chapter, we will highlight issues with current definitions of non-functional requirements. We will also list relevant classification and representation schemes. Finally, we will introduce goal-oriented approaches to handling non-functional requirements, with a focus on goal-oriented requirements language (GRL).
 
+\section{Definition}
+For many years, the requirements for a software product have been classified broadly as either functional or non-functional. The functional requirements are evident: they describe the observable behaviour of the system under various conditions. However, many people dislike the term 'non-functional'~\citep{Wiegers2013}. 
 
-\section{Product or process oriented approaches}
+These 'other-than-functional' requirements, could refer to \emph{how} well a system performs its functions, rather than to \emph{what} those functions may be. They could describe important characteristics or properties of a system, such as availability or performance. Likewise, they could be considered as \emph{quality attributes}~(\citefield{ieee_std_1061}{journaltitle}), but that view ignores other aspects such as design and implementation constraints or business rules, which we could also associate with non-functionality~\citep{Wiegers2013}.
 
-\section{Requirements as Goals}
-\label{ch:gore}
+We now provide three selected definitions, not because of their special correctness or attractiveness, but because they are amongst the more popular ones and support the argument that present definitions are inconsistent, ambiguous and confusing at times~\citep{Glinz:2007ehba}.
+
+\citet{Wiegers2013} defines non-functional requirements as
+\begin{displaycquote}{Wiegers2013}
+... descriptions of a \emph{property} or \emph{characteristic} that a software system must exhibit or a \emph{constraint} that it must respect, other than an observable system behaviour
+\end{displaycquote}
+
+while \citet{Jacobson:1999:USD:309683} defines them as
+\begin{displaycquote}{Jacobson:1999:USD:309683}
+.. a requirement that specifies system properties, such as environmental and \emph{implementation constraints}, performance, platform dependencies, maintainability, extensibility, and reliability. A requirement that specifies \emph{physical constraints} on a functional requirement.
+\end{displaycquote}
+
+and \citet{Sommerville:1998:REP:552009} as requirements which are
+\begin{displaycquote}{Sommerville:1998:REP:552009}
+... not specifically concerned with the functionality of a system, instead specifying restrictions on the product being developed and the development process, and \emph{external constraints} the product must meet.
+\end{displaycquote}
+
+\citet{Glinz:2007ehba} identifies terminological, but also major conceptual issues with current definitions of non-functional requirements. Most definitions use the terms \emph{property} or \emph{characteristic}, \emph{attribute}, \emph{quality} or \emph{constraint} differently, and the meaning of those terms is not always clear. For example, \emph{property} and \emph{characteristic} denote something that the system must have, but that is equally a criteria for inclusion in functional requirements definitions. Also, every non-functional requirement (or functional, for this matter) can be regarded as a quality of a system or as a constraint, because it restricts the space of potential solutions to those that meet this requirement~\citep{Glinz:2007ehba}. In addition, there are references to implementation, physical and external constraints and not only there is a lack of clear guidance as to what they intend to restrict, also, these restrictions or constraints are known by different terms in other definitions, such as \emph{'interface requirements'} or \emph{'design constraints'}. Finally, \emph{performance} is treated as a quality or attribute is most definitions, but it deserves a category of its own in some quality models~(\citefield{ieee_std_29148}{journaltitle}).
+
+\section{Classification and representation schemes}
+
+The definitions we have just alluded to, refer to concepts that are considered to be part of non-functional requirements. However, there are more detailed classification schemes that are worth our attention.
+
+\citet{Roman:1985} provides one such classification scheme based on the notion of constraints and types of constraints. \emph{Interface} constraints, define the way components of a system or application and its environment, interact. \emph{Performance} constraints, cover a broad range of issues dealing with time/space bounds, reliability, security, and survivability. \emph{Operating} constraints, include physical (e.g., size, weight, power, etc.), personnel availability, skill level considerations, accessibility for maintenance, environmental conditions (e.g., temperature, radiation, etc.), and spatial distribution of components. \emph{Life-cycle} constraints, fall into two broad categories: those that pertain to qualities of the design, such as maintainability or portability, and those that limit the development, maintenance, and enhancement process. \emph{Economic} constraints, represent considerations relating to immediate and long term costs. Finally, \emph{political} constraints deal with policy and legal issues. This view of non-functional requirements as constraints of components of a system or application will be explored further in Chapter~\ref{ch:Extendingbdd}.
+
+Another classification scheme is introduced by~\citefield{ieee_std_9126One}{journaltitle} and its interpretation of software quality. Software product quality can be evaluated by measuring internal attributes (typically static measures of intermediate products), or by measuring external attributes (typically by measuring the behaviour of the code when executed), or by measuring quality in use attributes. The objective is for the product to have the required effect in a particular context of use.
+
+This standard defined a quality model for external and internal quality. It categorises software quality attributes into six characteristics (functionality, reliability, usability, efficiency, maintainability and portability), which are further subdivided into sub-characteristics
+
+\begin{figure}[h]
+\includegraphics[width=0.95\textwidth]{QualityInLifecycle}
+\centering
+\caption[Software product quality model]{Software product quality model in ~\citefield{ieee_std_9126One}{journaltitle}}
+\label{fig:QualityInLifecycle}
+\end{figure}
+
+Interestingly, several issues have been identified with~\citefield{ieee_std_9126One}{journaltitle} such as terminology inconsistencies with other ISO standards; ambiguities in the way it is structured in terms of characteristics and sub-characteristics; incomplete set of characteristics and sub-characteristics, etc.~\citep{Al-Qutaish}.
+
+\begin{figure}[h]
+\includegraphics[width=0.65\textwidth]{iso25010}
+\centering
+\caption[ISO 25010 quality model]{ISO 25010 quality model in ~\citefield{ieee_std_25010}{journaltitle}}
+\label{fig:iso25010}
+\end{figure}
+
+This has lead to a revised standard that extends this quality model with eight product quality characteristics and 31 sub-characteristics~(\citefield{ieee_std_25010}{journaltitle}) (see figure~\ref{fig:iso25010}).
+
+Another classification sheme is FURPS~\citep{Grady1987}, an acronym representing a model for classifying software quality attributes or non-functional requirements, based on five categories: functionality, usability, reliability, performance and supportability~(see table~\ref{tb:furps}). The original FURPS model was later extended to empathize various specific attributes~\citep{adams2015non}.
+
+\begin{table}[h!]
+\caption[FURPS quality model]{FURPS quality model~\citep{Grady1987}}
+\label{tb:furps}
+\setlength{\extrarowheight}{1.8pt}
+\centering
+\scalebox{0.75}{
+\begin{tabularx}{0.55\textwidth}{cX}
+\toprule \multicolumn{1}{c}{\bfseries{Category}}&
+\multicolumn{1}{l}{\bfseries{Attribute}}\\
+\addlinespace
+\midrule
+\multirow{4}{*}{Functionality} & Feature set \\
+& Capabilities \\ 
+& Generality \\ 
+& Security \\ \midrule
+\multirow{4}{*}{Usability} & Human factors \\
+& Aesthetics \\ 
+& Consistency \\ 
+& Documentation \\ \midrule
+\multirow{5}{*}{Reliability} & Frequency/severity of failure \\
+& Recoverability \\ 
+& Predictability \\ 
+& Accuracy \\
+& Mean time to failure \\ \midrule
+\multirow{5}{*}{Performance} & Speed \\
+& Efficiency \\ 
+& Resource consumption \\ 
+& Throughput \\
+& Response time \\ \midrule
+\multirow{9}{*}{Supportability} & Testability \\
+& Extensibility \\ 
+& Adaptability \\ 
+& Maintainability \\
+& Compatibility \\
+& Configurability \\
+& Serviceability \\
+& Installability \\
+& Localizability \\
+\addlinespace
+\bottomrule
+\end{tabularx}
+}
+\end{table}
+
+Some classification schemes emerge from research work carried out in specific domains. For example, in the context of Service Oriented Architectures (SOA)~\footnote{~https://en.wikipedia.org/wiki/Service-oriented\_architecture}, ~\citet{Hanane2012} defined a catalogue of generic (i.e., domain independent) non-functional properties to be considered when service descriptions are developed including reliability, usability and security, but also others less obvious such as price -- the fee that the service consumer is expected to pay for invoking a given service -- or reputation of service, understood as the opinion of service consumers towards a service.
+
+A more recent classification scheme is provided by~\citet{adams2015non}. In this work, over 200 non-functional requirements are reduced, using results reported in eight models from the extant literature. The 27 resultant non-functional requirements have been organized in a taxonomy that categorizes the 27 major nonfunctional requirements within four distinct categories: \emph{System Design Concerns}, \emph{System Adaptation Concerns}, \emph{System Viability Concerns} and \emph{System Sustainment Concerns}. Figure~\ref{fig:nfrs_in_systems_design} show the relationship between the four system concerns and the 27 non-functional requirements selected for consideration during a system's life cycle.
+
+\begin{figure}[h]
+\includegraphics[width=0.95\textwidth]{nfrs_in_systems_design}
+\centering
+\caption[Taxonomy of non-functional requirements for systems]{Taxonomy of non-functional requirements for systems~\citep{adams2015non}}
+\label{fig:nfrs_in_systems_design}
+\end{figure}
+
+There have also been attempts to automate the classification of non-functional requirements. One of such approaches, detects and classifies stakeholders quality concerns across requirements specifications containing scattered and non-categorized requirements, and also across free-form documents such as meeting minutes or notes~\citep{Cleland-Huang:2007}. A similar approach, proposes a semi-supervised text categorization for the automatic identification and classification of non-functional requirements~\citep{Casamayor:2010}.
+
+According to \citet{Glinz:2007ehba}, the categorization and sub-classification of non-functional requirements in current classification schemes, reflect rather divergent concepts. For instance, whilst~\citet{Roman:1985} presents a classification scheme based on the notion of constraints, \citet{adams2015non} devises another scheme around concerns. Glinz had previously found more classification problems due to mixing three concepts that should better be separated. These are the concepts of \emph{kind} (should a given requirement be regarded as a function, a quality, a constraint, etc.), \emph{representation} and \emph{satisfaction} (hard vs. soft requirements)~\citep{Glinz:2005unba}.
+
+A software practitioner should be aware of the well known classification schemes and their limitations, such as the terminology and categorically inconsistencies mentioned above. More than be concerned with choosing the right scheme, he or she should know what each attribute or quality characteristic means, such as performance, so that the correct intent can be communicated between users, developers and testers who, ultimately, will implement and verify appropriate features in the product or application~\citep{Chung:2009vg}.
+
+According to~\citet{Matoussi:2008wr}, there are three extreme ways of specifying software requirements: complete formal specifications, informal specifications and hybrid or semi-formal approaches. We proceed by sampling from the literature, several approaches belonging to the above mentioned categories.
+
+\emph{No-Fun}~\citep{Franch1998} belongs to the formal category of representation schemes. \emph{NoFun} (acronym for 'NOn-FUNctional'), is a formal language for the description of software quality consisting of a hierarchy of software quality characteristics and attributes formulated as abstract and concrete quality models; component quality descriptions through assignment of values to component quality basic attributes, and finally, quality requirements stated over components, both context-free (universal quality properties) and context-dependent (quality properties for a given framework software domain, company, project, etc.)~\citep{Franch1998}. In another paper~\cite{NoFunWithISO}, the framework was applied to the set of quality attributes refinements that are part of~\citet{ieee_std_9126One}.
+
+\citet{Chung:2009vg} mention that an informal and common way to represent non-functional requirements is by means of requirements sentences, which are commonly listed separately under different sections of a requirements document and refers to~\citefield{ieee_830}{journaltitle}, superseded by~\citefield{ieee_std_29148}{journaltitle}, as an example.
+
+There are also informal but structured approaches around requirements sentences, such as the \emph{Volere} requirements process~\citep{Robertson:1999}, that is comprised of an identification number, NFR type, use case related to it, description, rationale, originator, fit criterion, customer satisfaction, customer dissatisfaction, priority, conflicts, supporting material, and history~\citep{Chung:2009vg}.
+
+In spite of all of the above ways by which non-functional requirements have been classified and represented, goal-oriented approaches were the first to treat \nfrs in more depth, dealing with their representation but also conflict detection amongst multiple non-functional requirements. 
+
+\section{Goal-oriented approaches}
 The use of goals in requirements engineering has received increasing attention over the past few years. Such recognition has led to a whole stream of research on goal modelling, goal specification, and goal-based reasoning for multiple purposes, such as requirements elaboration, verification or conflict management, and under multiple forms, from informal to qualitative to formal~\citep{Lamsweerde:2001wpba}.
 
-In addition, the requirements engineer needs to explore alternatives and evaluate their feasibility and desirability with respect to business goals. We share the view that goal-oriented analysis complements and strengthens traditional requirements engineering techniques by offering a means for capturing and evaluating alternative ways of meeting business goals~\citep{MylopoulosExpl2001}.
+A goal captures, at different levels of abstraction, the various objectives the system under consideration should achieve~\citep{Lamsweerde:2001wpba}. Goals also cover functional concerns associated with the services to be provided, and non-functional ones, associated with quality of service, such as safety, security, accuracy, performance, and so forth.
 
-\section{Goal oriented requirements language~(GRL)}
+The \emph{NFR Framework}~\citep{Chung2000} has probably been the first requirements model to address the lack of a proper treatment of quality characteristics by addressing both functional and non-functional requirements as a whole, and non-functionality at a high level of abstraction for both the problem and the solution~\citep{Chung:2009vg}.
+
+In the \emph{NFR Framework}, non-functional requirements are treated as softgoals, i.e., goals that need to be addressed not absolutely but in a good enough sense. Reflecting the sense of 'good enough', the \emph{NFR Framework} introduces the notion of satisficing, and, with this notion, a softgoal is said to satisfice (instead of satisfy) another softgoal. Softgoals are related through relationships which represent the influence or interdependency of one softgoal on another. A qualitative analysis method is included in the framework for deciding the status of softgoals, given that other, related softgoals are satisfied or have been found to be unsatisfiable~\citep{Chung2000}.
+
+\begin{figure}[h]
+\includegraphics[width=0.75\textwidth]{SIGLegend}
+\centering
+\caption[Catalogue of visual elements in NFR Framework]{Catalogue of visual elements in NFR Framework~\footnotemark}
+\label{fig:sig_legend}
+\end{figure}
+\footnotetext{~sourced from  http://www.utdallas.edu/~supakkul/NFR-modeling/label-evaluation}
+
+Figure~\ref{fig:sig_legend} shows in graphical form the most important concepts of the \emph{NFR Framework}. Softgoals, which are "soft" in nature, are shown as clouds and can be decomposed in other more specific soft-goals though decomposition links. We say that softgoals are refined downwards into subgoals, and subgoals contribute upwards to parent softgoals. There are two main types of decompositions \emph{AND} and \emph{OR}, with the former used when several subgoals are needed together to meet a higher softgoal, and the latter when one subgoal alone is sufficient. 
+
+When the non-functional requirements have been sufficiently refined, the next step is to identify \emph{operationalisations} (tick dark clouds), which are possible development techniques or specific solutions for achieving these non-functional requirements. In the \emph{NFR Framework}, each softgoal or contribution is associated with a \emph{label}, indicating the degree to which it is satisficed or denied.
+
+The \emph{NFR Framework} offers several different types of contributions whereby a softgoal satisfices, or denies, another softgoal - \emph{MAKE}, \emph{HELP}, \emph{HURT} and \emph{BREAK} are the prominent ones. While \emph{MAKE} and \emph{BREAK} respectively reflect our level of confidence in one softgoal fully satisficing or denying another, \emph{HELP} and \emph{HURT} respectively reflect our level of confidence in one softgoal partially satisficing or denying another~\citep{Chung:2009vg}. 
+
+The NFR Framework uses non-functional requirements such as security, accuracy, performance and cost to drive the overall design process. The framework, offers a structure for representing and recording the design and reasoning process in graphs, called softgoal interdependency graph (SIG)~\citep{Chung2000}. 
+
+Main requirements are shown as \emph{softgoals} at the top of a graph. Softgoals are connected by \emph{interdependency links}, which are shown as lines, often with arrowheads. Softgoals have associated \emph{labels} (values representing the degree to which a softgoal is achieved) which are used to support the reasoning process during design~\citep{Chung2000}. 
+
+Figure~\ref{fig:account_nfrs} shows a SIG for a hypothetical credit card application where security of account information, and good performance in the storing and updating of that information have been elicited as non-functional requirements to attain.
+
+\begin{figure}[h]
+\includegraphics[width=0.95\textwidth]{AccountNFRs2}
+\centering
+\caption[Example of a Softgoal Interdependency Graph]{Example of a Softgoal Interdependency Graph (SIG)~\footnotemark}
+\label{fig:account_nfrs}
+\end{figure}
+\footnotetext{~sourced from  http://www.utdallas.edu/~supakkul/NFRs-catalog/}
+
+These two non-functional requirements, softgoals in the \emph{NFR Framework} terminology, are represented as clouds at the top of the figure. Softgoals have a type (in this case, security and performance) and a topic, which refers to an entity from the domain or subject matter, in this case bank accounts. In the figure, secure accounts softgoal is decomposed into sub-softgoals integrity, confidentiality and availability. In this case, the developer or designer has taken the view that authorizing access to account information would help attain confidentiality of accounts softgoal. This authorization access, is then refined into an \emph{OR} decomposition of operationalisations, namely 'Use pin', 'Compare signature' or 'Require other ID'.
+
+Faced with those options, a decision is made to compare signatures by labelling the 'compare signature' operationalisation as satisficed, which in turn will do the same to 'Authenticate user access'.
+
+The \emph{NFR Framework}, rationalizes the development process by providing techniques for justifying design decisions made. These design decisions may positively or negatively affect one or more non-functional requirements, establishing interdependencies that allow inferring the degree to which those non-functional requirements are satisficed or denied~\citep{Chung2000}.
+
+Handling non-functional requirements is complex, as it is difficult to define a non-functional term completely unambiguously and hard to explore a complete list of possible solutions and choose the best, or optimal solution~\citep{Chung:2009vg}. Therefore, the \emph{NFR Framework} takes a more lightweight and qualitative approach towards non-functional requirements, taking a view that softgoals are idealizations and, as such, without all its defining properties necessarily established.
+
+\citet{Horkoff2012} suggests that models focusing on stakeholder goals are particularly suitable for elicitation and analysis in early requirements engineering, as they can show the underlying motivations for systems, capture non-functional success criteria, and show the effects of high-level design alternatives on the attainment of goals. We call this type of model, including agents with interdependent goals, agent-goal models, of which \emph{i*} and GRL are some of the most prominent examples.
+
+The \emph{i*} framework incorporates concepts from the \emph{NFR framework}, including softgoals, \emph{AND/OR} decompositions, and contribution links, as well as (hard) goals, resources, and dependencies between actors (agents)~\citep{Horkoff2013}. \emph{i*} consists of two main modelling components. The \emph{Strategic Dependency (SD)} model is used to describe the dependency relationships among various actors in an organizational context. The \emph{Strategic Rationale (SR)} model is used to describe stakeholder interests and concerns, and how they might be addressed by various configurations of systems and environments~\citep{Yu1997}.
+
+\begin{figure}[h]
+\includegraphics[width=0.95\textwidth]{istar_example}
+\centering
+\caption[Example of an \emph{i*} Strategic Dependency (SD) model]{Example of an \emph{i*} Strategic Dependency (SD) model~\citep{Roy:2007wyba}}
+\label{fig:istar_example}
+\end{figure}
+
+Figure~\ref{fig:istar_example} shows a simple SD model with two actors represented by circles, a Customer and an Electronic Payment System, and their inter-dependencies. In the example, Payment represents a resource to be provided by the Customer, Secure Payment is a softgoal to be achieved by the System, and Keep Password Secret is a goal to be achieved by the Customer~\citep{Roy:2007wyba}.
+
+The central concept in \emph{i*} is that of the intentional actor. Organizational actors are viewed as having intentional properties such as goals, beliefs, abilities, and commitments. Actors depend on each other for goals to be achieved, tasks to be performed, and resources to be furnished. By depending on others, an actor may be able to achieve goals that are difficult or imp 	ossible to achieve on its own~\citep{Yu1997}.
+
+The concepts of \emph{actors} and \emph{intentional elements} in \emph{i*} have influenced other goal-oriented languages, and in particular GRL, a visual modelling notation for intentions, business goals, and non-functional requirements of many stakeholders, for alternatives that have to be considered, for decisions that were made, and for rationales that helped make these decisions~\citep{amyot2011user}. We describe GRL in depth in the next section.
+
+\subsection{Goal-oriented Requirements Language~(GRL)}
 \label{sec:gore}
-Goals denote the objectives a system must meet. Eliciting high level goals early in the development process is crucial. However, goal-oriented requirements elicitation is an activity that continues as development proceeds, as high-level goals (such as business goals) are refined into lower-level goals (such as technical goals that are eventually operationalised in a system). Eliciting goals focuses the requirements engineer on the problem domain and the needs of the stakeholders, rather than on possible solutions to those problems~\citep{Nuseibeh:2000ub}.
+The Goal-oriented Requirements Language (GRL)~\citep{Amyot2010}, inherits the concept of softgoal from the \emph{NFR Framework}, and adopts non-functionality and related attributes, as first class modelling concepts~\citep{Chung:2009vg}. GRL captures business or system goals, alternative means of achieving goals (either objectively or subjectively), and rational for contributions and decisions~\citep{Amyot2003}. The language was developed with the following capability targets~\citep{Amyot2003}
 
-A goal is an objective the system under consideration should achieve. Goals capture, at different levels of abstraction, the various objectives the system under consideration should achieve~\citep{Lamsweerde:2001wpba}. Goals also cover different types of concerns: functional concerns associated with the services to be provided, and non-functional ones, associated with quality of service, such as safety, security, accuracy, performance, and so forth.
+\begin{itemize}
+\item to enable reasoning about feature interactions and trade-offs early in the design process
+\item to support the specification, analysis and management of goals and non-functional requirements
+\item to model the relationship between goals and system requirements
+\item to capture reusable analysis and design knowledge about non-functional requirements
+\end{itemize}
 
-\pagebreak
+GRL is part of User Requirements Notation (URN)~(\citefield{ituZ151}{journaltitle}), an ITU-T approved standard, with two complementary notations: GRL for modelling actors and their intentions, goals and non-functional requirements and Use Case Maps (UCM) notation for describing scenarios and architectures~\citep{Amyot2003}.~\citefield{ituZ151}{journaltitle} focuses on the definition of an abstract syntax, a concrete graphical syntax, and an interchange format for URN. In this section we will only cover what pertains to GRL as UCM is out of scope. 
+
+GRL is a visual modelling notation for intentions, business goals, and non-functional requirements of stakeholders, for alternatives that have to be considered, decisions that were made, and rational that helped make these decisions~\citep{amyot2011user}.
+
+There are four main categories of concepts in GRL: \emph{actors}, \emph{intentional elements}, \emph{indicators} and \emph{links}. Figure~\ref{fig:grl_visualsyntax} shows a summary of the graphical notation in GRL
+
+\begin{figure}[h]
+\includegraphics[width=0.75\textwidth]{grl_visualsyntax}
+\centering
+\caption[Summary of the GRL graphical notation]{Summary of the GRL graphical notation~\citep{Roy:2007wyba}}
+\label{fig:grl_visualsyntax}
+\end{figure}
+
+The intentional elements in GRL are \emph{goals}, \emph{softgoals}, \emph{tasks}, \emph{resources} and \emph{beliefs}. \emph{Intentional} elements are used to present the different alternative behavioural (dynamic) and structural (static) aspects of the system requirements and concentrate on the rational for choosing a particular alternative over the others~\citep{Saleh2004}.
+
+\emph{Actors} are holders of intentions; they are the active entities in the system or its environment (e.g., stakeholders or other systems) who want goals to be achieved, tasks to be performed, resources to be available and softgoals to be satisfied~(\citefield{ituZ151}{journaltitle}). \emph{Indicators} make real-world measurements available for reasoning in the goal model, allowing for a more accurate assessment of the satisfaction of actors~(\citefield{ituZ151}{journaltitle}). 
+
+\emph{Softgoals} differentiate themselves from \emph{goals} in that there is no clear, objective measure of satisfaction for a softgoal whereas a goal is quantifiable, often in a binary way. Softgoals are often more related to non-functional requirements, whereas goals are more related to functional requirements~\citep{amyot2011user}.
+
+\emph{Links} are used to connect isolated elements in the requirement model. Different types of links depict different structural and intentional relationships (including \emph{decompositions}, \emph{contributions} and \emph{dependencies})~(\citefield{ituZ151}{journaltitle}).
+
+GRL supports the analysis of strategies, which help reach the most appropriate trade-offs among (often conflicting) goals of stakeholders. A \emph{strategy} consists of a set of intentional elements and indicators that are given initial satisfaction values~(\citefield{ituZ151}{journaltitle}). It uses qualitative labels associate to lower-level intentional elements to measure the satisfaction level of higher-level elements. The qualitative satisfaction labels associated to intentional elements goes from \emph{SATISFICED} to \emph{DENIED}~\citep{Roy:2007wyba}. These satisfaction values are then propagated to the other intentional elements through their links, enabling a global assessment of the strategy being studied as well as the global satisfaction of the actors involved~(\citefield{ituZ151}{journaltitle}).
+
+The GRL notation supports belief elements, which provide justifications of the assessments in the model. Beliefs keep track of the rationales in the graphical models~\citep{Roy:2007wyba}.
+
+The URN standard describes the syntax and semantics of the language using an abstract syntax (partially shown in figure~\ref{fig:grl_abstract_grammar}), reserving a concrete grammar, presented as an extension of the abstract grammar, to support a graphical language but which has no implication in the semantics of the language.
+
+\begin{figure}[h]
+\includegraphics[width=0.95\textwidth]{grl_abstract_grammar}
+\centering
+\caption[GRL Abstract Grammar]{GRL Abstract Grammar defined in~\citefield{ituZ151}{journaltitle}}
+\label{fig:grl_abstract_grammar}
+\end{figure}
+
+A GRL goal graph is a connected graph of intentional elements that optionally reside within an actor. The one shown in figure~\ref{fig:WirelessIN_Integrated_GRLGraph} targets the evaluation of an architectural decision about where to put the data and the logic of the authorization service of a wireless system~\citep{amyot2011user}.
+
+\begin{figure}[h]
+\includegraphics[width=0.85\textwidth]{WirelessIN-Integrated-GRLGraph}
+\centering
+\caption[GRL Abstract Grammar]{GRL Abstract Grammar~\citep{amyot2011user}}
+\label{fig:WirelessIN_Integrated_GRLGraph}
+\end{figure}
+
+A goal graph, such as the one in figure~\ref{fig:WirelessIN_Integrated_GRLGraph}, shows the non-functional requirements and business goals of interest to the system and its stakeholders, as well as the alternatives for achieving these high-level elements. 
+
+Figure~\ref{fig:WirelessIN_Integrated_GRLGraph} shows a particular configuration of alternatives (indicated by a star (*) and a dashed outline), consisting of assigning an initial qualitative satisfaction level of \emph{satisficed} to service control point for data location and mobile switch for service location, and the impact this decision has on the satisfaction levels of stakeholders, namely the system and service provider and their goals. Note that the algorithm used in figure~\ref{fig:WirelessIN_Integrated_GRLGraph} combined qualitative and quantitative contributions and the numbers (between -100 and 100) are a quantitative measure of the satisfaction levels of goals and stakeholders. It can be seen that, the strategy chosen resulted in a a satisfaction level for the service provider measured at 39, while the system obtained 100. Accordingly, the goals of the system have been fully satisficed whilst the ones of the service provider have only been partially or in GRL terminology, weakly satisficed. Interestingly, in spite of minimum switch load, a softgoal of the service provider being denied, the impact of that decision on high throughput was low as high throughput had been decomposed in two softgoals and minimum message exchange was satisficed fully. 
+
+This evaluation mechanism propagates low-level decisions regarding alternatives to satisfaction ratings of high-level stakeholder goals and softgoals. GRL strategies can be compared with each other to help reach the most appropriate trade-offs among often conflicting goals of stakeholders. Colour coding of the intentional elements also reflect their satisfaction level (the greener, the more satisfied)~\citep{amyot2011user}.
+
+\subsection{Summary}
+
+In this chapter we have reviewed the notion of non-functional requirements and the multiple classification and representation schemes available. We followed with expanding on the importance of goals and goal-oriented approaches in the elicitation, analysis and modelling of stakeholders requirements, and in particular, quality attributes of the systems and applications that will help stakeholders attain those goals. Finally, we introduced GRL, by describing two other languages from which it spawn from, namely the \emph{NFR Framework} and \emph{i*}. While describing GRL, we focused on explaining how it supports reasoning about goals and requirements, while showing the impact of proposed alternative solutions to achieve those goals.
+
+In the next chapter, we will introduce goal-oriented ideas and concepts in behaviour-driven development (BDD) and in doing so, offer a treatment of non-functionality as a first-class concept in BDD.
+
 
 \chapter{Extending behaviour-driven development}
 \label{ch:Extendingbdd}
+We share the view that goal-oriented analysis complements and strengthens traditional requirements engineering techniques by offering a means for capturing and evaluating alternative ways of meeting business goals~\citep{MylopoulosExpl2001}.
+
+In fact, incorporating \nfrs into the different phases of the software life-cycle is a very hard task. Researchers face many challenges including great diversity of \nfrs, their subjective nature, formally specifying requirements, incorporating these requirements into models used for specifying functional requirements and resolving conflicts among \nfrs~\citep{Matoussi:2008wr}.
+
+In this work, we use the approach of~\citet{Chung:2009vg} of considering as non-functional requirements, any '-ilities', '-ities', such as usability or security, along with many other things that do not necessarily end with either of them, such as performance, coherence and user-friendliness, as well as concerns on productivity, time, cost and personal happiness. In view of mathematical functions, in the form of, $function: Input \rightarrow Output$~just about anything that addresses characteristics of a function, a function's input or output or relationships between the two, will be considered as non-functional requirement.
+
+Eliciting high level goals early in the development process is crucial. However, goal-oriented requirements elicitation is an activity that continues as development proceeds, as high-level goals (such as business goals) are refined into lower-level goals (such as technical goals that are eventually operationalised in a system). Eliciting goals focuses the requirements engineer on the problem domain and the needs of the stakeholders, rather than on possible solutions to those problems~\citep{Nuseibeh:2000ub}. In addition, the requirements engineer needs to explore alternatives and evaluate their feasibility and desirability with respect to business goals.
+
+In extending BDD, our research aimed at integrating a goal-reasoning approach in BDD, while being restricted by constraints imposed by the philosophy and principles of agile development. In other words, we extended BDD by 
+
+\begin{itemize}
+\item taking a lightweight approach
+\item aiming at minimal changes to Gherkin
+\item avoiding subverting the spirit behind \emph{Specification by Example}
+\item respecting the strengths of BDD and GRL and avoiding mixing concepts where no gain was to be made
+\end{itemize}
+
+In what follows, we will be assuming an iterative development approach, even though the description of the steps involved will be sequential. That is the nature of writing. We use a similar approach as~\citet{Chung2000} of following a process of developing a target artefact by starting with a source specification and producing constraints upon the target artefact. This could occur at various phases of development (e.g., requirements specification, conceptual design, or development).
+
+The \emph{NFR Framework} uses non-functional requirements such as security, accuracy, performance and cost to drive the overall design process~\citep{Chung2000}. BDD in turn, uses expected behaviours of a system to drive the development process. We assume a hybrid approach, by retaining its behaviour-driven characteristics, but adding constrains provided by non-functional requirements.
+
+Similarly to the \emph{NFR Framework}, there are several major steps in the process:
+\begin{itemize}
+\item acquiring or accessing knowledge the particular domain and the system which is being developed, functional requirements for the particular system, and particular kinds of NFRs, and associated development techniques
+\item identifying particular NFRs for the domain
+\item decomposing NFRs,
+\item identifying 'operationalizations' (possible design alternatives for meeting
+NFRs in the target system)
+\item dealing with ambiguities, trade-offs and priorities, and interdependencies among NFRs and operationalizations
+\item selecting operationalizations
+\item supporting decisions with design rationale
+\item evaluating the impact of decisions.
+\end{itemize}
+
+
 
 \begin{itemize}
 \item Compare with Advanced Traceability in~\citep{Hull2011}
@@ -652,6 +927,9 @@ A goal is an objective the system under consideration should achieve. Goals capt
 
 \chapter{Conclusion}
 \label{ch:Conclusion}
+Most conventional approaches to system design are driven by functional requirements. Developers focus their efforts primarily on achieving the desired functionality of a product or system, usually considering non-functional requirements (such as cost and performance) in a non-systematic and often undocumented way~\citep{Chung2000}. Furthermore, these software quality attributes are often addressed late and viewed as consequences of the decisions rather than as goals to be achieved.
+
+
 Out work helps to address some of the most common requirements risks~\citep[p. 20]{Wiegers2013}.
 \begin{itemize}
 \item Insufficient user involvement
@@ -673,6 +951,12 @@ Our work is also actual and contributes to major requirements trends in recent i
 Writing the requirements isn't the hard part. The hard part is determining the requirements. Writing requirements is a matter of clarifying, elaborating, and recording what you've learned. A solid understanding of a product's requirements ensures that your team works on the right problem and devises the best solution to that problem. Without knowing the requirements, you can't tell when the project is done, determine whether it has met its goals, or make trade-off decisions when scope adjustments are necessary. It can cost far more to correct a defect that's found late in the project than to fix it shortly after its creation. Shortcomings in requirements practices pose many risks to project success, where success means delivering a product that satisfies the user's functional and quality expectations at the agreed-upon cost and schedule~\citep{Wiegers2013}.
 
 Some of the most common requirements risks are insufficient user involvement; inaccurate planning; creeping user requirements ; ambiguous requirements and overlooked stakeholders. Sound requirements processes emphasize a collaborative approach to product development that involves stakeholders in a partnership throughout the project. Eliciting requirements lets the development team better understand its user community or market, a critical success factor. Emphasizing user tasks instead of superficially attractive features helps the team avoid writing code that no one will ever execute. Customer involvement reduces the expectation gap between what the customer really needs and what the developer delivers. Documented and clear requirements greatly facilitate system testing. All of these increase your chances of delivering high-quality products that satisfy all stakeholders~\citep{Wiegers2013}.
+
+A central point for the distinction of functionality and other qualities is that, for software construction, the purpose of the software system needs to be well defined in terms of the functions that the software will perform~\citep{Chung:2009vg}.
+
+The distinction between functionality and other qualities in the field of requirements engineering has an important benefit: it makes clear to software engineers that requirements are meant to deal with quality attributes and not with just one of them. As the software industry became more mature and different domains were explored by software engineers, it became clearer that it would not be enough just to deal with the description of the desired functionality, but that quality attributes should be carefully thought of early on as well~\citep{Chung:2009vg}.
+
+Not only non-functional requirements need to be stated up front, but they can help the software engineer make design decisions, while also justifying such decisions. However, in order to take this into consideration, it is necessary that quality attributes not be considered just as a separate set of requirements, but with the consideration of the functionality throughout the development process~\citep{Chung:2009vg}.
 
 \chapter{Typical chapter contents}\fxnote{Remove}
 
