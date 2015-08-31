@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<urn:URNspec xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:grl="http:///grl.ecore" xmlns:urn="http:///urn.ecore" name="URNspec" author="Pedro" created="August 31, 2015 1:07:42 PM BST" modified="August 31, 2015 6:57:33 PM BST" specVersion="9" urnVersion="1.27" nextGlobalID="228">
+  <ucmspec>
+    <scenarioGroups name="ScenarioGroup4" id="4">
+      <scenarios name="ScenarioDef5" id="5"/>
+    </scenarioGroups>
+  </ucmspec>
+  <grlspec>
+    <intElements name="Functional suitability" id="11" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Performance efficiency" id="13" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Compatibility" id="15" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Usability" id="17" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Reliability" id="19" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Security" id="21" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Maintainability" id="23" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Portability" id="25" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Effectiveness" id="27" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Efficiency" id="29" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Satisfaction" id="31" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Freedom from risk" id="33" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Context coverage" id="35" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Functional completeness" id="37" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Functional correctness" id="39" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Functional appropriateness" id="41" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Time behaviour" id="43" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Resource utilization" id="45" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Capacity" id="47" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Co-existence" id="49" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Interoperability" id="51" description="" linksDest="199 200 204 208 209 213 214" linksSrc="198 205 210" refs="52">
+      <metadata name="_numEval" value="25"/>
+      <metadata name="_qualEval" value="WeaklySatisfied"/>
+    </intElements>
+    <intElements name="Appropriateness recognizability" id="53" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Learnability" id="55" description="" linksDest="218" linksSrc="216" refs="56">
+      <metadata name="_numEval" value="-50"/>
+      <metadata name="_qualEval" value="WeaklyDenied"/>
+    </intElements>
+    <intElements name="Operability" id="57" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="User error protection" id="59" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="User interface aesthetics" id="61" description="" linksDest="217" linksSrc="215" refs="62">
+      <metadata name="_numEval" value="-50"/>
+      <metadata name="_qualEval" value="WeaklyDenied"/>
+    </intElements>
+    <intElements name="Accessibility" id="63" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Maturity" id="65" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Availability" id="67" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Fault tolerance" id="69" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Recoverability" id="71" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Confidentiality" id="73" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Integrity" id="75" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Non-repudiation" id="77" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Accountability" id="79" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Authenticity" id="81" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Modularity" id="83" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Reusability" id="85" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Analysability" id="87" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Modifiability" id="89" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Testability" id="91" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Adaptability" id="93" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Installability" id="95" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Replaceability" id="97" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Usefulness" id="99" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Trust" id="101" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Pleasure" id="103" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Comfort" id="105" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Economic risk mitigation" id="107" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Health and safety risk mitigation" id="109" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Environmental risk mitigation" id="111" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Context completeness" id="113" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Flexibility" id="115" description="">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Record meeting entries" id="117" description="" linksDest="155 198 201 202 203" linksSrc="153 154" type="Goal" importance="High" importanceQuantitative="100" refs="118">
+      <metadata name="_numEval" value="-49"/>
+      <metadata name="_qualEval" value="WeaklyDenied"/>
+    </intElements>
+    <intElements name="Meeting entries can be recorded in most DBMS" id="119" description="" linksSrc="199" type="Task" refs="120">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="100% of all transactions recording meeting entries in DBMS are successful" id="121" description="" linksSrc="200" type="Task" refs="122">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Record simplest meeting" id="123" description="" linksSrc="201" type="Task" refs="124">
+      <metadata name="_numEval" value="100"/>
+      <metadata name="_qualEval" value="Satisfied"/>
+    </intElements>
+    <intElements name="Record meeting for a date in the past fails with a warning to the user" id="125" description="" linksSrc="202" type="Task" refs="126">
+      <metadata name="_numEval" value="100"/>
+      <metadata name="_qualEval" value="Satisfied"/>
+    </intElements>
+    <intElements name="Record complex meeting" id="127" description="" linksSrc="203 204" type="Task" refs="128">
+      <metadata name="_numEval" value="100"/>
+      <metadata name="_qualEval" value="Satisfied"/>
+    </intElements>
+    <intElements name="Record different meeting types" id="129" description="" linksDest="153 156 205 206 207" type="Goal" importance="Low" importanceQuantitative="25" refs="130">
+      <metadata name="_numEval" value="-49"/>
+      <metadata name="_qualEval" value="WeaklyDenied"/>
+    </intElements>
+    <intElements name="Record one to one meeting" id="131" description="" linksSrc="206" type="Task" refs="132">
+      <metadata name="_numEval" value="100"/>
+      <metadata name="_qualEval" value="Satisfied"/>
+    </intElements>
+    <intElements name="Record team meeting" id="133" description="" linksSrc="207" type="Task" refs="134">
+      <metadata name="_numEval" value="100"/>
+      <metadata name="_qualEval" value="Satisfied"/>
+    </intElements>
+    <intElements name="Different Meeting types can be recorded in most DBMS" id="135" description="" linksSrc="208" type="Task" refs="136">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="100% of all transactions recording different meeting types in DBMS are successful" id="137" description="" linksSrc="209" type="Task" refs="138">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Record a meeting agenda" id="139" description="" linksDest="154 157 210 211 212" type="Goal" importance="Medium" importanceQuantitative="50" refs="140">
+      <metadata name="_numEval" value="-49"/>
+      <metadata name="_qualEval" value="WeaklyDenied"/>
+    </intElements>
+    <intElements name="Record meeting agenda with details in text" id="141" description="" linksSrc="211" type="Task" refs="142">
+      <metadata name="_numEval" value="100"/>
+      <metadata name="_qualEval" value="Satisfied"/>
+    </intElements>
+    <intElements name="Record meeting agenda with details in HTML" id="143" description="" linksSrc="212" type="Task" refs="144">
+      <metadata name="_numEval" value="100"/>
+      <metadata name="_qualEval" value="Satisfied"/>
+    </intElements>
+    <intElements name="Meeting agendas can be recorded in most DBMS" id="145" description="" linksSrc="213" type="Task" refs="146">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="100% of all transactions recording meeting agendas in DBMS are successful" id="147" description="" linksSrc="214" type="Task" refs="148">
+      <metadata name="_numEval" value="0"/>
+      <metadata name="_qualEval" value="None"/>
+    </intElements>
+    <intElements name="Product to have an intuitive interface" id="149" description="" linksDest="215 216" linksSrc="155 156 157" type="Goal" importance="High" importanceQuantitative="100" refs="150">
+      <metadata name="_numEval" value="-49"/>
+      <metadata name="_qualEval" value="WeaklyDenied"/>
+    </intElements>
+    <intElements name="Product has an intuitive interface" id="151" description="" linksSrc="217 218" type="Task" refs="152">
+      <metadata name="_numEval" value="-50"/>
+      <metadata name="_qualEval" value="WeaklyDenied"/>
+    </intElements>
+    <actors name="Meeting Organiser" id="220" description="" contRefs="221">
+      <metadata name="_numEval" value="-49"/>
+      <metadata name="_qualEval" value="WeaklyDenied"/>
+    </actors>
+    <actors name="Procurement Manager" id="222" description="" contRefs="223">
+      <metadata name="_numEval" value="-49"/>
+      <metadata name="_qualEval" value="WeaklyDenied"/>
+    </actors>
+    <links xsi:type="grl:Dependency" name="Dependency_From_95_To_109" id="153" description="" refs="//@urndef/@specDiagrams.0/@connections.0" dest="129" src="117"/>
+    <links xsi:type="grl:Dependency" name="Dependency_From_95_To_120" id="154" description="" refs="//@urndef/@specDiagrams.0/@connections.1" dest="139" src="117"/>
+    <links xsi:type="grl:Dependency" name="Dependency_From_132_To_95" id="155" description="" refs="//@urndef/@specDiagrams.0/@connections.2" dest="117" src="149"/>
+    <links xsi:type="grl:Dependency" name="Dependency_From_132_To_109" id="156" description="" refs="//@urndef/@specDiagrams.0/@connections.3" dest="129" src="149"/>
+    <links xsi:type="grl:Dependency" name="Dependency_From_132_To_120" id="157" description="" refs="//@urndef/@specDiagrams.0/@connections.4" dest="139" src="149"/>
+    <links xsi:type="grl:Contribution" name="Contribution_From_28_To_95" id="198" description="" refs="//@urndef/@specDiagrams.0/@connections.5" dest="117" src="51"/>
+    <links xsi:type="grl:Contribution" name="Contribution_From_98_To_28" id="199" description="" refs="//@urndef/@specDiagrams.0/@connections.6" dest="51" src="119"/>
+    <links xsi:type="grl:Contribution" name="Contribution_From_100_To_28" id="200" description="" refs="//@urndef/@specDiagrams.0/@connections.7" dest="51" src="121"/>
+    <links xsi:type="grl:Contribution" name="Contribution_From_102_To_95" id="201" description="" refs="//@urndef/@specDiagrams.0/@connections.8" dest="117" src="123"/>
+    <links xsi:type="grl:Contribution" name="Contribution_From_104_To_95" id="202" description="" refs="//@urndef/@specDiagrams.0/@connections.9" dest="117" src="125"/>
+    <links xsi:type="grl:Contribution" name="Contribution_From_106_To_95" id="203" description="" refs="//@urndef/@specDiagrams.0/@connections.10" dest="117" src="127" contribution="SomePositive" quantitativeContribution="75"/>
+    <links xsi:type="grl:Contribution" name="Contribution_From_106_To_28" id="204" description="" refs="//@urndef/@specDiagrams.0/@connections.11" dest="51" src="127"/>
+    <links xsi:type="grl:Contribution" name="Contribution_From_28_To_109" id="205" description="" refs="//@urndef/@specDiagrams.0/@connections.12" dest="129" src="51"/>
+    <links xsi:type="grl:Contribution" name="Contribution_From_112_To_109" id="206" description="" refs="//@urndef/@specDiagrams.0/@connections.13" dest="129" src="131"/>
+    <links xsi:type="grl:Contribution" name="Contribution_From_114_To_109" id="207" description="" refs="//@urndef/@specDiagrams.0/@connections.14" dest="129" src="133"/>
+    <links xsi:type="grl:Contribution" name="Contribution_From_116_To_28" id="208" description="" refs="//@urndef/@specDiagrams.0/@connections.15" dest="51" src="135"/>
+    <links xsi:type="grl:Contribution" name="Contribution_From_118_To_28" id="209" description="" refs="//@urndef/@specDiagrams.0/@connections.16" dest="51" src="137"/>
+    <links xsi:type="grl:Contribution" name="Contribution_From_28_To_120" id="210" description="" refs="//@urndef/@specDiagrams.0/@connections.17" dest="139" src="51"/>
+    <links xsi:type="grl:Contribution" name="Contribution_From_123_To_120" id="211" description="" refs="//@urndef/@specDiagrams.0/@connections.18" dest="139" src="141"/>
+    <links xsi:type="grl:Contribution" name="Contribution_From_125_To_120" id="212" description="" refs="//@urndef/@specDiagrams.0/@connections.19" dest="139" src="143"/>
+    <links xsi:type="grl:Contribution" name="Contribution_From_127_To_28" id="213" description="" refs="//@urndef/@specDiagrams.0/@connections.20" dest="51" src="145"/>
+    <links xsi:type="grl:Contribution" name="Contribution_From_129_To_28" id="214" description="" refs="//@urndef/@specDiagrams.0/@connections.21" dest="51" src="147"/>
+    <links xsi:type="grl:Contribution" name="Contribution_From_38_To_132" id="215" description="" refs="//@urndef/@specDiagrams.0/@connections.22" dest="149" src="61"/>
+    <links xsi:type="grl:Contribution" name="Contribution_From_32_To_132" id="216" description="" refs="//@urndef/@specDiagrams.0/@connections.23" dest="149" src="55" contribution="SomePositive" quantitativeContribution="75"/>
+    <links xsi:type="grl:Contribution" name="Contribution_From_136_To_38" id="217" description="" refs="//@urndef/@specDiagrams.0/@connections.24" dest="61" src="151" contribution="Make" quantitativeContribution="100"/>
+    <links xsi:type="grl:Contribution" name="Contribution_From_136_To_32" id="218" description="" refs="//@urndef/@specDiagrams.0/@connections.25" dest="55" src="151" contribution="Make" quantitativeContribution="100"/>
+    <groups name="StrategiesGroup2" id="2" strategies="3 227 228"/>
+    <strategies name="AllFunctionalScenariosSatisfied" id="3" author="Pedro" group="2">
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="125">
+        <kpiEvalValueSet/>
+      </evaluations>
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="133">
+        <kpiEvalValueSet/>
+      </evaluations>
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="131">
+        <kpiEvalValueSet/>
+      </evaluations>
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="123">
+        <kpiEvalValueSet/>
+      </evaluations>
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="143">
+        <kpiEvalValueSet/>
+      </evaluations>
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="141">
+        <kpiEvalValueSet/>
+      </evaluations>
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="127">
+        <kpiEvalValueSet/>
+      </evaluations>
+    </strategies>
+    <strategies name="AllFunctionalScenariosSatisfied-GlobalConstraint" id="227" author="Pedro" group="2">
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="125">
+        <kpiEvalValueSet/>
+      </evaluations>
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="133">
+        <kpiEvalValueSet/>
+      </evaluations>
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="131">
+        <kpiEvalValueSet/>
+      </evaluations>
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="123">
+        <kpiEvalValueSet/>
+      </evaluations>
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="143">
+        <kpiEvalValueSet/>
+      </evaluations>
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="141">
+        <kpiEvalValueSet/>
+      </evaluations>
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="127">
+        <kpiEvalValueSet/>
+      </evaluations>
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="151">
+        <kpiEvalValueSet/>
+      </evaluations>
+    </strategies>
+    <strategies name="AllFunctionalScenariosSatisfied-GlobalConstraint-WeaklyDenied" id="228" author="Pedro" group="2">
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="125">
+        <kpiEvalValueSet/>
+      </evaluations>
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="133">
+        <kpiEvalValueSet/>
+      </evaluations>
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="131">
+        <kpiEvalValueSet/>
+      </evaluations>
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="123">
+        <kpiEvalValueSet/>
+      </evaluations>
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="143">
+        <kpiEvalValueSet/>
+      </evaluations>
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="141">
+        <kpiEvalValueSet/>
+      </evaluations>
+      <evaluations evaluation="100" qualitativeEvaluation="Satisfied" intElement="127">
+        <kpiEvalValueSet/>
+      </evaluations>
+      <evaluations evaluation="-50" qualitativeEvaluation="WeaklyDenied" intElement="151">
+        <kpiEvalValueSet/>
+      </evaluations>
+    </strategies>
+    <impactModel/>
+    <indicatorGroup name="Time" id="6" isRedesignCategory="true"/>
+    <indicatorGroup name="Cost" id="7" isRedesignCategory="true"/>
+    <indicatorGroup name="Quality" id="8" isRedesignCategory="true"/>
+    <indicatorGroup name="Flexibility" id="9" isRedesignCategory="true"/>
+    <featureModel/>
+  </grlspec>
+  <urndef>
+    <specDiagrams xsi:type="grl:GRLGraph" name="GRLGraph10" id="10" description="Generated from one or more feature files using Gherkin.GRLCatalogueGenerator">
+      <nodes xsi:type="grl:IntentionalElementRef" name="IntentionalElementRef52" id="52" x="1052" y="969" succ="//@urndef/@specDiagrams.0/@connections.5 //@urndef/@specDiagrams.0/@connections.12 //@urndef/@specDiagrams.0/@connections.17" pred="//@urndef/@specDiagrams.0/@connections.6 //@urndef/@specDiagrams.0/@connections.7 //@urndef/@specDiagrams.0/@connections.11 //@urndef/@specDiagrams.0/@connections.15 //@urndef/@specDiagrams.0/@connections.16 //@urndef/@specDiagrams.0/@connections.20 //@urndef/@specDiagrams.0/@connections.21" def="51">
+        <metadata name="_height" value="70"/>
+        <metadata name="_width" value="130"/>
+      </nodes>
+      <nodes xsi:type="grl:IntentionalElementRef" name="IntentionalElementRef56" id="56" x="1695" y="584" contRef="223" succ="//@urndef/@specDiagrams.0/@connections.23" pred="//@urndef/@specDiagrams.0/@connections.25" def="55">
+        <metadata name="_height" value="52"/>
+        <metadata name="_width" value="110"/>
+      </nodes>
+      <nodes xsi:type="grl:IntentionalElementRef" name="IntentionalElementRef62" id="62" x="1833" y="584" succ="//@urndef/@specDiagrams.0/@connections.22" pred="//@urndef/@specDiagrams.0/@connections.24" def="61">
+        <metadata name="_height" value="70"/>
+        <metadata name="_width" value="130"/>
+      </nodes>
+      <nodes xsi:type="grl:IntentionalElementRef" name="IntentionalElementRef118" id="118" x="632" y="444" contRef="221" succ="//@urndef/@specDiagrams.0/@connections.2" pred="//@urndef/@specDiagrams.0/@connections.0 //@urndef/@specDiagrams.0/@connections.1 //@urndef/@specDiagrams.0/@connections.5 //@urndef/@specDiagrams.0/@connections.8 //@urndef/@specDiagrams.0/@connections.9 //@urndef/@specDiagrams.0/@connections.10" def="117">
+        <metadata name="_height" value="70"/>
+        <metadata name="_width" value="130"/>
+      </nodes>
+      <nodes xsi:type="grl:IntentionalElementRef" name="IntentionalElementRef120" id="120" x="847" y="1188" succ="//@urndef/@specDiagrams.0/@connections.6" def="119">
+        <metadata name="_height" value="88"/>
+        <metadata name="_width" value="150"/>
+      </nodes>
+      <nodes xsi:type="grl:IntentionalElementRef" name="IntentionalElementRef122" id="122" x="1029" y="1270" succ="//@urndef/@specDiagrams.0/@connections.7" def="121">
+        <metadata name="_height" value="106"/>
+        <metadata name="_width" value="170"/>
+      </nodes>
+      <nodes xsi:type="grl:IntentionalElementRef" name="IntentionalElementRef124" id="124" x="454" y="536" succ="//@urndef/@specDiagrams.0/@connections.8" def="123">
+        <metadata name="_height" value="70"/>
+        <metadata name="_width" value="130"/>
+      </nodes>
+      <nodes xsi:type="grl:IntentionalElementRef" name="IntentionalElementRef126" id="126" x="444" y="299" succ="//@urndef/@specDiagrams.0/@connections.9" def="125">
+        <metadata name="_height" value="106"/>
+        <metadata name="_width" value="170"/>
+      </nodes>
+      <nodes xsi:type="grl:IntentionalElementRef" name="IntentionalElementRef128" id="128" x="639" y="968" succ="//@urndef/@specDiagrams.0/@connections.10 //@urndef/@specDiagrams.0/@connections.11" def="127">
+        <metadata name="_height" value="70"/>
+        <metadata name="_width" value="130"/>
+      </nodes>
+      <nodes xsi:type="grl:IntentionalElementRef" name="IntentionalElementRef130" id="130" x="826" y="277" contRef="221" succ="//@urndef/@specDiagrams.0/@connections.0 //@urndef/@specDiagrams.0/@connections.3" pred="//@urndef/@specDiagrams.0/@connections.12 //@urndef/@specDiagrams.0/@connections.13 //@urndef/@specDiagrams.0/@connections.14" def="129">
+        <metadata name="_height" value="88"/>
+        <metadata name="_width" value="150"/>
+      </nodes>
+      <nodes xsi:type="grl:IntentionalElementRef" name="IntentionalElementRef132" id="132" x="1009" y="98" succ="//@urndef/@specDiagrams.0/@connections.13" def="131">
+        <metadata name="_height" value="70"/>
+        <metadata name="_width" value="130"/>
+      </nodes>
+      <nodes xsi:type="grl:IntentionalElementRef" name="IntentionalElementRef134" id="134" x="829" y="94" succ="//@urndef/@specDiagrams.0/@connections.14" def="133">
+        <metadata name="_height" value="70"/>
+        <metadata name="_width" value="130"/>
+      </nodes>
+      <nodes xsi:type="grl:IntentionalElementRef" name="IntentionalElementRef136" id="136" x="1285" y="1180" succ="//@urndef/@specDiagrams.0/@connections.15" def="135">
+        <metadata name="_height" value="106"/>
+        <metadata name="_width" value="170"/>
+      </nodes>
+      <nodes xsi:type="grl:IntentionalElementRef" name="IntentionalElementRef138" id="138" x="1516" y="1093" succ="//@urndef/@specDiagrams.0/@connections.16" def="137">
+        <metadata name="_height" value="106"/>
+        <metadata name="_width" value="170"/>
+      </nodes>
+      <nodes xsi:type="grl:IntentionalElementRef" name="IntentionalElementRef140" id="140" x="1041" y="447" contRef="221" succ="//@urndef/@specDiagrams.0/@connections.1 //@urndef/@specDiagrams.0/@connections.4" pred="//@urndef/@specDiagrams.0/@connections.17 //@urndef/@specDiagrams.0/@connections.18 //@urndef/@specDiagrams.0/@connections.19" def="139">
+        <metadata name="_height" value="70"/>
+        <metadata name="_width" value="130"/>
+      </nodes>
+      <nodes xsi:type="grl:IntentionalElementRef" name="IntentionalElementRef142" id="142" x="1320" y="491" succ="//@urndef/@specDiagrams.0/@connections.18" def="141">
+        <metadata name="_height" value="88"/>
+        <metadata name="_width" value="150"/>
+      </nodes>
+      <nodes xsi:type="grl:IntentionalElementRef" name="IntentionalElementRef144" id="144" x="1216" y="631" succ="//@urndef/@specDiagrams.0/@connections.19" def="143">
+        <metadata name="_height" value="88"/>
+        <metadata name="_width" value="150"/>
+      </nodes>
+      <nodes xsi:type="grl:IntentionalElementRef" name="IntentionalElementRef146" id="146" x="1529" y="964" succ="//@urndef/@specDiagrams.0/@connections.20" def="145">
+        <metadata name="_height" value="88"/>
+        <metadata name="_width" value="150"/>
+      </nodes>
+      <nodes xsi:type="grl:IntentionalElementRef" name="IntentionalElementRef148" id="148" x="637" y="1080" succ="//@urndef/@specDiagrams.0/@connections.21" def="147">
+        <metadata name="_height" value="106"/>
+        <metadata name="_width" value="170"/>
+      </nodes>
+      <nodes xsi:type="grl:IntentionalElementRef" name="IntentionalElementRef150" id="150" x="1520" y="278" contRef="223" pred="//@urndef/@specDiagrams.0/@connections.2 //@urndef/@specDiagrams.0/@connections.3 //@urndef/@specDiagrams.0/@connections.4 //@urndef/@specDiagrams.0/@connections.22 //@urndef/@specDiagrams.0/@connections.23" def="149">
+        <metadata name="_height" value="88"/>
+        <metadata name="_width" value="150"/>
+      </nodes>
+      <nodes xsi:type="grl:IntentionalElementRef" name="IntentionalElementRef152" id="152" x="1534" y="796" succ="//@urndef/@specDiagrams.0/@connections.24 //@urndef/@specDiagrams.0/@connections.25" def="151">
+        <metadata name="_height" value="88"/>
+        <metadata name="_width" value="150"/>
+      </nodes>
+      <contRefs xsi:type="grl:ActorRef" name="ActorRef221" id="221" x="594" y="248" width="618" height="456" contDef="220" nodes="118 140 130">
+        <label/>
+      </contRefs>
+      <contRefs xsi:type="grl:ActorRef" name="ActorRef223" id="223" x="1426" y="245" width="350" height="206" contDef="222" nodes="56 150">
+        <label/>
+      </contRefs>
+      <connections xsi:type="grl:LinkRef" source="130" target="118" link="153"/>
+      <connections xsi:type="grl:LinkRef" source="140" target="118" link="154"/>
+      <connections xsi:type="grl:LinkRef" source="118" target="150" link="155"/>
+      <connections xsi:type="grl:LinkRef" source="130" target="150" link="156"/>
+      <connections xsi:type="grl:LinkRef" source="140" target="150" link="157"/>
+      <connections xsi:type="grl:LinkRef" source="52" target="118" link="198">
+        <label deltaX="-36" deltaY="-57"/>
+      </connections>
+      <connections xsi:type="grl:LinkRef" source="120" target="52" link="199">
+        <label deltaX="-29" deltaY="-61"/>
+      </connections>
+      <connections xsi:type="grl:LinkRef" source="122" target="52" link="200">
+        <label deltaX="-28" deltaY="-48"/>
+      </connections>
+      <connections xsi:type="grl:LinkRef" source="124" target="118" link="201">
+        <label deltaX="30" deltaY="-30"/>
+      </connections>
+      <connections xsi:type="grl:LinkRef" source="126" target="118" link="202">
+        <label deltaX="30" deltaY="-30"/>
+      </connections>
+      <connections xsi:type="grl:LinkRef" source="128" target="118" link="203">
+        <label deltaX="30" deltaY="-30"/>
+      </connections>
+      <connections xsi:type="grl:LinkRef" source="128" target="52" link="204">
+        <label deltaX="30" deltaY="-30"/>
+      </connections>
+      <connections xsi:type="grl:LinkRef" source="52" target="130" link="205">
+        <label deltaX="30" deltaY="-30"/>
+      </connections>
+      <connections xsi:type="grl:LinkRef" source="132" target="130" link="206">
+        <label deltaX="30" deltaY="-30"/>
+      </connections>
+      <connections xsi:type="grl:LinkRef" source="134" target="130" link="207">
+        <label deltaX="-28" deltaY="-42"/>
+      </connections>
+      <connections xsi:type="grl:LinkRef" source="136" target="52" link="208">
+        <label deltaX="-30" deltaY="-68"/>
+      </connections>
+      <connections xsi:type="grl:LinkRef" source="138" target="52" link="209">
+        <label deltaX="-13" deltaY="-91"/>
+      </connections>
+      <connections xsi:type="grl:LinkRef" source="52" target="140" link="210">
+        <label deltaX="30" deltaY="-30"/>
+      </connections>
+      <connections xsi:type="grl:LinkRef" source="142" target="140" link="211">
+        <label deltaX="30" deltaY="-30"/>
+      </connections>
+      <connections xsi:type="grl:LinkRef" source="144" target="140" link="212">
+        <label deltaX="22" deltaY="-53"/>
+      </connections>
+      <connections xsi:type="grl:LinkRef" source="146" target="52" link="213">
+        <label deltaX="-21" deltaY="-56"/>
+      </connections>
+      <connections xsi:type="grl:LinkRef" source="148" target="52" link="214">
+        <label deltaX="-26" deltaY="-43"/>
+      </connections>
+      <connections xsi:type="grl:LinkRef" source="62" target="150" link="215">
+        <label deltaX="-31" deltaY="-52"/>
+      </connections>
+      <connections xsi:type="grl:LinkRef" source="56" target="150" link="216">
+        <label deltaX="28" deltaY="-84"/>
+      </connections>
+      <connections xsi:type="grl:LinkRef" source="152" target="62" link="217">
+        <label deltaX="-34" deltaY="-19"/>
+      </connections>
+      <connections xsi:type="grl:LinkRef" source="152" target="56" link="218">
+        <label deltaX="30" deltaY="-30"/>
+      </connections>
+    </specDiagrams>
+  </urndef>
+  <metadata name="_Use0to100EvaluationRange" value="false"/>
+</urn:URNspec>

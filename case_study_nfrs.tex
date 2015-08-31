@@ -1,0 +1,66 @@
+\begin{table}
+\caption{Meeting scheduler original non-functional requirements~(\emph{PROMISE}, \citefield{promiserepo}{year})}
+\label{tb:scheduler_original_nfrs}
+\setlength{\extrarowheight}{1.8pt}
+\centering
+\scalebox{0.85}{
+\begin{tabularx}{\textwidth}{cX}
+    \toprule \multicolumn{1}{c}{\bfseries{Requirement ID}}&
+    \multicolumn{1}{c}{\bfseries{Functional Requirement Description}}\\
+    \addlinespace
+    \midrule
+    \endfirsthead
+    138   & The product must work with most database management systems (DBMS) on the market whether the DBMS is colocated with the product on the same machine or is located on a different machine on the computer network. \\
+    \midrule
+    139   & The product will function alongside server software on any operating system where the Java runtime can be installed. \\    \midrule
+    140   & The product will require collaboration with a database management system (DBMS). The DBMS may be located on the same machine as the product or on a separate machine residing on the same computer network. \\    \midrule
+    141   & The product must make use of web/application server technology. Open source examples include Apache web server Tomcat and the JBoss application server. \\    \midrule
+    142   & A database management system such as Oracle DB2 MySql or HSQL will need to be integrated with the product \\    \midrule
+    143   & The product's Look and Feel shall be able to incorporate aspects of the customer's organization such as logo branding and identity \\    \midrule
+    144   & The product shall have a conservative and professional appearance \\    \midrule
+    145   & The product shall make the users want to use it. 80\textbackslash{}\% of the users surveyed report they are regularly using the product after the first 2 weeks postlaunch \\    \midrule
+    146   & The product shall be easy to use. 90\textbackslash{}\% of users will be able to successfully reserve a conference room within 5 minutes of product use \\    \midrule
+    147   & The product shall give users feedback when necessary. 80\textbackslash{}\% of the users surveyed report that the product accurately confirms their actions \\    \midrule
+    148   & The product shall allow the user to select a chosen language from one of the target market countries \\ \midrule
+    149   & The product shall allow for customization of start page and views preferences \\    \midrule
+    150   & An employee will be able to successfully use the product within a few minutes. After informally navigating the product for less than 15 minutes users shall be able to successfully setup meetings and reserve conference rooms \\    \midrule
+    151   & The product shall use a standard navigation menu familiar to most web users \\    \midrule
+    152   & The product shall allow for intuitive searching of available conference rooms \\    \midrule
+    153   & The product shall conform to the Americans with Disabilities Act \\    \midrule
+    154   & The response shall be fast enough to avoid interrupting the user's flow of thought. 90\textbackslash{}\% of tasks shall complete within 5 seconds. 98\textbackslash{}\% of tasks shall complete within 8 seconds \\    \midrule
+    155   & Aside from server failure the software product shall achieve 99.99\textbackslash{}\% up time \\    \midrule
+    156   & The product shall create an exception log of problems encountered within the product for transmission to our company for analysis and resolution \\    \midrule
+    157   & The product shall be capable of handling up to 1 000 concurrent requests. This number will increase to 2 000 by Release 2. The concurrency capacity must be able to handle peak scheduling times such as early morning and late afternoon hours \\    \midrule
+    158   & The product shall be able to process 10 000 transactions per hour within two years of its launch. This number will increase to 20 000 by Release 2 \\    \midrule
+    159   & The product shall be expected to operate for at least 5 years for each customer installation \\    \midrule
+    160   & The product shall be used in office environments \\    \midrule
+    161   & The product must be able to interface with any HTML browser. The product shall transmit data between the user and the product without problems. The product shall display HTML properly in 80\textbackslash{}\% of all HTML browsers tested (minimum is to test 8 browsers) \\    \midrule
+    162   & The product must be able to interface with various database management systems. The product shall communicate successfully with the database management system on 100\textbackslash{}\% of all transactions. \\    \midrule
+    163   & The product must be able to interface with various email servers. The product shall be able to send email \\    \midrule
+    164   & The product shall be available for distribution via the Internet as a binary or ZIP file \\    \midrule
+    165   & The product shall be available for distribution as a packaged CD \\    \midrule
+    166   & The product will be available for licensing as a one-server two-five servers or five-or-more servers license \\    \midrule
+    167   & A new user must be able to be added to the system within 10 minutes.90\textbackslash{}\% of new users are able to log into the system within 10 minutes \\    \midrule
+    168   & The product must be designed using Design Patterns and coding best practices. 90\textbackslash{}\% of maintenance software developers are able to integrate new functionality into the product with 2 working days \\    \midrule
+    169   & The product must be highly configurable for use with various database management systems for the end users. 80\textbackslash{}\% of end users are able to integrate new database management systems with the product without changing the product's software code \\    \midrule
+    170   & Maintenance releases will be offered to customers once a year. The releases shall take no longer than 5 minutes for 80\textbackslash{}\% of the customer base to install \\    \midrule
+    171   & Every registered user will have access to the product's support site via the Internet. 70\textbackslash{}\% of registered users shall find a solution to their problem within 5 minutes of using the support site \\    \midrule
+    172   & The customer shall be able to easily integrate new building maps with the product throughout the product's life-cycle. Integration of new maps with the product shall be possible with little to no support from product support staff \\    \midrule
+    173   & The product shall be translated into foreign languages other than the target market countries languages in future releases. For each emerging target market it shall take no more than 5 days to configure the product for that market's language \\    \midrule
+    174   & The product is expected to integrate with multiple database management systems. The product will operate with Oracle SQL Server DB2 MySQL HSQL and MS Access \\    \midrule
+    175   & The product shall be able to be installed in any operating environment within 2 days \\    \midrule
+    176   & The product shall ensure that only company employees or external users with company-approved user IDs may have product access. 100\textbackslash{}\% of all logons shall be by either company employees or external users with company-approved user IDs \\    \midrule
+    177   & Only managers are able to perform search queries for reservations by user. 100\textbackslash{}\% of all search queries for reservations by user shall be from logons of only management logons \\    \midrule
+    178   & The product shall ensure that the database's data corresponds to the data entered by the user. Each conference room reservation in the system will contain the same information as was entered by the user \\    \midrule
+    179   & The product shall prevent the input of malicious data. The product and/or adjacent hardware/software systems data shall remain 100\textbackslash{}\% uncorrupted each time malicious data is input into the product \\    \midrule
+    180   & The product and/or dependent databases/filesystems shall remain operational as a result of the input of malicious data. The product and/or dependent databases/filesystems shall not crash 100\textbackslash{}\% of the time that malicious data is input into the product \\    \midrule
+    181   & The product shall have the ability to receive automatic software updates as new threats emerge. 100\textbackslash{}\% of customers will be able to receive automatic software updates transmitted to the installed product \\    \midrule
+    182   & The language of the product shall accommodate all of the target market countries. 90\textbackslash{}\% of survey respondents from each target market country will find that the language of the product is acceptable \\    \midrule
+    183   & The product shall be able to display calendar dates and times according to the user's locale. 90\textbackslash{}\% of survey respondents from each target market country will find that the date and time formatting of the product is correct \\    \midrule
+    184   & The product must be developed with the J2SE/J2EE programming language libraries \\
+    
+    \addlinespace
+    \bottomrule
+    \end{tabularx}
+}
+\end{table}
