@@ -206,7 +206,7 @@ In spite of the above mentioned differences of interpretation, it is unanimously
 
 None of these agile practices, treat non-functional requirements in a systematic way, certainly not in a way that allows reasoning about which requirements interdependencies may exist, and the positive or negative influences each may have on each other. Among many proposals, goal-oriented approaches were the first to treat non-functional requirements as first-class citizens.~\citet{Mylopoulos:1999jh} observed that goal-oriented requirements engineering is generally complementary to other approaches and, in particular, is well suited to analysing requirements early in the software development cycle, especially with respect to non-functional requirements and the evaluation of alternatives. 
 
-It seems only logical and expectable that, improvements to the discovery and communication of requirements, and in particular non-functional requirements, will lead to an increase in success rates of software projects.
+It seems only logical and expectable that, improvements to the discovery and communication of requirements, will lead to an increase in success rates of software projects.
 
 \section{Aim and limitations of study}
 The context described in the previous section justify research aimed at capturing, documenting and communicating requirements using natural language tools and techniques in a precise, complete and unambiguous way, but also with the flexibility and adaptability to allow requirements to change and evolve through the course of time.
@@ -960,14 +960,14 @@ Eliciting high level goals early in the development process is crucial. However,
 
 This focus on the needs of stakeholders, even if logical and beneficial, has lead to other goals, such as cross-cutting concerns or quality concerns of stakeholders, being neglected or addressed later in the software life-cycle. In fact, incorporating these goal types, such as \nfrs, into the different phases of the software life-cycle is a very hard task. Researchers face many challenges including their great diversity,  subjective nature, difficulty in formalisation, incorporating these requirements into models used for specifying functional requirements and resolving conflicts among \nfrs~\citep{Matoussi:2008wr}. Behaviour-driven development is one such model, traditionally used for specifying functional requirements and where their non-functional counterparts are rarely given the same relevance. 
 
-In this chapter we present, through data publicly available, a case study applying our extension to BDD that include the treatment of \nfrs as first class citizens, alongside functional requirements. Moreover, our approach is independent of the particular taxonomy chosen and remains faithful to the principles of agile development discussed in earlier chapters. 
+In this chapter we present, through data publicly available, an application of our extension to BDD to a subset of the requirements of a case study dataset, including the treatment of \nfrs as first class citizens alongside functional requirements. Moreover, our approach is independent of the particular taxonomy chosen and remains faithful to the principles of agile development discussed in earlier chapters. 
 
 The next chapter will focus on the changes made to Gherkin to support our methodology and also, detail a translator from feature files specified in Gherkin to GRL.
 
 \section{Methodology}
 We may be overusing the word methodology, given that some authors consider BDD not to be a methodology in its own right~\citep{Smart201410}. The extension we are proposing to BDD does not make it a full blown methodology (e.g. we are mostly silent regarding management of requirements using BDD) but it is useful to refer to our collection of methods and techniques using one word other than BDD, hence the choice for \emph{methodology}.
 
-There are not that many references in the literature for approaches to handling non-functional requirements in agile methods and the ones that we have found are consistent with one another.~\citet{Davies} defends that agile teams should take responsibility for eliciting non-functional requirements and they should do it early-on by discussing with users the capabilities of the system, like quality of service and longevity, at the start of the project. The author is of the opinion, there are three approaches to describe these required capabilities in agile methods. Some teams like to use the usual story format (see listing~\ref{lst:story_template}) as in this way, all requirements look the same, can be understood by everyone including non-technical individuals, and therefore have the same visibility as other stories. Other teams keep it simple and simply factor \nfrs into acceptance criteria for affected user stories. Finally, last approach is to introduce `technical stories' to cover anything that needs to be built or restructured but is too difficult to explain to business people. These story cards are typically free format and expressed in a language that only the development team understands~\citep{Davies}.
+There are not that many references in the literature for approaches to handling non-functional requirements in agile methods and the ones that exist, are consistent with each other.~\citet{Davies} defends that agile teams should take responsibility for eliciting non-functional requirements and they should do it early-on by discussing with users the capabilities of the system, like quality of service and longevity, at the start of the project. The author is of the opinion, there are three approaches to describe these required capabilities in agile methods. Some teams like to use the usual story format, as in this way, all requirements look the same, can be understood by everyone including non-technical individuals, and therefore have the same visibility as other stories. Other teams keep it simple and simply factor \nfrs into acceptance criteria for affected user stories. Finally, last approach is to introduce `technical stories' to cover anything that needs to be built or restructured but is too difficult to explain to business people. These story cards are typically free format and expressed in a language that only the development team understands~\citep{Davies}. A team at Connextra is credited with the following story card format~\footnote{~see http://agilecoach.typepad.com/photos/connextra\_user\_story\_2001/connextrastorycard.html for examples}
 
 \begin{center}
 \begin{description}
@@ -999,9 +999,9 @@ or
 
 Trying to write \nfrs in this template is a good exercise, as it helps make sure we understand who wants what and why, as the above examples demonstrate. \citet{CohnNFRS} points out though that we should pay attention not to get obsessed with this format and instead specify it in whatever way feels natural, if using the template leads to confusingly formed sentences.
 
-In our research, we found the user story format appropriate to write both functional and non-functional requirements. Our extension to Gherkin requires writing requirements in user story format, as we need to differentiate the goal from the stakeholder/role it intends to benefit. We do not believe this to be a significant drawback, but it does represent a breaking change with existing feature files. A small refactoring to the extended Gherkin parser described in chapter~\ref{ch:gherkin_redux} would satisfy this requirement.
+In our research, we found the user story format appropriate to write both functional and non-functional requirements. Our extension to Gherkin requires writing requirements in user story format, as we need to differentiate the goal from the stakeholder/role it intends to benefit. We do not believe this to be a significant drawback, but it does represent a breaking change with existing feature files. A refactoring to the extended Gherkin parser described in chapter~\ref{ch:gherkin_redux} could relax this constraint and allow existing features to be parsed successfully.
 
-In this work, we use the approach of~\citet{Chung:2009vg} of considering as non-functional requirements, any `-ilities', `-ities', such as usability or security, along with many other things that do not necessarily end with either of them, such as performance or user-friendliness. In view of mathematical functions, in the form of, $\mathit{function} : \mathit{Input} \rightarrow \mathit{Output}$, just about anything that addresses characteristics of a function, a function's input or output or relationships between the two, can be considered as non-functional requirement.
+In this work, we use the approach of~\citet{Chung:2009vg} of considering as non-functional requirements, any `-ilities', `-ities', such as usability or security, along with many other things that do not necessarily end with either of them, such as performance or user-friendliness. In view of mathematical functions, in the form of $\mathit{function} : \mathit{Input} \rightarrow \mathit{Output}$, just about anything that addresses characteristics of a function, a function's input or output or relationships between the two, can be considered as non-functional requirement.
 
 \citet{Leffingwell2011} identifies, together with functional and non-functional requirements, design constraints as another class of requirements (see table~\ref{tb:three_req_types}). Design constraints typically originate from one of three sources: some necessary restriction of design options, conditions imposed on the development process itself, and regulations and imposed standards.\fxnote{Argument in conclusion}
 
@@ -1032,7 +1032,7 @@ Our approach integrates all of the above requirements in a coherent manner, wher
 \item requiring minimal changes to Gherkin
 \item preventing subversion of the spirit behind \emph{Specification by Example}
 \item respecting the strengths of BDD and GRL
-\item following a separation of concerns policy when integrating Gherkin and GRL
+\item following a separation of concerns approach when integrating Gherkin and GRL
 \end{itemize}
 
 In what follows, we will be assuming an iterative development approach, even though the description of the steps involved will be sequential. That is the nature of writing, and more so when documenting the results of technical research. We use a similar approach as~\citet{Chung2000} of following a process of developing a target artefact by starting with a source specification and producing constraints upon the target artefact. This could occur at various phases of development (e.g., requirements specification, conceptual design, or development).
@@ -1052,130 +1052,17 @@ Analogously to the \emph{NFR Framework}, there are several major steps in this p
 \item evaluating the impact of decisions.
 \end{itemize}
 
-Again, these steps are not followed in sequence and we do not intend to introduce each, one at a time. It will hopefully be clear from the presentation, what each step consists of and when it is being applied. 
-In presenting our results and describing our methodology, we will make use of case study data contained on the \emph{PROMISE}~(Predictor Models in Software Engineering) requirements dataset~(\emph{PROMISE}, 2015). The \emph{PROMISE} dataset consists of 625 requirements collected from 15 software development projects. Among them, 255 items are marked as functional requirements and the remaining 370 non-functional requirements items are classified into 11 categories, such as Security, Performance and Usability.
+Again, these steps are not followed in sequence and we do not intend to introduce each, one at a time. It will be clear from the presentation, what each step consists of and when it is being applied.
 
-One of the projects included in the dataset, is a \emph{meeting scheduler}. Functionally, the \emph{meeting scheduler} is required to create meetings, send invitations, book conference rooms, book room equipment and so on. Table~\ref{tb:scheduler_original_frs} lists all original functional requirements  contained in the dataset. Note that to facilitate tracing to the original \emph{PROMISE} dataset we are retaining the requirements identifiers used therein.
+In presenting our results and describing our methodology, we will make use of case study data contained on the \emph{PROMISE}~(Predictor Models in Software Engineering) requirements dataset~(\emph{PROMISE}, 2015). The \emph{PROMISE} dataset consists of 625 requirements collected from 15 software development projects. Among them, 255 items are marked as functional requirements and the remaining 370 non-functional requirements items are classified into 11 categories, such as security, performance and usability.
 
-\ifdraft{%
-  \fxnote{THIS WILL CONTAIN FRs TABLE for CASE STUDY}
-}{%
-\begin{table}[h!]
-\caption[Meeting scheduler original functional requirements]{Meeting scheduler original functional requirements~(\emph{PROMISE}, 2015)}
-\label{tb:scheduler_original_frs}
-\setlength{\extrarowheight}{1.8pt}
-\centering
-\scalebox{0.85}{
-\begin{tabularx}{\textwidth}{cX}
-    \toprule \multicolumn{1}{c}{\bfseries{Requirement ID}}&
-    \multicolumn{1}{c}{\bfseries{Functional Requirement Description}}\\
-    \addlinespace
-    \midrule
-    R 48  & The product shall record meeting entries \\ \midrule
-    R 49  & The product will notify employees of meeting invitations \\ \midrule
-    R 50  & The product shall have the ability to send meeting reminders to employees \\ \midrule
-    R 51  & The product shall assign the organizers contact information to each meeting they create \\ \midrule
-    R 52  & The product will record meeting acknowledgements \\ \midrule
-    R 53  & The product shall store new conference rooms \\ \midrule
-    R 54  & The product shall update existing conference rooms \\ \midrule
-    R 55  & The product will be able to delete conference rooms \\ \midrule
-    R 56  & The product shall be able to store new room equipment \\ \midrule
-    R 57  & The product will update existing room equipment \\ \midrule
-    R 58  & The product shall be able to delete room equipment \\ \midrule
-    R 59  & The product shall allow an organizer to invite other employees to meetings \\ \midrule
-    R 60  & Each time a conference room is reserved the conference room schedule shall be updated to reflect the time and date of the reservation \\ \midrule
-    R 61  & The product shall record the transportation status of equipment reserved \\ \midrule
-    R 62  & The product shall display a map of the company building showing conference room locations \\ \midrule
-    R 63  & The product shall record updated meeting agendas \\ \midrule
-    R 64  & The product shall send a meeting confirmation to the meeting organizer \\ \midrule
-    R 65  & The product shall display room equipment according to search parameters \\ \midrule
-    R 66  & The product shall display conference rooms according to search parameters \\ \midrule
-    R 67  & The product shall record different meeting types \\ \midrule
-    R 68  & The product shall record all the equipment that has been reserved \\ \midrule
-    R 69  & The product shall notify building personnel of equipment transport requests \\ \midrule
-    R 70  & The product will allow privileged users to view meeting schedules in multiple reporting views \\ \midrule
-    R 71  & The product shall be able to send meeting notifications via different kinds of end-user specified methods \\ \midrule
-    R 72  & The product shall have a customizable Look and Feel \\ \midrule
-    R 73  & The product shall have an intuitive user interface \\ \midrule
-    R 74  & The product will display an available status for unreserved conference rooms \\
-    \addlinespace
-    \bottomrule
-    \end{tabularx}
-}
-\end{table}
-}
-
-The case study example includes 27 functional requirements and 47 \nfrs, covering different aspects of the system, such as interoperability, usability, security, user friendliness, etc. The entire list of original non-functional requirements of the \emph{meeting scheduler} case study can be found in Appendix~\ref{ch:case_study_appendix}. 
-
-The dataset also specifies for each non-functional requirement if it traces to a functional requirement, that is if that functional requirement is impacted by the non-functional requirement. That mapping is presented in table~\ref{tb:scheduler_original_frs_to_nfrs} (the absence of a particular non-functional requirement identifier from the columns of the table, implies there is no dependency between that non-functional and any of the functional requirements)
-
-\ifdraft{%
-  \fxnote{THIS WILL CONTAIN FRS to NFRS MAPPING TABLE}
-}{%
-\begin{table}[h!]
-\caption[Meeting scheduler mapping of functional to non-functional requirements]{Meeting scheduler mapping of functional to non-functional requirements~(\emph{PROMISE}, 2015)}
-\label{tb:scheduler_original_frs_to_nfrs}
-\setlength{\extrarowheight}{1.8pt}
-\centering
-\scalebox{0.75}{
-    \begin{tabular}{rrccccccccccccccccccccccccccccccccccccccccccccccc}
-    \toprule
-              & \multicolumn{11}{c}{\bfseries{Non-Functional Requirements}} \\
-        \midrule
-        \multicolumn{1}{c}{\bfseries{Req ID}} & \begin{turn}{45}R 138\end{turn} & \begin{turn}{45}R 140 (*)\end{turn} & \begin{turn}{45}R 142 (*)\end{turn} & \begin{turn}{45}R 146\end{turn} & \begin{turn}{45}R 149\end{turn} & \begin{turn}{45}R 152\end{turn} & \begin{turn}{45}R 162\end{turn} & \begin{turn}{45}R 163\end{turn} & \begin{turn}{45}R 168\end{turn} & \begin{turn}{45}R 178\end{turn} & \begin{turn}{45}\end{turn} \\
-            \multicolumn{1}{c}{R 48} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       & \multirow{27}[54]{*}{} \\
-            \multicolumn{1}{c}{R 49} & \multicolumn{10}{c}{\multirow{4}[8]{*}{}}                                     &  \\
-            \multicolumn{1}{c}{R 50} & \multicolumn{10}{c}{}                                                         &  \\
-            \multicolumn{1}{c}{R 51} & \multicolumn{10}{c}{}                                                         &  \\
-            \multicolumn{1}{c}{R 52} & \multicolumn{10}{c}{}                                                         &  \\
-            \multicolumn{1}{c}{R 53} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
-            \multicolumn{1}{c}{R 54} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
-            \multicolumn{1}{c}{R 55} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
-            \multicolumn{1}{c}{R 56} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
-            \multicolumn{1}{c}{R 57} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
-            \multicolumn{1}{c}{R 58} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
-            \multicolumn{1}{c}{R 59} & \multicolumn{10}{c}{}                                                         &  \\
-            \multicolumn{1}{c}{R 60} &       &       &       & \multicolumn{1}{l}{O,P}   &       &       &       &       &       & \multicolumn{1}{l}{O}     &  \\
-            \multicolumn{1}{c}{R 61} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
-            \multicolumn{1}{c}{R 62} &       &       &       &       &       & \multicolumn{1}{l}{L}     &       &       & \multicolumn{1}{l}{MA,MO} &       &  \\
-            \multicolumn{1}{c}{R 63} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
-            \multicolumn{1}{c}{R 64} &       &       &       &       &       &       &       & \multicolumn{1}{l}{I}     &       &       &  \\
-            \multicolumn{1}{c}{R 65} & \multicolumn{10}{c}{\multirow{2}[4]{*}{}}                                     &  \\
-            \multicolumn{1}{c}{R 66} & \multicolumn{10}{c}{}                                                         &  \\
-            \multicolumn{1}{c}{R 67} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
-            \multicolumn{1}{c}{R 68} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
-            \multicolumn{1}{c}{R 69} & \multicolumn{10}{c}{}                                                         &  \\
-            \multicolumn{1}{c}{R 70} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       & \multicolumn{1}{l}{AS}    &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
-            \multicolumn{1}{c}{R 71} &       &       &       &       &       &       &       & \multicolumn{1}{l}{I}     &       &       &  \\
-            \multicolumn{1}{c}{R 72} &       &       &       &       & \multicolumn{1}{l}{AS}    &       &       &       &       &       &  \\
-            \multicolumn{1}{c}{R 73} &       &       &       &       & \multicolumn{1}{l}{L,AS}  &       &       &       &       &       &  \\
-            \multicolumn{1}{c}{R 74} &       &       &       & \multicolumn{1}{l}{O,P}   &       & \multicolumn{1}{l}{L}     &       &       &       &       &  \\
-        \bottomrule
-    \end{tabular}%
-}
-\caption*{
-        \scalebox{0.85}{
-            \begin{tabular}{c c l}
-              \multicolumn{1}{c}{\multirow{3}[1]{*}{\emph{\bfseries{Legend:}} In the above, initials represent qualities}} 
-                & O	 & Operability \\
-                & P	 & Pleasure \\
-                & I	 & Interoperability \\
-                & L	 & Learnability \\
-                & MA & Maintainability \\
-                & MO & Modifiability \\
-                & AS & user interface aesthetics \\
-                \multicolumn{2}{c}{\multirow{3}[1]{*}{\emph{\bfseries{(*)}} \citet{MylopoulosOnt2014} marked these as Functional requirements and we will not consider them}} 
-            \end{tabular}
-        }
-  }
-\end{table}
-}
+One of the projects included in the dataset, is a \emph{meeting scheduler}. Functionally, the \emph{meeting scheduler} is required to create meetings, send invitations, book conference rooms, book room equipment and so on. The \emph{meeting scheduler} example includes 27 functional requirements and 47 \nfrs, covering different aspects of the system, such as interoperability, usability, security, user friendliness, etc. The dataset also specifies for each non-functional requirement if it traces to a functional requirement, that is if that functional requirement is somehow constrained by the non-functional requirement. That mapping is presented in Appendix~\ref{ch:case_study_appendix}, table~\ref{tb:scheduler_original_frs_to_nfrs} (the absence of a particular non-functional requirement identifier from the columns of the table, implies there is no dependency between that non-functional and any of the functional requirements). The entire list of original functional and non-functional requirements of the \emph{meeting scheduler} case study can also be found in Appendix~\ref{ch:case_study_appendix}. Note that to facilitate tracing to the original \emph{PROMISE} dataset we are retaining the requirements identifiers used therein.
 
 We were unsatisfied with the choice of taxonomy used in the dataset, as the data contains no guidance or indication is this respect. Also, some of the categorisations used were arguably inconsistent. For example, functional requirement 48 is originally impacted by non-functional requirements 138, 140, 142 and 162 and all of these have been categorised as Operational, whilst in our view 138 and 140 are more pertinent to interoperability constraints and 142 is more of a design constraint, rather than a specific non-functional requirement.
 
-We also took into consideration an ontological approach and analysis done to this case study dataset~\citep{MylopoulosOnt2014}. Their classification includes three basic categories of requirements, `functional requirement (FR)', `quality requirement (QR)', and `constraints over function (CF)'. These would be modelled by functional goals, quality goals and function constraints in their conceptual model. They have also identified an additional category, `Domain Assumption' that, in their words, can operationalise any other goal.
+We also took into consideration an ontological approach and analysis done to this case study dataset~\citep{MylopoulosOnt2014}. Their classification includes three basic categories of requirements, `functional requirement (FR)', `quality requirement (QR)', and `constraints over function (CF)'. These would be modelled by functional goals, quality goals and function constraints in their conceptual model. They have also identified an additional category, `Domain Assumption (DA)' that, in their words, can operationalise any other goal.
 
-The authors analysed the 47 \nfrs within the dataset, and identified 21 QRs, 9 FRs, 14 Qrs+FRs, 2 CF+QR, and 1 DA. In the interest of space, we have decided to ignore any non-functional requirement that has been identified as FR, given that treating these would have no other consequence than growing our list of functional requirements to address. Therefore, and for the above reason, requirements 140 and 142 would fall from our list of \nfrs to take into consideration.
+The authors analysed the 47 \nfrs within the dataset, and identified 21 QRs, 9 FRs, 14 Qrs+FRs, 2 CF+QR, and 1 DA. In the interest of space, we have decided to ignore any non-functional requirement that has been identified as FR, given that treating these would have no other consequence than growing our list of functional requirements to address. Therefore, and for the above reason, requirements 140 and 142 were removed from our list of \nfrs to take into consideration.
 
 In this context, we opted by using the categorization in~\citefield{ieee_std_25010}{journaltitle}, and reproduced again in figure~\ref{fig:iso25010_again} for easy referencing.
 
@@ -1188,17 +1075,17 @@ In this context, we opted by using the categorization in~\citefield{ieee_std_250
 \end{figure}
 \captionsetup[figure]{list=yes}
 
-Therefore, in what follows, we use 10 \nfrs (the ones that impact one or more of the functional requirements), with the meaning intended by Leffingwell, that is, requirements that define criteria used to judge the operation or qualities of a system~\citep{Leffingwell2011}. Other requirements, listed originally as non-functional requirements, fall in the category of design constraints, such as requirements with identifiers 139, \emph{`The product will function alongside server software on any operating system where the Java runtime can be installed'} or 141, \emph{`The product must make use of web/application server technology. Open source examples include Apache web server Tomcat and the JBoss application server'}. 
+In what follows, we use 10 \nfrs (the ones that impact one or more of the functional requirements), with the meaning intended by Leffingwell, that is, requirements that define criteria used to judge the operation or qualities of a system~\citep{Leffingwell2011}. Other requirements, listed originally as non-functional requirements, fall in the category of design constraints, such as requirements with identifiers 139, \emph{`The product will function alongside server software on any operating system where the Java runtime can be installed'} or 141, \emph{`The product must make use of web/application server technology. Open source examples include Apache web server Tomcat and the JBoss application server'}. 
 
-In the interest of space and keeping discussion relevant, we will address all three types of requirements, that is functional, non-functional and design constraints, but will devote more attention to the requirements contained in the mapping table~\ref{tb:scheduler_original_frs_to_nfrs}. The reasons for this will become clear when we describe our extended format for feature files, as in our methodology, design constraints are addressed no differently than non-functional requirements with a global reach, one that causes them to have an impact on all other goals.
+In the interest of space and keeping discussion relevant, we will address all three types of requirements, that is, functional, non-functional and design constraints, but will devote more attention to the requirements contained in the mapping table~\ref{tb:scheduler_original_frs_to_nfrs}. The reasons for this will become clear when we describe our extended format for feature files, as in our methodology, design constraints are addressed no differently than non-functional requirements with a global reach, one that causes them to have an impact on all other goals.
 
-Before describing how we model this set of requirements using our extended BDD methodology, we need to surface some constraints that we were faced with and that shaped our approach. We had to assume that the list of requirements was consistent with original goals of the stakeholders, whoever they may be. This was the first hurdle we had to overcome, and that was identifying the different stakeholders of the system. Note that it was not our intention to identify all possible stakeholders, but rather only the ones that could be derived from the dataset.
+Before describing how we model this set of requirements using our extended BDD methodology, we need to surface some constraints that we were faced with and that shaped our approach. We had to assume that the list of requirements was consistent with original goals of stakeholders, whoever they may be. This was the first hurdle we had to overcome, and that was identifying the different stakeholders of the system. Note that it was not our intention to identify all possible stakeholders, but rather only the ones that could be derived from the dataset.
 
 We note also, that we did not have access to stakeholders and could not confirm assumptions, refine requirements or deal with ambiguities, or had access to business users from whom we could obtain further knowledge about the domain. This is not to say that we cannot use our methodology with confidence, it is just that we need to be appreciative of the constrained context in which our research took place.
 
 In other words, our focus is on proving the feasibility (or not, for that matter) of our approach and to present the benefits, challenges and conclusions of our research. It is not to design the best possible \emph{meeting scheduler} given a set of elicited requirements. That would just not be possible without a significant amount of guess work. 
 
-Figure~\ref{fig:gherkin_ast} contains a class model of the current Gherkin implementation. At the centre of the model are \emph{Features}, consisting of a name, a description, an optional list of tags and comments, and a list of \emph{Scenario Definitions} with an optional \emph{Background}. A name is synonymous with title, and description is a block of text in no particular format. \emph{Keyword} is filled by the parser and represents what lexeme was parsed (e.g. for a feature, one can use `Feature', `Business Need' or `Ability') when processing each line of a feature file. \emph{Background} adds context to the scenarios in a single feature and is similar to a scenario containing a number of \emph{Steps}. \emph{Tags} can be used to group features and scenarios together. Every \emph{scenario} consists of a list of \emph{Steps}, which must start with one of the keywords \emph{Given}, \emph{When}, \emph{Then}, \emph{But} or \emph{And}. These \emph{Steps}, are the interface to external tools to support testing and automated test execution approaches.
+Chapter~\ref{ch:gherkin_redux} describes in detail current Gherkin implementation and changes we introduced to the parser to support our methodology. Therein, we describe the current Gherkin class model. At the centre of the model are \emph{Features}, consisting of a name, a description, an optional list of tags and comments, and a list of \emph{Scenario Definitions} with an optional \emph{Background}. A name is synonymous with title, and description is a block of text in no particular format. \emph{Keyword} is filled by the parser and represents what lexeme was parsed (e.g. for a feature, one can use `Feature', `Business Need' or `Ability') when processing each line of a feature file. \emph{Background} adds context to the scenarios in a single feature and is similar to a scenario containing a number of \emph{Steps}. \emph{Tags} can be used to group features and scenarios together. Every \emph{scenario} consists of a list of \emph{Steps}, which must start with one of the keywords \emph{Given}, \emph{When}, \emph{Then}, \emph{But} or \emph{And}. These \emph{Steps}, are the interface to external tools to support testing and automated test execution approaches.
 
 In the next section, we will introduce our changes to Gherkin by using a subset of requirements from the \emph{meeting scheduler} case study.
 
@@ -1338,6 +1225,8 @@ In BDD, and in the spirit of \emph{Specification by Example}, we clarify require
 \begin{featurelist}{Changes to Gherkin -- Scenarios}{lst:gherkin_changes_scenarios}
 \begin{featurecode}{0.7}
 \begin{minted}{Gherkin}
+
+
 Feature:    R48 - The product shall record meeting entries
 
             As a Meeting Organiser
@@ -1375,9 +1264,10 @@ In GRL, we will use \emph{Tasks} to represent scenarios and the two situations d
 
 The complete feature file is listed below with remaining scenarios included.
 
-\begin{featurelist}{Changes to Gherkin -- Complete 48 feature}{lst:gherkin_changes_complete}
+\begin{featurelist}{Changes to Gherkin -- Complete feature}{lst:gherkin_changes_complete}
 \begin{featurecode}{0.7}
 \begin{minted}{Gherkin}
+
 Feature:    R48 - The product shall record meeting entries
 
             As a Meeting Organiser
@@ -1461,6 +1351,7 @@ Scenario:   100% of all transactions recording meeting agendas in DBMS are succe
 \begin{featurelist}{R67 -- The product shall record different meeting types}{lst:feature_r67}
 \begin{featurecode}{0.7}
 \begin{minted}{Gherkin}
+
 Feature:    R67 - The product shall record different meeting types
 
             As a Meeting Organiser
@@ -1486,7 +1377,7 @@ Scenario:   100% of all transactions recording different meeting \
 \end{featurecode}
 \end{featurelist}
 
-The last requirement to address is the one with identifier 73, and by doing so, we will introduce our last change to Gherkin and that is allowing the specification of global \nfrs or design constraints. For easy reference, we list requirement 73 and \nfrs it is impacted by, in table~\ref{tb:case_study_cross_cutting}
+The last requirement to address is the one with identifier 73, and by doing so, we will introduce our last change to Gherkin and that is allowing the specification of global \nfrs or design constraints~( see listing \ref{lst:feature_r73}). For easy reference, we list requirement 73 and \nfrs it is impacted by, in table~\ref{tb:case_study_cross_cutting}
 
 \begin{table}[h!]
 \caption[Cross-cutting \nfrs]{Cross-cutting \nfrs}
@@ -1531,9 +1422,9 @@ Scenario:   Product has an intuitive interface
 \end{featurecode}
 \end{featurelist}
 
-These cross-cutting concerns (applies also to design constraints), will be distinguished by ordinary \nfrs by being tagged with a \emph{Global} tag, allowing the parser and, more importantly, the translator from Gherkin to GRL to treat them appropriately. In GRL, they will correspond to \emph{Dependency} links between the goal herein introduced (in this case, \emph{product to have an intuitive interface}) and all other goals introduced so far. That is, satisfaction of any other goal, will be dependant on the satisfaction of this global reach goal.\\
+These cross-cutting concerns (applies also to design constraints), will be distinguished by ordinary \nfrs by being tagged with a \emph{GLOBAL} tag, allowing the parser and, more importantly, the translator from Gherkin to GRL to treat them appropriately. In GRL, they will correspond to \emph{Dependency} links between the goal herein introduced (in this case, \emph{product to have an intuitive interface}) and all other goals introduced so far. That is, satisfaction of any other goal, will be dependant on the satisfaction of this global reach goal.\\
 
-We now turn our attention to GRL and how we can model the features covered so far. In chapter~\ref{ch:gherkin_redux} we will describe a translator from gherkin to GRL. The output of that translator can be imported into jUCMNav~\footnote{~see http://jucmnav.softwareengineering.ca/ucm/bin/view/ProjetSEG/WebHome for details}, a free, Eclipse-based~\footnote{~see https://eclipse.org/ for details} graphical editor and analysis and transformation tool for the User Requirements Notation (URN), including GRL.
+We now turn our attention to GRL and how we can model the features covered so far. In chapter~\ref{ch:gherkin_redux} we will describe a translator from Gherkin to GRL. The output of that translator can be imported into jUCMNav~\footnote{~see http://jucmnav.softwareengineering.ca/ucm/bin/view/ProjetSEG/WebHome for details}, a free, Eclipse-based~\footnote{~see https://eclipse.org/ for details} graphical editor and analysis and transformation tool for the User Requirements Notation (URN), including GRL.
 
 This tool has been described in detail before, first in Jean-François Roy's masters thesis~\citep{Roy:2007wyba} and later in a research paper~\citep{Amyot2010}, and we refer the interested reader to those two documents, as describing the tool in detail here, is out of scope.
 
@@ -1548,9 +1439,9 @@ For now, we describe possible uses of the models imported into jUCMNav -- more p
 
 The model shows two actors (modelled as circles drawn with dashed lines), and within each, their set of goals defined in the story format extension for feature files described earlier. We can also observe dependencies (thick lines with a filled arrow in the middle) pointing from a dependent goal to others it depends upon (e.g. \emph{Record a meeting agenda} depends upon \emph{Record meeting entries}). 
 
-Also, all global qualities have incoming dependencies from all other goals (e.g. refer to \emph{Product to have an intuitive interface} in the model).
+Also, all global qualities have incoming dependencies from all other goals (e.g. refer to \emph{Product to have an intuitive interface} in the graph).
 
-Three \emph{Softgoals} are shown, namely \emph{Interoperability}, \emph{Learnability} and \emph{User interface aesthetics} that also correspond to the ones identified earlier. Note that these \emph{Softgoals} have to be previously defined, and our translator will ensure these are present by including a set of quality softgoals and decompositions with each run of the translator. We have chosen to base this set in the quality characteristics defined in~\citet{ieee_std_25010} but it could be tailored to different categorisation schemes. This process will be described in more detail in chapter~\ref{ch:gherkin_redux}.
+Three \emph{Softgoals} are shown, namely \emph{Interoperability}, \emph{Learnability} and \emph{User interface aesthetics} that also correspond to the ones identified earlier. Note that these \emph{Softgoals} have to be previously defined, and our translator will ensure these are present by including a set of quality softgoals and decompositions with each run of the translator. We have chosen to base this set in the quality characteristics defined in~\citet{ieee_std_25010} but a different categorisation scheme can be used. This process will be described in more detail in chapter~\ref{ch:gherkin_redux}.
 
 The hexagons define \emph{Tasks} in GRL corresponding to scenarios defined in the feature files, with some contributing to Goals,  other to Softgoals, and others to both (e.g. \emph{Record complex meeting} contributes to \emph{Interoperability} softgoal and to \emph{Record meeting entries} goal).
 
@@ -1560,13 +1451,13 @@ Using GRL and the jUCMNav tool, we are able to develop analysis procedures by ev
 
 \citet{Amyot2010} mentions that the analysis of goal models can be done in very different ways depending on the nature of the model and the purpose of the analysis. We believe that in our methodology, there are at least two types of analysis worth considering. 
 
-The first one consists of taking the model as it currently is, and assign initial satisfaction levels to some of the leaf nodes corresponding to the \emph{Tasks} in the model. This corresponds to scenarios being satisficed (or not) and triggering the satisfaction levels of goals and actors. In early stages of the software life-cycle, we may be interested in modelling the potential impact of scenarios in goal satisfaction of one or more stakeholders. In later stages, perhaps we have those scenarios already implemented and satisfied and want to assess current satisfaction levels of actors, in order to determine how far we may be from delivering software or application that satisfied its stakeholders in a sufficiently manner.
+The first one consists of taking the model as it currently is, and assigning initial satisfaction levels to some of the leaf nodes corresponding to the \emph{Tasks} in the model. This relates to scenarios being satisficed (or not) and triggering the satisfaction levels of goals and actors. In early stages of the software life-cycle, we may be interested in modelling the potential impact of scenarios in goal satisfaction of one or more stakeholders. In later stages, perhaps we have those scenarios already implemented and satisfied and want to assess current satisfaction levels of actors, in order to determine how far we may be from delivering software or application that satisfied its stakeholders in a sufficiently manner.
 
-The second analysis type, involves considering design options for \emph{Tasks} and/or \emph{Goals} and then checking the impact of those decisions on the satisfaction levels of goals and actors. The process is very similar to the above, but here we are delving into the design domain and considering alternative options to operationalise -- with the meaning intended by the \emph{NFR Framework} -- goals and tasks.
+The second analysis type, considers design options for \emph{Tasks} and/or \emph{Goals} and then checking the impact of those decisions on the satisfaction levels of goals and actors. The process is very similar to the above, but here we are delving into the design domain and considering alternative options to operationalise -- with the meaning intended by the \emph{NFR Framework} -- goals and tasks.
 
-We will now show instances of these two types of analysis, but before proceeding, we need to specify \emph{importance} levels for each of the goals that are bound to an Actor. For what follows, we set the importance of \emph{Record meeting entries} to \emph{High}, of \emph{Record a meeting agenda} to \emph{Medium} and of \emph{Record different meeting types} to \emph{Low}. The goal \emph{Product to have an intuitive interface} was also set to \emph{High} as it is the only goal for the actor \emph{Procurement Manager}, and that seemed like a logical thing to do. This assignment of importance levels to goals bound to actors, is enforced by jUCMNav, without which we would not be able to assess the satisfaction level of actors in the model.
+We will now show instances of these two types of analysis, but before proceeding, we need to specify \emph{importance} levels for each of the goals that are bound to an Actor. For what follows, we set the importance of \emph{Record meeting entries} to \emph{High}, of \emph{Record a meeting agenda} to \emph{Medium} and of \emph{Record different meeting types} to \emph{Low}. The goal \emph{Product to have an intuitive interface} was also set to \emph{High} as it is the only goal for the actor \emph{Procurement Manager}, and that seemed like a logical thing to do. This assignment of importance levels to goals bound to actors, is enforced by jUCMNav, without which, we would not be able to assess the satisfaction level of actors in the model.
  
-We will start by first considering using the model as it currently is. Initial satisfaction levels for some of the intentional elements are provided in a \emph{strategy} and then propagated to the other intentional elements of the model through the various links that connect them. We start by satisfying all \emph{Tasks} corresponding to `functional' scenarios (see figure~\ref{fig:casestudy-functionalscenarios}), that is, those that are not tagged with \emph{NFR}.
+We will start by first considering using the model as it currently is. Initial satisfaction levels for some of the intentional elements are provided in a \emph{strategy} and then propagated to the other ones through the various links that connect them. We start by satisfying all \emph{Tasks} corresponding to `functional' scenarios (see figure~\ref{fig:casestudy-functionalscenarios}), that is, those that are not tagged with \emph{NFR}.
 
 \begin{sidewaysfigure}
 \includegraphics[width=\columnwidth]{casestudy-functionalscenarios}
@@ -1575,7 +1466,7 @@ We will start by first considering using the model as it currently is. Initial s
 \label{fig:casestudy-functionalscenarios}
 \end{sidewaysfigure}
 
-We can note that both goals and actors have their satisfaction level untouched (showing zero on top of the respective icon). This is consistent with our expectation, since all goals are dependent on the \emph{Product to have an intuitive interface} which we haven't yet specified a satisfaction level, and the current strategy did not cause a change to its satisfaction level. It is interesting to note the impact on both goals and actors of setting the satisfaction of that global constraint to either \emph{Satisfied} (see figure~\ref{fig:casestudy-functionalscenarios-globalconstraint}) or \emph{Weakly Denied} (see figure~\ref{fig:casestudy-functionalscenarios-globalconstraint-denied}). The latter satisfaction level, could be interpreted, for example, as an indication of some users being dissatisfied with the user interface or the team facing some implementation issues with some of the application's screens.
+We note that both goals and actors have their satisfaction level untouched (showing zero on top of their respective icon). This is consistent with our expectation, since all goals are dependent on the \emph{Product to have an intuitive interface} which we haven't yet specified a satisfaction level for, and the current strategy did not cause a change to its satisfaction level. It is interesting to note the impact on both goals and actors of setting the satisfaction of that global constraint to either \emph{Satisfied} (see figure~\ref{fig:casestudy-functionalscenarios-globalconstraint}) or \emph{Weakly Denied} (see figure~\ref{fig:casestudy-functionalscenarios-globalconstraint-denied}). The latter satisfaction level, could be interpreted, for example, as an indication of some users being dissatisfied with the user interface or the team facing implementation issues with the application's user interface.
 
 \begin{sidewaysfigure}
 \includegraphics[width=\columnwidth]{casestudy-functionalscenarios-globalconstraint}
@@ -1614,11 +1505,11 @@ Figure~\ref{fig:casestudy-designoptionsB} shows the same model as before, with t
 \section{Summary}
 In this chapter, and in the context of Behaviour-driven development, we have described a methodology that addresses \nfrs in tandem with functional requirements. We have done it, by introducing a goal-oriented approach to the elicitation, analysis and modelling of requirements as aspirational goals of one or more identified stakeholders of an application or system.
 
-We initially described, through a series of small transformational steps, the set of required changes to Gherkin, in order to translate requirements into goals, determine any dependencies and conflicts between goals, and more importantly, evaluate satisfaction levels of goals and actors.
+We initially described, through a series of small transformational steps, the set of required changes to Gherkin, in order to translate requirements into goals, determine any dependencies and conflicts between goals, and more identify constraints to the satisfaction of those goals.
 
-We have made use of a well known public dataset and, sampled a subset of functional and non-functional requirements to support the description of our methodology. In doing so, we have showed how requirements specified in Gherkin can be transformed into a GRL catalogue of intentional elements and modelled as a GRL graph in a specialised tool such as jUCMNav.
+We have made use of a well known public dataset and, sampled a subset of functional and non-functional requirements to support the description of our methodology. In doing so, we have showed how requirements specified in Gherkin can be later modelled as a GRL graph in a specialised tool such as jUCMNav.
 
-In the next chapter we will describe in detail the implementation changes to the Gherkin parser and also a tool to convert one or more feature files into a GRL catalogue suitable to be imported and further refined and analysed into jUCMNav.
+In the next chapter we will describe in detail the implementation changes to the Gherkin parser and also introduce a translator to convert one or more feature files into a GRL catalogue suitable to be imported into jUCMNav, for further modelling, refinement and analysis.
 
 \chapter{From Gherkin to GRL}
 \label{ch:gherkin_redux}
@@ -1775,7 +1666,61 @@ End with a strong lead into next chapter.\\
 \begin{appendices}
 \chapter{Case Study}
 \label{ch:case_study_appendix}
-The table below lists all the original non-functional requirements for the \emph{meeting scheduler} project included in  the \emph{PROMISE} dataset, including the classification proposed by \citeauthor{MylopoulosOnt2014} in \cite{MylopoulosOnt2014}. Note that for easy of referencing the table retains original requirement identifiers.
+The table below lists all original functional requirements contained in the \emph{PROMISE} dataset. Note that for easy of referencing the tables below retain original requirement identifiers.
+
+\ifdraft{%
+  \fxnote{THIS WILL CONTAIN FRs TABLE for CASE STUDY}
+}{%
+\begin{center}
+\begin{longtable}{c m{.8\textwidth}}
+\caption[Meeting scheduler original functional requirements]{Meeting scheduler original functional requirements~(\emph{PROMISE}, 2015)\label{tb:scheduler_original_frs}}\\
+\toprule \multicolumn{1}{c}{\bfseries{Requirement ID}} & \multicolumn{1}{c}{\bfseries{Functional Requirement Description}}\\
+ \addlinespace
+ \midrule
+ \endfirsthead
+\multicolumn{2}{c}%
+{\tablename\ \thetable\ -- \textit{Continued from previous page}} \\
+\toprule \multicolumn{1}{c}{\bfseries{Requirement ID}} & \multicolumn{1}{c}{\bfseries{Functional Requirement Description}}\\
+ \addlinespace
+ \midrule
+\endhead
+\multicolumn{2}{r}{\textit{Continued on next page}} \\
+\endfoot
+\addlinespace
+\bottomrule
+\endlastfoot   
+    R 48  & The product shall record meeting entries \\ \midrule
+    R 49  & The product will notify employees of meeting invitations \\ \midrule
+    R 50  & The product shall have the ability to send meeting reminders to employees \\ \midrule
+    R 51  & The product shall assign the organizers contact information to each meeting they create \\ \midrule
+    R 52  & The product will record meeting acknowledgements \\ \midrule
+    R 53  & The product shall store new conference rooms \\ \midrule
+    R 54  & The product shall update existing conference rooms \\ \midrule
+    R 55  & The product will be able to delete conference rooms \\ \midrule
+    R 56  & The product shall be able to store new room equipment \\ \midrule
+    R 57  & The product will update existing room equipment \\ \midrule
+    R 58  & The product shall be able to delete room equipment \\ \midrule
+    R 59  & The product shall allow an organizer to invite other employees to meetings \\ \midrule
+    R 60  & Each time a conference room is reserved the conference room schedule shall be updated to reflect the time and date of the reservation \\ \midrule
+    R 61  & The product shall record the transportation status of equipment reserved \\ \midrule
+    R 62  & The product shall display a map of the company building showing conference room locations \\ \midrule
+    R 63  & The product shall record updated meeting agendas \\ \midrule
+    R 64  & The product shall send a meeting confirmation to the meeting organizer \\* \midrule
+    R 65  & The product shall display room equipment according to search parameters \\ \midrule
+    R 66  & The product shall display conference rooms according to search parameters \\ \midrule
+    R 67  & The product shall record different meeting types \\ \midrule
+    R 68  & The product shall record all the equipment that has been reserved \\ \midrule
+    R 69  & The product shall notify building personnel of equipment transport requests \\ \midrule
+    R 70  & The product will allow privileged users to view meeting schedules in multiple reporting views \\ \midrule
+    R 71  & The product shall be able to send meeting notifications via different kinds of end-user specified methods \\ \midrule
+    R 72  & The product shall have a customizable Look and Feel \\ \midrule
+    R 73  & The product shall have an intuitive user interface \\ \midrule
+    R 74  & The product will display an available status for unreserved conference rooms \\
+\end{longtable}
+\end{center}
+}
+
+The table below lists all the original non-functional requirements for the \emph{meeting scheduler} project included in  the \emph{PROMISE} dataset, including the classification proposed by \citeauthor{MylopoulosOnt2014} in \cite{MylopoulosOnt2014}.
 
 \ifdraft{%
   \fxnote{THIS WILL CONTAIN NFRS TABLE}
@@ -1805,7 +1750,7 @@ The table below lists all the original non-functional requirements for the \emph
     R 140   & FR & The product will require collaboration with a database management system (DBMS). The DBMS may be located on the same machine as the product or on a separate machine residing on the same computer network. \\    \midrule
     R 141   & QR & The product must make use of web/application server technology. Open source examples include Apache web server Tomcat and the JBoss application server. \\    \midrule
     R 142   & FR & A database management system such as Oracle DB2 MySql or HSQL will need to be integrated with the product \\    \midrule
-    R 143   & FR+QR & The product's Look and Feel shall be able to incorporate aspects of the customer's organization such as logo branding and identity \\    \midrule
+    R 143   & FR+QR & The product's Look and Feel shall be able to incorporate aspects of the customer's organization such as logo branding and identity \\*    \midrule
     R 144   & QR & The product shall have a conservative and professional appearance \\    \midrule
     R 145   & QR & The product shall make the users want to use it. 80\textbackslash{}\% of the users surveyed report they are regularly using the product after the first 2 weeks postlaunch \\    \midrule
     R 146   & QR & The product shall be easy to use. 90\textbackslash{}\% of users will be able to successfully reserve a conference room within 5 minutes of product use \\*    \midrule
@@ -1840,7 +1785,7 @@ The table below lists all the original non-functional requirements for the \emph
     R 175   & QR & The product shall be able to be installed in any operating environment within 2 days \\    \midrule
     R 176   & CF+QR & The product shall ensure that only company employees or external users with company-approved user IDs may have product access. 100\textbackslash{}\% of all logons shall be by either company employees or external users with company-approved user IDs \\    \midrule
     R 177   & CF+QR & Only managers are able to perform search queries for reservations by user. 100\textbackslash{}\% of all search queries for reservations by user shall be from logons of only management logons \\    \midrule
-    R 178   & FR+QR & The product shall ensure that the database's data corresponds to the data entered by the user. Each conference room reservation in the system will contain the same information as was entered by the user \\    \midrule
+    R 178   & FR+QR & The product shall ensure that the database's data corresponds to the data entered by the user. Each conference room reservation in the system will contain the same information as was entered by the user \\*    \midrule
     R 179   & FR+QR & The product shall prevent the input of malicious data. The product and/or adjacent hardware/software systems data shall remain 100\textbackslash{}\% uncorrupted each time malicious data is input into the product \\    \midrule
     R 180   & QR & The product and/or dependent databases/filesystems shall remain operational as a result of the input of malicious data. The product and/or dependent databases/filesystems shall not crash 100\textbackslash{}\% of the time that malicious data is input into the product \\    \midrule
     R 181   & FR+QR & The product shall have the ability to receive automatic software updates as new threats emerge. 100\textbackslash{}\% of customers will be able to receive automatic software updates transmitted to the installed product \\    \midrule
@@ -1851,111 +1796,522 @@ The table below lists all the original non-functional requirements for the \emph
 \end{center}
 }
 
+\ifdraft{%
+  \fxnote{THIS WILL CONTAIN FRS to NFRS MAPPING TABLE}
+}{%
+\begin{table}[h!]
+\caption[Meeting scheduler mapping of functional to non-functional requirements]{Meeting scheduler mapping of functional to non-functional requirements~(\emph{PROMISE}, 2015)}
+\label{tb:scheduler_original_frs_to_nfrs}
+\setlength{\extrarowheight}{1.8pt}
+\centering
+\scalebox{0.75}{
+    \begin{tabular}{rrccccccccccccccccccccccccccccccccccccccccccccccc}
+    \toprule
+              & \multicolumn{11}{c}{\bfseries{Non-Functional Requirements}} \\
+        \midrule
+        \multicolumn{1}{c}{\bfseries{Req ID}} & \begin{turn}{45}R 138\end{turn} & \begin{turn}{45}R 140 (*)\end{turn} & \begin{turn}{45}R 142 (*)\end{turn} & \begin{turn}{45}R 146\end{turn} & \begin{turn}{45}R 149\end{turn} & \begin{turn}{45}R 152\end{turn} & \begin{turn}{45}R 162\end{turn} & \begin{turn}{45}R 163\end{turn} & \begin{turn}{45}R 168\end{turn} & \begin{turn}{45}R 178\end{turn} & \begin{turn}{45}\end{turn} \\
+            \multicolumn{1}{c}{R 48} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       & \multirow{27}[54]{*}{} \\
+            \multicolumn{1}{c}{R 49} & \multicolumn{10}{c}{\multirow{4}[8]{*}{}}                                     &  \\
+            \multicolumn{1}{c}{R 50} & \multicolumn{10}{c}{}                                                         &  \\
+            \multicolumn{1}{c}{R 51} & \multicolumn{10}{c}{}                                                         &  \\
+            \multicolumn{1}{c}{R 52} & \multicolumn{10}{c}{}                                                         &  \\
+            \multicolumn{1}{c}{R 53} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
+            \multicolumn{1}{c}{R 54} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
+            \multicolumn{1}{c}{R 55} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
+            \multicolumn{1}{c}{R 56} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
+            \multicolumn{1}{c}{R 57} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
+            \multicolumn{1}{c}{R 58} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
+            \multicolumn{1}{c}{R 59} & \multicolumn{10}{c}{}                                                         &  \\
+            \multicolumn{1}{c}{R 60} &       &       &       & \multicolumn{1}{l}{O,P}   &       &       &       &       &       & \multicolumn{1}{l}{O}     &  \\
+            \multicolumn{1}{c}{R 61} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
+            \multicolumn{1}{c}{R 62} &       &       &       &       &       & \multicolumn{1}{l}{L}     &       &       & \multicolumn{1}{l}{MA,MO} &       &  \\
+            \multicolumn{1}{c}{R 63} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
+            \multicolumn{1}{c}{R 64} &       &       &       &       &       &       &       & \multicolumn{1}{l}{I}     &       &       &  \\
+            \multicolumn{1}{c}{R 65} & \multicolumn{10}{c}{\multirow{2}[4]{*}{}}                                     &  \\
+            \multicolumn{1}{c}{R 66} & \multicolumn{10}{c}{}                                                         &  \\
+            \multicolumn{1}{c}{R 67} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
+            \multicolumn{1}{c}{R 68} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       &       &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
+            \multicolumn{1}{c}{R 69} & \multicolumn{10}{c}{}                                                         &  \\
+            \multicolumn{1}{c}{R 70} & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     & \multicolumn{1}{l}{I}     &       & \multicolumn{1}{l}{AS}    &       & \multicolumn{1}{l}{I}     &       &       &       &  \\
+            \multicolumn{1}{c}{R 71} &       &       &       &       &       &       &       & \multicolumn{1}{l}{I}     &       &       &  \\
+            \multicolumn{1}{c}{R 72} &       &       &       &       & \multicolumn{1}{l}{AS}    &       &       &       &       &       &  \\
+            \multicolumn{1}{c}{R 73} &       &       &       &       & \multicolumn{1}{l}{L,AS}  &       &       &       &       &       &  \\
+            \multicolumn{1}{c}{R 74} &       &       &       & \multicolumn{1}{l}{O,P}   &       & \multicolumn{1}{l}{L}     &       &       &       &       &  \\
+        \bottomrule
+    \end{tabular}%
+}
+\caption*{
+        \scalebox{0.85}{
+            \begin{tabular}{c c l}
+              \multicolumn{1}{c}{\multirow{3}[1]{*}{\emph{\bfseries{Legend:}} In the above, initials represent qualities}} 
+                & O	 & Operability \\
+                & P	 & Pleasure \\
+                & I	 & Interoperability \\
+                & L	 & Learnability \\
+                & MA & Maintainability \\
+                & MO & Modifiability \\
+                & AS & user interface aesthetics \\
+                \multicolumn{2}{c}{\multirow{3}[1]{*}{\emph{\bfseries{(*)}} \citet{MylopoulosOnt2014} marked these as Functional requirements and we will not consider them}} 
+            \end{tabular}
+        }
+  }
+\end{table}
+}
+
+\clearpage
 \section{Case study requirements in BDD format}
 
 In this section, we list the remaining feature files corresponding to the functional requirements in the \emph{meeting scheduler} case study and not addressed previously in chapter~\ref{ch:Extendingbdd}, section~\ref{sec:case_study}.
 
 \begin{featurelist}{R53 -- The product shall store new conference rooms}{lst:feature_r53}
 \begin{featurecode}{0.7}
-\inputminted{Gherkin}{D:/Dev/thesis/gherkin3/testdata/extendedBDD/R53.feature}
+\begin{minted}{Gherkin}
+
+
+Feature:    R53 - The product shall store new conference rooms
+	
+            As a Facilities Manager
+            I want to record new conference rooms
+            So that I can keep my facilities inventory updated
+            Which may impact update existing conference rooms
+            Which may impact delete conference rooms
+			
+Constrained by:
+            | Interoperability | Help |
+
+# This scenario does not include a contribution.
+# Therefore, a default contribution from scenario to goal will be added
+Scenario:   Record conference room with minimum details
+            Given the application has been started
+            And I choose to add new conference room
+            When I specify a conference room name, building identifier and floor
+            And I proceed to save the conference room
+            Then the conference room should be recorded
+@NFR	
+Scenario:   Conference rooms can be recorded in most DBMS
+            Contributing to help Interoperability
+@NFR
+Scenario:   100% of all transactions recording conference rooms in DBMS are successful
+            Contributing to help Interoperability
+\end{minted}
 \end{featurecode}
 \end{featurelist}
-\clearpage
 
 \begin{featurelist}{R54 -- The product shall record meeting entries}{lst:feature_r54}
 \begin{featurecode}{0.7}
-\inputminted{Gherkin}{D:/Dev/thesis/gherkin3/testdata/extendedBDD/R54.feature}
+\begin{minted}{Gherkin}
+
+
+Feature:    R54 - The product shall record meeting entries
+
+            As a Facilities Manager
+            I want to update existing conference rooms
+            So that I can keep my facilities inventory updated
+	
+Constrained by:
+            | Interoperability | Help |
+
+Scenario:   Update conference room fields other than name
+
+Scenario:   Product does not allow updating conference room field name
+
+@NFR	
+Scenario:   Conference rooms can be updated in most DBMS
+            Contributing to help Interoperability
+
+@NFR
+Scenario:   100% of all transactions updating conference rooms in DBMS are successful
+            Contributing to help Interoperability	
+\end{minted}
 \end{featurecode}
 \end{featurelist}
 \clearpage
 
 \begin{featurelist}{R55 -- The product will be able to delete conference rooms}{lst:feature_r55}
 \begin{featurecode}{0.7}
-\inputminted{Gherkin}{D:/Dev/thesis/gherkin3/testdata/extendedBDD/R55.feature}
+\begin{minted}{Gherkin}
+
+
+Feature:    R55 - The product will be able to delete conference rooms
+
+            As a Facilities Manager
+            I want to delete conference rooms
+            So that I can keep my facilities inventory updated
+		
+Constrained by:
+            | Interoperability | Help |
+
+Scenario:   Delete conference room not associated with a meeting succeeds
+
+Scenario:   Not possible to delete conference room with meetings associated
+
+@NFR	
+Scenario:   Conference rooms can be deleted from most DBMS
+            Contributing to help  Interoperability
+
+@NFR
+Scenario:   100% of all transactions deleting conference rooms in DBMS are successful
+            Contributing to help  Interoperability
+\end{minted}
 \end{featurecode}
 \end{featurelist}
-\clearpage
 
 \begin{featurelist}{R56 -- The product shall be able to store new room equipment}{lst:feature_r56}
 \begin{featurecode}{0.7}
-\inputminted{Gherkin}{D:/Dev/thesis/gherkin3/testdata/extendedBDD/R56.feature}
+\begin{minted}{Gherkin}
+
+
+Feature:    R56 - The product shall be able to store new room equipment
+
+            As a Facilities Manager
+            I want to store new room equipment
+            So that I can keep my conference rooms equipment inventory updated
+            Which may impact update existing room equipment
+            Which may impact delete room equipment
+			
+Constrained by:
+            | Interoperability | Help |
+
+Scenario:   Record room equipment with minimum details
+
+Scenario:   Record room equipment with complete details
+
+@NFR
+Scenario:   Room equipment can be stored in most DBMS
+            Contributing to help  Interoperability
+
+@NFR
+Scenario:   100% of all transactions storing room equipment in DBMS are successful
+            Contributing to help  Interoperability
+\end{minted}
 \end{featurecode}
 \end{featurelist}
 \clearpage
 
 \begin{featurelist}{R57 -- The product will update existing room equipment}{lst:feature_r57}
 \begin{featurecode}{0.7}
-\inputminted{Gherkin}{D:/Dev/thesis/gherkin3/testdata/extendedBDD/R57.feature}
+\begin{minted}{Gherkin}
+
+
+Feature:    R57 - The product will update existing room equipment
+
+            As a Facilities Manager
+            I want to update existing room equipment
+            So that I can keep my conference rooms equipment inventory updated
+			
+Constrained by:
+            | Interoperability | Help |
+
+@NFR
+Scenario:   Room equipment can be updated in most DBMS
+            Contributing to help  Interoperability
+
+@NFR
+Scenario:   100% of all transactions updating room equipment in DBMS are successful
+            Contributing to help  Interoperability
+\end{minted}
 \end{featurecode}
 \end{featurelist}
-\clearpage
 
 \begin{featurelist}{R58 -- The product shall be able to delete room equipment}{lst:feature_r58}
 \begin{featurecode}{0.7}
-\inputminted{Gherkin}{D:/Dev/thesis/gherkin3/testdata/extendedBDD/R58.feature}
+\begin{minted}{Gherkin}
+
+
+Feature:    R58 - The product shall be able to delete room equipment
+
+            As a Facilities Manager
+            I want to delete room equipment
+            So that I can keep my conference rooms equipment inventory updated
+	
+Constrained by:
+            | Interoperability | Help |
+
+Scenario:   Delete room equipment not associated with a meeting succeeds
+
+# This scenario shows that by producing examples we can uncover other nfrs
+Scenario:   Delete room equipment with a meeting associated notifies meeting organiser
+
+@NFR
+Scenario:   Notifications of deleted room equipment can be sent through \
+            various email servers	
+            Which helps Interoperability
+
+@NFR	
+Scenario:   Room equipment can be deleted from most DBMS
+            Contributing to help  Interoperability
+
+@NFR
+Scenario:   100% of all transactions deleting room equipment from DBMS are successful
+            Contributing to help  Interoperability
+\end{minted}
 \end{featurecode}
 \end{featurelist}
 \clearpage
 
-\begin{featurelist}{R60 -- }{lst:feature_r60}
+\begin{featurelist}{R60 -- Each time a conference room is reserved the schedule shall be updated}{lst:feature_r60}
 \begin{featurecode}{0.7}
-\inputminted{Gherkin}{D:/Dev/thesis/gherkin3/testdata/extendedBDD/R60.feature}
+\begin{minted}{Gherkin}
+
+
+Feature:    R60 - Each time a conference room is reserved the conference room schedule \
+            shall be updated to reflect the time and date of the reservation
+
+            As a Meeting Organiser
+            I want to reserve a conference room and update the schedule with the \
+            meeting's date and time
+            So that I prevent double bookings
+
+Constrained by:
+            | Operability | Help |
+            | Pleasure    | Help |
+@NFR	
+Scenario:   Updated conference room schedule data in the database corresponds to the \
+            data entered by the user
+            Which helps Operability
+
+@NFR
+Scenario:   It is easy to reserve a conference room and update the schedule with the \
+            meeting's date and time
+            Which helps Operability
+            Contributing to help Pleasure
+
+@NFR	
+Scenario:   90% of users are able to reserve a conference room within 5 minutes of use
+            Which helps Operability
+\end{minted}
+\end{featurecode}
+\end{featurelist}
+
+\begin{featurelist}{R61 -- The product shall record the transportation status of equipment reserved}{lst:feature_r61}
+\begin{featurecode}{0.7}
+\begin{minted}{Gherkin}
+
+
+Feature:    R61 - The product shall record the transportation status of equipment reserved
+
+            As a Meeting Organiser
+            I want to record the transportation status of equipment reserved
+            So that I can verify when the equipment is available
+	
+Constrained by:
+            | Interoperability | Help |
+
+@NFR	
+Scenario:   Transportation status of equipment reserved can be recorded in most DBMS
+            Which helps Interoperability
+
+@NFR	
+Scenario:   100% of all transactions recording transportation status of equipment \
+            reserved in DBMS are successful
+            Which helps Interoperability
+\end{minted}
 \end{featurecode}
 \end{featurelist}
 \clearpage
 
-\begin{featurelist}{R61 -- }{lst:feature_r61}
+\begin{featurelist}{R62 -- The product shall display a map of the company building}{lst:feature_r62}
 \begin{featurecode}{0.7}
-\inputminted{Gherkin}{D:/Dev/thesis/gherkin3/testdata/extendedBDD/R61.feature}
+\begin{minted}{Gherkin}
+
+
+Feature:    R62 - The product shall display a map of the company building showing \
+            conference room locations
+
+            As a Meeting Organiser
+            I want to view a map of the company building
+            So that I can see conference room locations and choose the best location \
+            for the meeting
+	
+Constrained by:
+            | Learnability    | Help |
+            | Maintainability | Help |
+            | Modifiability   | Help |
+
+@NFR	
+Scenario:   Product allows intuitive searching of available conference rooms
+            Which helps Learnability
+	
+@NFR
+Scenario:   Product is designed using Design Patterns and coding best practices
+            Which makes Maintainability
+
+@NFR
+Scenario:   90% of maintenance software developers are able to integrate new \
+            functionality into the product with 2 working days
+            Which makes Modifiability
+\end{minted}
+\end{featurecode}
+\end{featurelist}
+
+\begin{featurelist}{R64 -- The product shall send a meeting confirmation to the meeting organizer}{lst:feature_r64}
+\begin{featurecode}{0.7}
+\begin{minted}{Gherkin}
+
+
+Feature:    R64 - The product shall send a meeting confirmation to the meeting organizer
+
+            As a Meeting Organiser
+            I want to receive a meeting confirmation
+            So that I can be sure the meeting has been recorded
+	
+Constrained by:
+            | Interoperability | Help |
+
+@NFR	
+Scenario:   Meeting confirmations can be sent through various email servers
+            Which helps Interoperability
+\end{minted}
 \end{featurecode}
 \end{featurelist}
 \clearpage
 
-\begin{featurelist}{R62 -- }{lst:feature_r62}
+\begin{featurelist}{R68 -- The product shall record all the equipment that has been reserved}{lst:feature_r68}
 \begin{featurecode}{0.7}
-\inputminted{Gherkin}{D:/Dev/thesis/gherkin3/testdata/extendedBDD/R62.feature}
+\begin{minted}{Gherkin}
+
+
+Feature:    R68 - The product shall record all the equipment that has been reserved
+
+            As a Meeting Organiser
+            I want to record all the reserved equipment
+            So that I can be sure all equipment will be available for the meeting
+	
+Constrained by:
+            | Interoperability | Help |
+
+Scenario:   Reserve projector for a meeting is recorded
+
+Scenario:   Reserve projector and board for a meeting is recorded	
+
+@NFR	
+Scenario:   All the reserved equipment can be recorded in most DBMS
+            Which helps Interoperability
+
+@NFR	
+Scenario:   100% of all transactions recording all the reserved equipment \
+            in DBMS are successful
+            Which helps Interoperability
+\end{minted}
+\end{featurecode}
+\end{featurelist}
+
+\begin{featurelist}{R70 -- The product will allow privileged users to view meeting schedules}{lst:feature_r70}
+\begin{featurecode}{0.7}
+\begin{minted}{Gherkin}
+
+
+Feature:    R70 - The product will allow privileged users to view meeting schedules in \ 
+            multiple reporting views
+
+            As a Privileged User
+            I want to view meeting schedules in multiple reporting views
+            So that I can control schedules
+	
+Constrained by:
+            | Interoperability          | Help         |
+            | user interface aesthetics | SomePositive |
+
+Scenario:   Display monthly view of scheduled meetings
+
+Scenario:   Display view of scheduled meetings for a given conference room
+
+Scenario:   Display view of scheduled meetings organised by a specific individual
+	
+@NFR	
+Scenario:   All meeting schedules can be stored in most DBMS
+            Which helps Interoperability
+
+@NFR
+Scenario:   100% of all transactions recording meeting schedules in DBMS are successful
+            Which helps Interoperability
+
+@NFR
+Scenario:   Multiple reporting views can be customised
+            Which helps user interface aesthetics
+\end{minted}
 \end{featurecode}
 \end{featurelist}
 \clearpage
 
-\begin{featurelist}{R64 -- }{lst:feature_r64}
+\begin{featurelist}{R71 -- The product shall be able to send meeting notifications...}{lst:feature_r71}
 \begin{featurecode}{0.7}
-\inputminted{Gherkin}{D:/Dev/thesis/gherkin3/testdata/extendedBDD/R64.feature}
+\begin{minted}{Gherkin}
+
+
+Feature:    R71 - The product shall be able to send meeting notifications via different \
+            kinds of end-user specified methods
+
+            As a Meeting Organiser
+            I want to send meeting notifications via different kinds of end-user methods
+            So that I can be sure I can contact all meeting attendees
+	
+Constrained by:
+            | Interoperability | Help |
+
+Scenario:   Send email notification
+
+Scenario:   Send messaging notification
+
+Scenario:   Meeting confirmations can be sent via different kinds of end-user specified \
+            methods and through various email servers
+            Which helps Interoperability
+\end{minted}
 \end{featurecode}
 \end{featurelist}
-\clearpage
 
-\begin{featurelist}{R68 -- }{lst:feature_r68}
+
+\begin{featurelist}{R72 -- The product shall have a customizable look and feel}{lst:feature_r72}
 \begin{featurecode}{0.7}
-\inputminted{Gherkin}{D:/Dev/thesis/gherkin3/testdata/extendedBDD/R68.feature}
+\begin{minted}{Gherkin}
+
+
+Feature:    R72 - The product shall have a customizable look and feel
+			
+            @GLOBAL
+            As a Procurement Manager
+            I want to customise the product's look and feel
+            So that I can tailor the product to different departments and teams
+	
+Constrained by:
+            | user interface aesthetics | SomePositive |
+
+@NFR
+Scenario:   Product's look and feel can be customised
+            Which helps user interface aesthetics
+\end{minted}
 \end{featurecode}
 \end{featurelist}
-\clearpage
 
-\begin{featurelist}{R70 -- }{lst:feature_r70}
+\begin{featurelist}{R74 -- The product will display availability for unreserved conference rooms}{lst:feature_r74}
 \begin{featurecode}{0.7}
-\inputminted{Gherkin}{D:/Dev/thesis/gherkin3/testdata/extendedBDD/R70.feature}
-\end{featurecode}
-\end{featurelist}
-\clearpage
+\begin{minted}{Gherkin}
 
-\begin{featurelist}{R71 -- }{lst:feature_r71}
-\begin{featurecode}{0.7}
-\inputminted{Gherkin}{D:/Dev/thesis/gherkin3/testdata/extendedBDD/R71.feature}
-\end{featurecode}
-\end{featurelist}
-\clearpage
 
-\begin{featurelist}{R72 -- }{lst:feature_r72}
-\begin{featurecode}{0.7}
-\inputminted{Gherkin}{D:/Dev/thesis/gherkin3/testdata/extendedBDD/R72.feature}
-\end{featurecode}
-\end{featurelist}
-\clearpage
+Feature:    R74 - The product will display availability for unreserved conference rooms
 
-\begin{featurelist}{R74 -- }{lst:feature_r74}
-\begin{featurecode}{0.7}
-\inputminted{Gherkin}{D:/Dev/thesis/gherkin3/testdata/extendedBDD/R74.feature}
+            As a Meeting Organiser
+            I want to see status for all unreserved conference rooms
+            So that I am able to chose the best room for a meeting
+	
+Constrained by:
+            | Learnability | Help |
+            | Operability  | Help |
+            | Pleasure     | Help |			
+
+@NFR	
+Scenario:   Product allows intuitive searching of all unreserved conference rooms
+            Which helps Learnability
+
+@NFR	
+Scenario:   90% of users are able to see status for all unreserved conference rooms \
+            within 5 minutes of product use
+            Which helps Operability
+	
+Scenario:   It is easy to see status for all unreserved conference rooms
+            Which helps Operability
+            Contributing to help Pleasure
+\end{minted}
 \end{featurecode}
 \end{featurelist}
 
