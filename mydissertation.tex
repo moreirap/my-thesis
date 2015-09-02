@@ -1,6 +1,8 @@
 %\documentclass[dissertation,draft]{softeng}
 \documentclass[dissertation,final]{softeng}
 
+\usepackage{enumitem} % allows reducing space between items
+
 \usepackage{ifdraft} % Contain macros to determine if document class has draft option or not
 
 \usepackage{etoolbox}
@@ -20,7 +22,6 @@
 
 % \togglefalse{workingmode}
 % 
-
 
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -78,6 +79,7 @@
 \usepackage{graphicx} %package to manage images
 \graphicspath{ {Images/} {Images/case_study/} }
 
+
 \colorlet{tableheadcolor}{gray!25} % Table header colour = 25% gray
 \newcommand{\headcol}{\rowcolor{tableheadcolor} \bfseries} %he
 \colorlet{tablerowcolor}{gray!10} % Table row separator colour = 10% gray
@@ -94,8 +96,8 @@
 \uchyph=0 % Prevent hyphenation of all uppercase words (normally acronyms)
 
 \usepackage[outputdir=Temp,newfloat=true,cache=false]{minted}
-\setminted[gherkin]{frame=lines,
-                    framesep=2mm,
+\setminted[gherkin]{frame=none,
+                    framesep=0mm,
                     fontsize=\footnotesize,
                     baselinestretch=1.2,
                     samepage=true,
@@ -103,13 +105,23 @@
                     obeytabs=false,
                     tabsize=4}
 \usemintedstyle{bw}
+
+% ignore minted parsing errors
+\makeatletter
+\expandafter\def\csname PYGdefault@tok@err\endcsname{\def\PYGdefault@bc##1{{\strut ##1}}}
+\makeatother
+
 \SetupFloatingEnvironment{listing}{name=Source Code / Feature}
 \SetupFloatingEnvironment{listing}{listname=List of Source Code / Feature}
+
+\usepackage{tikz}
+
+\def\tikzmark#1{\tikz[remember picture,overlay]\coordinate(#1);}
 
 % Used for Listings of Features
 \newsavebox{\featurebox} 
 \newenvironment{featurecode}[1]
-{ \lrbox\featurebox \begin{adjustbox}{width=#1\textwidth,minipage=\textwidth,center} }
+{ \lrbox\featurebox \begin{adjustbox}{width=#1\textwidth,minipage=\textwidth,margin=1cm 0 0 0,inner} }
 { \end{adjustbox}\endlrbox}
 
 \newenvironment{featurelist}[2]
@@ -135,16 +147,16 @@
 \setcounter{LTchunksize}{50}
 
 \begin{document}
-
+\expandafter\def\csname PY@tok@err\endcsname{}
 \maketitle
 
 
 \begin{abstract}
 Software engineering methods have evolved from having a prescribed and sequential nature to using more adaptable and iterative approaches. Such is the case with Behaviour Driven Development (BDD), a recent member of the family of agile methodologies addressing the correct specification of the behaviour characteristics of a system, by focusing on close collaboration and identification of examples.
 
-Whilst BDD is very successful in ensuring developed software meets its functional requirements, it is largely silent regarding the systematic treatment of its non-functional counterparts, descriptions of how the system should behave with respect to some quality attribute such as performance, reusability, etc.
+Whilst BDD is very successful in ensuring that developed software meets its functional requirements, it is largely silent regarding the systematic treatment of its non-functional counterparts, descriptions of how the system should behave with respect to some quality attribute such as performance, reusability, etc.
 
-Historically, the systematic treatment of non-functional requirements (NFRs) in software engineering is categorised as being either product-oriented and based on a quantitative approach aimed at evaluating the degree to which a system meets its NFRs or process-oriented, qualitative in nature and where they are used to drive the software design process. Examples of the latter category, are the NFR Framework -- a structured approach to represent and reason about non-functional requirements -- and the goal-oriented requirements language (GRL) that provides support for evaluation and analysis of the most appropriate trade-offs among (often conflicting) goals of stakeholders. 
+Historically, the systematic treatment of non-functional requirements (NFRs) in software engineering is categorised as being either product-oriented and based on a quantitative approach aimed at evaluating the degree to which a system meets its NFRs, or process-oriented, qualitative in nature and used to drive the software design process. Examples of the latter category, are the NFR Framework -- a structured approach to represent and reason about non-functional requirements -- and the goal-oriented requirements language (GRL) that provides support for evaluation and analysis of the most appropriate trade-offs among (often conflicting) goals of stakeholders. 
 
 In this thesis, we investigate the extent to which goal-oriented principles can be integrated in BDD, with the aim of handling non-functional requirements in an explicit and systematic way, whilst respecting the principles and philosophy behind agile development.
 \end{abstract}
@@ -194,30 +206,30 @@ The primary measure of success of a software system is the degree to which it me
 The importance of requirements in software engineering cannot be understated. In his essay \emph{No Silver Bullet},~\citet{Brooks1987}, referring to the critical role of requirements to a software project, states that 
 \blockcquote{Brooks1987}{The hardest single part of building a software system is deciding precisely what to build. No other part of the conceptual work is as difficult as establishing the detailed technical requirements, including all the interfaces to people, to machines, and to other software systems. No other part of the work so cripples the resulting system if done wrong. No other part is more difficult to rectify later.}
 
- More recently, ~\citet{Davis200505} reveals that errors introduced during requirements activities account for 40 to 50 percent of all defects found in a software product.  When arguing for the importance of requirements, \citet{Hull2011} reason that to be well understood by everybody they are generally expressed in natural language and herein lies the challenge: to capture the need or problem completely and unambiguously without resorting to specialist jargon or conventions. The authors follow by positing these needs may not be clearly defined at the start, may conflict or be constrained by factors outside their control or may be influenced by other goals which themselves change in the course of time.
+More recently, \citet{Davis200505} reveals that errors introduced during requirements activities account for 40 to 50 percent of all defects found in a software product.  When arguing for the importance of requirements, \citet{Hull2011} reason that to be well understood by everybody they are generally expressed in natural language and herein lies the challenge: to capture the need or problem completely and unambiguously without resorting to specialist jargon or conventions. The authors follow by positing that these needs may not be clearly defined at the start, may conflict or be constrained by factors outside their control or may be influenced by other goals which themselves change in the course of time.
 
 Furthermore, requirements can be classified in multiple and at times conflicting ways. \citet{Glinz:2007ehba} points out that in every current classification scheme there is a distinction between requirements concerning the functionality of a system and all other, often referred to as non-functional requirements. In another paper, the same author points out issues with current classification schemes such as sub-classification, terminology and satisfaction level whereby some requirements are considered \emph{`soft'} in the sense that they can be weakly or strongly satisfied (e.g \emph{the system shall have a good performance}; or \emph{the System shall be secure}). \citet{Chung:2009vg} contribute that, in spite of this separation, most existing requirement models and requirements specification languages lack a proper treatment of non-functional requirements. In addition, this separation of functional and non-functional requirements has lead to the latter being either neglected, addressed later in a project or completely ignored. This problem applies to both traditional and agile software development processes. 
 
 A software process is generically defined as a set of activities, methods, practices, and transformations that are used to develop and maintain software and its associated products~\citep{Cugola:1998htba}. Agile software development approaches have become more popular during the last few years. Several methods have been developed with the aim of delivering software faster and to ensure that the software meets customer changing needs. All these approaches share some common principles: Improved customer satisfaction, adopting requirements, frequently to changing delivering working software, and close collaboration of business people and developers~\citep{Paetsch:2003tl}.
 
-One of such agile approaches is Behaviour Driven Development (BDD). The understanding of BDD is far from clear and unanimous~\citep{Solis0}. Some authors refer to BDD as a development process~\citep{Smart201410}, others state that it is not a fully fledged software development methodology but rather \emph{\textcquote{Adzic201106}{supplement other methodologies, provide rigour in specifications and testing, enhance communication between various stakeholders and members of software development teams, reduce unnecessary rework, and facilitate change.}}
+One such agile approach is Behaviour Driven Development (BDD). The understanding of BDD is far from clear and unanimous~\citep{Solis0}. Some authors refer to BDD as a development process~\citep{Smart201410}, others state that it is not a fully fledged software development methodology but rather \emph{\textcquote{Adzic201106}{supplement other methodologies, provide rigour in specifications and testing, enhance communication between various stakeholders and members of software development teams, reduce unnecessary rework, and facilitate change.}}
 
-In spite of the above mentioned differences of interpretation, it is unanimously accepted that BDD focus on deriving from  business goals, a sufficiently set of software features that contribute to achieve these business goals. This process makes use of Gherkin~\citep{wynne2012cucumber} -- a domain specific language which promotes the use of a ubiquitous language~\footnote{~Eric Evans first introduced that term in \citetitle{evans2004domain} \citet{evans2004domain}}  that business people can understand -- to describe and model a system. However the focus has been on functionality and quality characteristics such as performance, security, maintainability are not explicitly addressed. To the best of our knowledge, the single exception to the above, is the work of \citet{barmi2011automated}, but with restricted applicability to probabilistic -- those that can be written using probabilistic statements~\citep{grunske2008specification} -- non-functional requirements only.
+In spite of the above mentioned differences of interpretation, it is unanimously accepted that BDD focus is deriving from  business goals, a sufficient set of software features that contribute to achieve these business goals. This process makes use of Gherkin~\citep{wynne2012cucumber} -- a domain specific language which promotes the use of a ubiquitous language~\footnote{~Eric Evans first introduced that term in \citetitle{evans2004domain} \citet{evans2004domain}}  that business people can understand -- to describe and model a system. However the focus has been on functionality and quality characteristics such as performance, security, maintainability are not explicitly addressed. To the best of our knowledge, the single exception to the above, is the work of \citet{barmi2011automated}, but with restricted applicability to probabilistic -- those that can be written using probabilistic statements~\citep{grunske2008specification} -- non-functional requirements only.
 
-None of these agile practices, treat non-functional requirements in a systematic way, certainly not in a way that allows reasoning about which requirements interdependencies may exist, and the positive or negative influences each may have on each other. Among many proposals, goal-oriented approaches were the first to treat non-functional requirements as first-class citizens.~\citet{Mylopoulos:1999jh} observed that goal-oriented requirements engineering is generally complementary to other approaches and, in particular, is well suited to analysing requirements early in the software development cycle, especially with respect to non-functional requirements and the evaluation of alternatives. 
+None of these agile practices treat non-functional requirements in a systematic way, certainly not in a way that allows reasoning about which requirements interdependencies may exist, and the positive or negative influences each may have on each others. Among many proposals, goal-oriented approaches were the first to treat non-functional requirements as first-class citizens.~\citet{Mylopoulos:1999jh} observed that goal-oriented requirements engineering is generally complementary to other approaches and, in particular, is well suited to analysing requirements early in the software development cycle, especially with respect to non-functional requirements and the evaluation of alternatives. 
 
-It seems only logical and expectable that, improvements to the discovery and communication of requirements, will lead to an increase in success rates of software projects.
+It seems only logical and expectable that improvements to the discovery and communication of requirements will lead to an increase in success rates of software projects.
 
 \section{Aim and limitations of study}
-The context described in the previous section justify research aimed at capturing, documenting and communicating requirements using natural language tools and techniques in a precise, complete and unambiguous way, but also with the flexibility and adaptability to allow requirements to change and evolve through the course of time.
+The context described in the previous section justifies research aimed at capturing, documenting and communicating requirements using natural language tools and techniques in a precise, complete and unambiguous way, but also with the flexibility and adaptability to allow requirements to change and evolve through the course of time.
 
-In this thesis, we investigate the extent to which goal-oriented principles can be integrated in BDD, with the aim of handling non-functional requirements in an explicit and systematic way, whilst respecting the principles and philosophy behind agile development. In particular, we consider how BDD can be extended, and also Gherkin modified, to incorporate actor and goal concepts as defined and treated in GRL.
+In this thesis, we investigate the extent to which goal-oriented principles can be integrated into BDD, with the aim of handling non-functional requirements in an explicit and systematic way, whilst respecting the principles and philosophy behind agile development. In particular, we consider how BDD can be extended, and also Gherkin modified, to incorporate actor and goal concepts as defined and treated in GRL.
 
 We do not however investigate the integration of GRL with use case maps (UCM), as part of the User Requirements Notation~\citep{liu2004designing}. UCM targets modelling scenarios of functional or operational requirements and performance and architectural reasoning. This is left as an area for further research.
 
-We also do not aim at providing another classification scheme and address the, sometimes artificial, separation of functional and non-functional requirements. Instead, we adopt the notion of goals as an objective the system under consideration should achieve and goals formulations as properties to be ensured. We share the view that goals cover different types of concerns: functional which are associated with the services to be provided, and non-functional concerns associated with quality of service such as safety, security, accuracy, performance, and so forth~\citep{Lamsweerde:2001wpba}.
+We also do not aim at providing another classification scheme and address the, sometimes artificial, separation of functional and non-functional requirements. Instead, we adopt the notion of goals as an objective the system under consideration should achieve and goal formulations as properties to be ensured. We share the view that goals cover different types of concerns: functional which are associated with the services to be provided, and non-functional concerns associated with quality of service such as safety, security, accuracy, performance, and so forth~\citep{Lamsweerde:2001wpba}.
 
-Finally, we do not apply this technique to a specific non-functional requirement or restrict the validity of our results to any particular taxonomy, as our approach is independent of the NFR being addressed or taxonomy chosen.
+Finally, we do not apply this technique to a specific non-functional requirement or restrict the validity of our results to any particular taxonomy, as our approach is independent of the \nfrs being addressed or taxonomy chosen.
 
 \section{Significance of the study}
 
@@ -226,9 +238,9 @@ By reinterpreting behaviours in BDD as not just specifications of functionality 
 \begin{center}
 \begin{itemize}
 \item Allows non-functional requirements to be specified in natural language form in Gherkin
-\item Allows Gherkin specifications to be converted into goal models and imported and used in jUCMNav
-\item Allows BDD to consider all non-functional requirements, not just those that are technical, but still relevant for a successful product delivery
-\item Brings to BDD the capability to assess qualitative and quantitative satisfaction levels of actors and goals 
+\item Allows Gherkin specifications to be converted into goal models;
+\item Allows BDD to consider all non-functional requirements relevant for a successful product delivery,not just those that are technical;
+\item Brings to BDD the capability to assess qualitative and quantitative satisfaction levels of actors and goals.
 \end{itemize}
 \end{center}
 
@@ -236,23 +248,23 @@ By allowing goals to be elicited and specified in Gherkin, this thesis brings th
 
 \begin{center}
 \begin{itemize}
-\item Allows goals elicitation to occur in Gherkin using natural language and therefore more suitable for discussion and fostering communication
-\item Brings the benefits of executable specifications in BDD to goal formulations
+\item Allows goals elicitation to occur in Gherkin using natural language and therefore bemore suitable for discussion and fostering communication;
+\item Brings the benefits of executable specifications in BDD to goal formulations.
 \end{itemize}
 \end{center}
 
 
 \section{Overview of contents}
 
-We have now reviewed the motivation for this study, stated the aim of the research and identified the contributions our work brings to BDD and goal-oriented requirements engineering and the research community in general. The rest of the thesis is organised as follows:
+The rest of the thesis is organised as follows:
 
-Chapter~\ref{ch:Background} contains all the necessary background material related to requirements engineering, the approaches taken by agile processes and, in particular section~\ref{ch:Background:sec:bdd} on behaviour-driven development, describing the principles and practices of this popular agile process. Chapter~\ref{ch:nfr_research} presents an overview of the research concerning ways of handling non-functional requirements in software engineering and section~\ref{sec:gore} on goal-oriented requirements engineering with a focus on GRL and with a description of jUCMNav~\citep{Amyot2010}, an editor for GRL models.
+Chapter~\ref{ch:Background} contains all the necessary background material related to requirements engineering, the approaches taken by agile processes and, in particular, an in-depth analysis of behaviour-driven development, describing the principles and practices of this popular agile process. Chapter~\ref{ch:nfr_research} presents an overview of the research concerning ways of handling non-functional requirements in software engineering and also a section on goal-oriented requirements engineering with a focus on GRL and with a description of jUCMNav~\citep{Amyot2010}, an editor for GRL models.
 
-Chapter~\ref{ch:Extendingbdd} and chapter~\ref{ch:gherkin_redux} are the core of the thesis and contain details of extensions to Gherkin; mapping of Gherkin elements to GRL, such as actors and intentional elements and a description of a translator from Gherkin to an XML-based interchange format to be used in jUCMNav.
+Chapter~\ref{ch:Extendingbdd} and chapter~\ref{ch:gherkin_redux} are the core of the thesis and contain details of extensions to Gherkin; mapping of Gherkin elements to GRL, such as actors and intentional elements; and a description of a translator from Gherkin to an XML-based interchange format containing GRL elements and links.
 
-Chapter~\ref{ch:Extendingbdd} focus more on the practical uses of the extended methodology, while chapter~\ref{ch:gherkin_redux} exposes the technical details of the implementation changes made to Gherkin and introduces a translator from Gherkin to GRL.
+Chapter~\ref{ch:Extendingbdd} focuses more on the practical uses of the extended methodology, while chapter~\ref{ch:gherkin_redux} exposes the technical details of the changes made to Gherkin and explains in detail the implementation of the translator from Gherkin to GRL.
 
-Chapter~\ref{ch:Conclusion} contains implications of findings, concluding thoughts, identifies limitations of study and suggests topics for future research.
+Chapter~\ref{ch:Conclusion} contains implications of findings, concluding thoughts and related work, identifies limitations of study and suggests topics for future research.
 }
 \chapter{From traditional to agile requirements engineering}
 \label{ch:Background}
@@ -931,15 +943,29 @@ A goal graph, such as the one in figure~\ref{fig:WirelessIN_Integrated_GRLGraph}
 Figure~\ref{fig:WirelessIN_Integrated_GRLGraph} shows a particular configuration of alternatives (indicated by a star (*) and a dashed outline), consisting of assigning an initial qualitative satisfaction level of \emph{satisficed} to service control point for data location and mobile switch for service location, and the impact this decision has on the satisfaction levels of stakeholders, namely the system and service provider and their goals. Note that the algorithm used in figure~\ref{fig:WirelessIN_Integrated_GRLGraph} combined qualitative and quantitative contributions and the numbers (between -100 and 100) are a quantitative measure of the satisfaction levels of goals and stakeholders. It can be seen that, the strategy chosen resulted in a a satisfaction level for the service provider measured at 39, while the system obtained 100. Accordingly, the goals of the system have been fully satisficed whilst the ones of the service provider have only been partially or in GRL terminology, weakly satisficed. Interestingly, in spite of minimum switch load, a softgoal of the service provider being denied, the impact of that decision on high throughput was low as high throughput had been decomposed in two softgoals and minimum message exchange was satisficed fully. 
 
 GRL defines the following qualitative contribution levels as standard (their equivalent quantitative contribution is also shown)
-\begin{description}
-\item[Make] 100
-\item[Some Positive] 75
-\item[Help] 25
-\item[Unknown] 0
-\item[Hurt] -25
-\item[Some Negative] -75
-\item[Break] -100
-\end{description}
+\begin{table}[h!]
+\caption[GRL contribution levels in jUCMNav]{GRL contribution levels in jUCMNav}
+\label{tb:grl_contribution_levels}
+\setlength{\extrarowheight}{1.8pt}
+\centering
+\scalebox{0.75}{
+\begin{tabularx}{.6\textwidth}{cc}
+\toprule \multicolumn{1}{c}{\bfseries{Contribution Type}}&
+\multicolumn{1}{c}{\bfseries{Value}}\\
+\addlinespace
+\midrule
+Make & 100 \\ \midrule
+Some Positive & 75 \\ \midrule
+Help & 25 \\ \midrule
+Unknown & 0 \\ \midrule
+Hurt & -25 \\ \midrule
+Some Negative & -75 \\ \midrule
+Break & -100 \\ 
+\addlinespace
+\bottomrule
+\end{tabularx}
+}
+\end{table}
 
 This evaluation mechanism propagates low-level decisions regarding alternatives to satisfaction ratings of high-level stakeholder goals and softgoals. GRL strategies can be compared with each other to help reach the most appropriate trade-offs among often conflicting goals of stakeholders. Colour coding of the intentional elements also reflect their satisfaction level (the greener, the more satisfied)~\citep{amyot2011user}.
 
@@ -967,20 +993,14 @@ The next chapter will focus on the changes made to Gherkin to support our method
 \section{Methodology}
 We may be overusing the word methodology, given that some authors consider BDD not to be a methodology in its own right~\citep{Smart201410}. The extension we are proposing to BDD does not make it a full blown methodology (e.g. we are mostly silent regarding management of requirements using BDD) but it is useful to refer to our collection of methods and techniques using one word other than BDD, hence the choice for \emph{methodology}.
 
-There are not that many references in the literature for approaches to handling non-functional requirements in agile methods and the ones that exist, are consistent with each other.~\citet{Davies} defends that agile teams should take responsibility for eliciting non-functional requirements and they should do it early-on by discussing with users the capabilities of the system, like quality of service and longevity, at the start of the project. The author is of the opinion, there are three approaches to describe these required capabilities in agile methods. Some teams like to use the usual story format, as in this way, all requirements look the same, can be understood by everyone including non-technical individuals, and therefore have the same visibility as other stories. Other teams keep it simple and simply factor \nfrs into acceptance criteria for affected user stories. Finally, last approach is to introduce `technical stories' to cover anything that needs to be built or restructured but is too difficult to explain to business people. These story cards are typically free format and expressed in a language that only the development team understands~\citep{Davies}. A team at Connextra is credited with the following story card format~\footnote{~see http://agilecoach.typepad.com/photos/connextra\_user\_story\_2001/connextrastorycard.html for examples}
+There are not that many references in the literature for approaches to handling non-functional requirements in agile methods and the ones that exist, are consistent with each other.~\citet{Davies} defends that agile teams should take responsibility for eliciting non-functional requirements and they should do it early-on by discussing with users the capabilities of the system, like quality of service and longevity, at the start of the project. The author is of the opinion, there are three approaches to describe these required capabilities in agile methods. Some teams like to use the usual story format, as in this way, all requirements look the same, can be understood by everyone including non-technical individuals, and therefore have the same visibility as other stories. Other teams keep it simple and simply factor \nfrs into acceptance criteria for affected user stories. Finally, last approach is to introduce `technical stories' to cover anything that needs to be built or restructured but is too difficult to explain to business people. These story cards are typically free format and expressed in a language that only the development team understands~\citep{Davies}. A team at Connextra is credited with the following story card format~\footnote{~see http://agilecoach.typepad.com/photos/connextra\_user\_story\_2001/connextrastorycard.html for examples}\\
 
-\begin{center}
-\begin{description}
-\item[As a] \textless Role \textgreater
-\item[I want] \textless Goal \textgreater
-\item[So that] \textless Benefit \textgreater
-\end{description}
-\end{center}
+\textbf{As a} \textit{\textless Actor \textgreater}, \textbf{I want} \textit{\textless Goal \textgreater}, \textbf{So that} \textit{\textless Benefit \textgreater} \\
 
 \citet{CohnNFRS} advises the use of the story format and gives examples where, in his view, non-functional characteristics can be expressed using the template above
 
 \begin{center}
-\begin{description}
+\begin{description}[itemsep=-5pt]
 \item[As a] CTO 
 \item[I want] the system to use our existing orders database rather than create a new one
 \item[So that] we don't have one more database to maintain
@@ -990,7 +1010,7 @@ There are not that many references in the literature for approaches to handling 
 or
 
 \begin{center}
-\begin{description}
+\begin{description}[itemsep=-5pt]
 \item[As a] user
 \item[I want] the site to be available 99.999 percent of the time I try to access it
 \item[So that] I don't get frustrated and find another site to use
@@ -1003,10 +1023,10 @@ In our research, we found the user story format appropriate to write both functi
 
 In this work, we use the approach of~\citet{Chung:2009vg} of considering as non-functional requirements, any `-ilities', `-ities', such as usability or security, along with many other things that do not necessarily end with either of them, such as performance or user-friendliness. In view of mathematical functions, in the form of $\mathit{function} : \mathit{Input} \rightarrow \mathit{Output}$, just about anything that addresses characteristics of a function, a function's input or output or relationships between the two, can be considered as non-functional requirement.
 
-\citet{Leffingwell2011} identifies, together with functional and non-functional requirements, design constraints as another class of requirements (see table~\ref{tb:three_req_types}). Design constraints typically originate from one of three sources: some necessary restriction of design options, conditions imposed on the development process itself, and regulations and imposed standards.\fxnote{Argument in conclusion}
+\citet{Leffingwell2011} identifies, together with functional and non-functional requirements, design constraints as another class of requirements (see table~\ref{tb:three_req_types}). Design constraints typically originate from one of three sources: some necessary restriction of design options, conditions imposed on the development process itself, and regulations and imposed standards.
 
 \begin{table}[h!]
-\caption[Three types of Requirements]{Three types of requirements~\citep{Leffingwell2011}}
+\caption[Three types of requirements]{Three types of requirements~\citep{Leffingwell2011}}
 \label{tb:three_req_types}
 \setlength{\extrarowheight}{1.8pt}
 \centering
@@ -1151,7 +1171,7 @@ We introduce the concepts of an \emph{Actor}, in this case \emph{Meeting Organis
 
 \emph{Goals} equate very closely with functional requirements and it will be by satisfying them (and also \emph{Sofgoals}, representing non-functional requirements and addressed later) that an actor's satisfaction level can be evaluated. \emph{Benefits} are used to document the perceived benefit of achieving a goal, and help justify modelling decisions in GRL.
 
-\emph{Actors} and \emph{Goals} are GRL concepts (see chapter~\ref{ch:nfr_research},~section~\ref{sec:gore} for details on these concepts) that will be used by a Gherkin to GRL translator that will be described in chapter~\ref{ch:gherkin_redux}. \emph{Benefits} will not be translated to GRL as we did not find a suitableGRL element to map them to.\fxnote{Mention No mapping to Benefits in Conclusion}
+\emph{Actors} and \emph{Goals} are GRL concepts (see chapter~\ref{ch:nfr_research},~section~\ref{sec:gore} for details on these concepts) that will be used by a Gherkin to GRL translator that will be described in chapter~\ref{ch:gherkin_redux}. \emph{Benefits} will not be translated to GRL as we did not find a suitableGRL element to map them to.
 
 In order to address conflicts amongst \emph{Goals}, we extend the user story format with one or more references to other goals that may be impacted by a given goal~(see listing \ref{lst:gherkin_changes_impactedgoals}). The keyword used is \emph{Which may impact} followed by a \emph{Goal} that needs to be defined in another feature file.
 
@@ -1321,7 +1341,7 @@ A last point to make regarding this feature, is that it is possible to specify, 
 
 The remaining features, corresponding to requirements with identifiers 63 and 67 can be found in listings \ref{lst:feature_r63} and \ref{lst:feature_r67}.
 
-\begin{featurelist}{R63 -- The product shall record updated meeting agendas}{lst:feature_r63}
+\begin{featurelist}{Changes to Gherkin -- R63 -- The product shall record updated meeting agendas}{lst:feature_r63}
 \begin{featurecode}{0.7}
 \begin{minted}{Gherkin}
 Feature:    R63 - The product shall record updated meeting agendas
@@ -1348,7 +1368,7 @@ Scenario:   100% of all transactions recording meeting agendas in DBMS are succe
 \end{featurecode}
 \end{featurelist}
 
-\begin{featurelist}{R67 -- The product shall record different meeting types}{lst:feature_r67}
+\begin{featurelist}{Changes to Gherkin -- R67 -- The product shall record different meeting types}{lst:feature_r67}
 \begin{featurecode}{0.7}
 \begin{minted}{Gherkin}
 
@@ -1400,7 +1420,7 @@ The last requirement to address is the one with identifier 73, and by doing so, 
 
 Note that this feature, also introduces a new actor, namely \emph{Procurement Manager} as we decided to model this cross-cutting concern as a goal of a stakeholder that carries that overall interest in the application's user interface and learnability characteristics. This learnability quality requirement is not something that was part of the original dataset, but a quality that we derived from our interpretation of the requirements.
 
-\begin{featurelist}{R73 -- The product shall have an intuitive user interface}{lst:feature_r73}
+\begin{featurelist}{Changes to Gherkin -- R73 -- The product shall have an intuitive user interface}{lst:feature_r73}
 \begin{featurecode}{0.7}
 \begin{minted}{Gherkin}
 Feature:  R73 - The product shall have an intuitive user interface
@@ -1513,82 +1533,83 @@ In the next chapter we will describe in detail the implementation changes to the
 
 \chapter{From Gherkin to GRL}
 \label{ch:gherkin_redux}
+In the previous chapter we have exemplified how to use the proposed extension to BDD, handling \nfrs as first-class citizens alongside functional requirements. In order to achieve this undertaking, we had to alter the Gherkin parser to allow additional constructs.
 
-It is important to note that Gherkin has been localised for several languages. In our research, we only extended the English language keywords, but it would be relatively easy to add support for more languages. Gherkin uses \emph{Json}~(Javascript Object Notation)~\footnote{see http://json.org/ for details} -- a lightweight data-interchange format -- to represent keywords in all supported languages. Listing below shows the English keywords supported, including the ones we added in this work, that is \emph{asA}, \emph{iWant}, \emph{soThat}, \emph{qualityAttribute}, \emph{qualityReason}, \emph{scenarioContribution} and \emph{whichMayImpact}.
+In this chapter, we are detailing the changes made to the Gherkin parser by showing relevant code extracts accompanied with explanations in order to better describe those changes. We will be using version 3 of the Gherkin parser~\footnote{~see https://github.com/cucumber/gherkin3 for details}, a version that responds to issues with previous versions~\footnote{~ see discussion in https://groups.google.com/forum/\#!msg/cukes/YLKsqbBMBoI/DYhfFx8GBegJ for details} (e.g. difficulty in adding support for new languages; difficult to build, so releases are very infrequent).
 
+We will also detail a translator from Gherkin to an XML-based interchange format to be imported in a GRL tool (jUCMNav) and that allows goal modelling and analysis, and supports evaluation of satisfaction levels of actors and goals.
+
+\section{Gherkin Extended}
+\label{sec:gherkin_extended}
+When using the word Gherkin we can be referring to the language, the parser or the compiler. Gherkin is a parser and compiler for the Gherkin language -- a domain specific language for the specification and documentation of requirements, focusing on the expected behaviours of a system or application which are exemplified using scenarios. In that follows the intended meaning of the use of the word Gherkin should be clear from the context of use, and if not we will clarify its intended meaning.
+
+Gherkin (both parser and compiler), is implemented in multiple platforms and target languages, including \emph{.NET / C$\#$}, \emph{JVM / Java}, \emph{Javascript / Browser or Node.js}, etc. Note that, in what follows, we are using the \emph{.NET / C\#} version of the Gherkin parser. The following diagram provides an overview of the architecture of Gherkin
+
+\begin{figure}[h!]
+\includegraphics[width=0.85\textwidth]{gherkin_overview}
+\centering
+\caption[Gherkin Overview]{Gherkin Overview~\footnotemark}
+\label{fig:gherkin_overview}
+\end{figure}
+\footnotetext{~sourced and replicated from https://github.com/cucumber/gherkin3}
+
+The scanner reads a feature file and creates a token for each line. The tokens are passed to the parser, which outputs an AST -- a hierarchical syntactic structure of the source program commonly generated by parsers and parser generators -- to be used by back-end phases of the compilation process. If the scanner sees a \emph{\# language header}, it will reconfigure itself dynamically to look for Gherkin keywords for the associated language. The parser is generated by the \emph{Berp}~\footnote{~ see https://github.com/gasparnagy/berp for details and source code} parser generator as part of the build process. Berp takes a grammar file (\emph{gherkin.berp}) and a template file (\emph{gherkin-X.razor}) as input and outputs a parser in language X~(see figure~\ref{fig:berp_overview}).
+
+\begin{figure}[h!]
+\includegraphics[width=0.75\textwidth]{berp_overview}
+\centering
+\caption[Berp Overview]{Berp Overview~\footnotemark}
+\label{fig:berp_overview}
+\end{figure}
+\footnotetext{~sourced and replicated from https://github.com/cucumber/gherkin3}
+
+The keywords are defined in a file named \emph{gherkin-languages.json}. Listing below shows a section of that file containing English keywords only, including new ones added as part of this research and that are shown within shaded area below. The new keywords are \emph{asA}, \emph{iWant}, \emph{soThat}, \emph{qualityAttribute}, \emph{qualityReason}, \emph{scenarioContribution} and \emph{whichMayImpact}. 
+
+\definecolor{ashgrey}{rgb}{0.7, 0.75, 0.71}
+
+\tikzmark{JsonList}
 \begin{featurelist}{Extended Gherkin -- English keywords}{lst:gherkin_keywords}
 \begin{featurecode}{0.7}
 \begin{minted}{json}
-{
-"en": {
-        "and": [
-            "* ",
-            "And "
-        ],
-        "background": [
-            "Background"
-        ],
-        "but": [
-            "* ",
-            "But "
-        ],
-        "examples": [
-            "Examples",
-            "Scenarios"
-        ],
-        "feature": [
-            "Feature",
-            "Business Need",
-            "Ability"
-        ],
-        "given": [
-            "* ",
-            "Given "
-        ],
-        "name": "English",
-        "native": "English",
-        "scenario": [
-            "Scenario"
-        ],
-        "scenarioOutline": [
-            "Scenario Outline",
-            "Scenario Template"
-        ],
-        "then": [
-            "* ",
-            "Then "
-        ],
-        "when": [
-            "* ",
-            "When "
-        ],
-        "asA": [ "As a " ],
-        "iWant": [ "I want to ", "I want the" ],
-        "soThat": [ "So that " ],
-        "qualityAttribute": [ "Without ignoring" , "Constrained by"],
-        "qualityReason": [ "By " ],
+{ "en": {
+        "and":	          [ "* ", "And " ],
+        "background":           [ "Background" ],
+        "but":	          [ "* ", "But " ],
+        "examples":             [ "Examples", "Scenarios" ],
+        "feature":              [ "Feature", "Business Need", "Ability" ],
+        "given":                [ "* ", "Given " ],
+        "name":                 "English",
+        "native":               "English",
+        "scenario":             [ "Scenario" ],
+        "scenarioOutline":      [ "Scenario Outline", "Scenario Template" ],
+        "then":                 [ "* ", "Then " ],
+        "when":                 [ "* ", "When " ],
+        "asA":                  [ "As a " ],
+        "iWant":                [ "I want to ", "I want the " ],
+        "soThat":               [ "So that " ],
+        "qualityAttribute":     [ "Without ignoring" , "Constrained by"],
         "scenarioContribution": [
-            "Breaking the ",
-            "Which breaks ",
-            "Contributing to break ",
-            "Helping the ",
-            "Which helps ",
-            "Contributing to help ",
-            "Hurting the ",
-            "Which hurts ",
-            "Contributing to hurt ",
-            "Making the ",
-            "Which makes ",
-            "Contributing to make ",
+            "Breaking the ", "Which breaks ", "Contributing to break ",
+            "Helping the ", "Which helps ", "Contributing to help ",
+            "Hurting the ", "Which hurts ", "Contributing to hurt ",
+            "Making the ", "Which makes ", "Contributing to make ",
             "With some positive contribution to ",
-            "With some negative contribution to "
-        ],
-        "whichMayImpact": [ "Which may impact " ]
-    },
+            "With some negative contribution to " 
+                                ],
+        "whichMayImpact":       [ "Which may impact " ]
+       }
 }
 \end{minted}
 \end{featurecode}
+\begin{tikzpicture}[remember picture,overlay]
+\draw[fill=ashgrey,opacity=0.2] ([yshift=-9.65cm,xshift=0.5cm]JsonList) rectangle ([yshift=-5.0cm,xshift=15cm]JsonList);
+%\draw[fill=ashgrey,opacity=0.2] ([yshift=-90.65cm,xshift=0.5cm]JsonList) rectangle ([yshift=-5.0cm,xshift=15cm]JsonList);
+\end{tikzpicture}
 \end{featurelist}
+
+It is important to note that Gherkin has been localised for several languages, and in our research we only extended the English language keywords, but it would be relatively easy to add support for more languages. Gherkin uses \emph{JSON}~(Javascript Object Notation)~\footnote{~see http://json.org/ for details} -- a lightweight data-interchange format -- to represent keywords in all supported languages.
+
+As we mentioned before, the parser generates an AST that can be used in back-end stages of compilers or as an intermediate representation that other tools can use. We will make use of this representation when we describe the translator from Gherkin to GRL. The following class diagram describes the AST generated by the original parser, that is, the one without our changes.
 
 \begin{figure}[h!]
 \includegraphics[width=0.85\textwidth]{gherkin3_ast}
@@ -1596,72 +1617,546 @@ It is important to note that Gherkin has been localised for several languages. I
 \caption[Original Gherkin class model]{Original Gherkin class model~\footnotemark}
 \label{fig:gherkin_ast}
 \end{figure}
-\footnotetext{~extracted from the Gherkin wiki at https://github.com/cucumber/gherkin3}
+\footnotetext{~sourced from https://github.com/cucumber/gherkin3}
+
+In the diagram, every class represents a node in the AST. Every node has a \emph{Location} that describes the line number and column number in the input file. A requirement of the implementation is that the AST must have a JSON representation (used for testing).
+
+At the centre of the model are \emph{Features}, consisting of a name, a description, an optional list of tags and comments, and a list of \emph{Scenario Definitions} with an optional \emph{Background}. A name is synonymous with title, and description is a block of text in no particular format. \emph{Keyword} is filled by the parser and represents what lexeme was parsed (e.g. for a feature, one can use `Feature', `Business Need' or `Ability') when processing each line of a feature file. \emph{Background} adds context to the scenarios in a single feature and is similar to a scenario containing a number of \emph{Steps}. \emph{Tags} can be used to group features and scenarios together. Every \emph{Scenario} consists of a list of \emph{Steps}, which must start with one of the keywords \emph{Given}, \emph{When}, \emph{Then}, \emph{But} or \emph{And}. These \emph{Steps}, are the interface to external tools to support testing and automated test execution approaches.
+\clearpage
+
+In order to introduce our changes, we present now a revised class model for the AST returned by the parser after applying the changes to Gherkin discussed next.
+
+\begin{figure}[h!]
+\includegraphics[width=0.95\textwidth]{gherkin_ast_new2}
+\centering
+\caption[Updated Gherkin class model]{Updated Gherkin class model (shaded nodes are new)}
+\label{fig:gherkin_ast_new}
+\end{figure}
+
+The first change replaced the \emph{description} attribute of a \emph{Feature} by a composed object \emph{FeatureDescription}. As any other node in the AST, a \emph{FeatureDescription} contains a \emph{Location} node (that link is not shown to prevent cluttering the diagram).
+
+Recall from chapter~\ref{ch:Extendingbdd} that we decided to represent features using the Connextra user story format (reproduced again below)\\
+
+\textbf{As a} \textit{\textless Actor \textgreater}, \textbf{I want} \textit{\textless Goal \textgreater}, \textbf{So that} \textit{\textless Benefit \textgreater} \\
+
+For this reason, \emph{FeatureDescription} contains a reference to an \emph{Actor}, a \emph{Goal} and a \emph{Benefit} node representing the segments within the user story format above. These three new nodes, simply hold the \emph{keyword} matched, which for an actor is `As a ', for a goal is either `I want to ' or `I want the ' and for a benefit is `So that ' (listing~\ref{lst:gherkin_keywords} contains all of these keywords) and the lexeme parsed, which is the remaining content of the line being parsed without keyword and cleared of any spaces in between. With what has been described so far, feature contained in listing~\ref{lst:gherkin_changes_userstory} can be parsed successfully.
+
+The next change introduced a composition between \emph{FeatureDescription} and \emph{Goal} node, to support specifying dependencies between goals. \emph{FeatureDescription} has a collection (possibly empty) of \emph{impacted goals}. This is so that features such as the one in listing~\ref{lst:gherkin_changes_impactedgoals} can be parsed successfully.
+
+Another composition was added between \emph{FeatureDescription} and \emph{QualityAttribute} to support attaching quality constraints to goals. The keywords supported are `Without ignoring' and `Constrained by'. We could use the first, whenever we intend to focus attention on attaining those qualities and the second when instead, we prefer to surface the fact that one or more qualities constrain the particular goal being modelled.
+
+The last remaining change, was to add a composition between \emph{Scenario} and \emph{Scenario Contribution} to allow specifying the contribution each \emph{Scenario} can have to the feature's goal or to a quality.
+
+Listing~\ref{lst:changes_to_gherkin_grammar} shows an extract of the relevant parts of the alterations to the \emph{Berp} grammar for the Gherkin language. \emph{Berp} uses a syntax similar to BNF~\footnote{Backus-Naur Form --  a widely used notation to specify the syntax of languages} and provides support for languages without explicit tokenization rules, such as Gherkin. The symbols $+,?,*$ have the meaning expected and as used in regular expressions syntax. Tokens are preceded with a \# character and some of them can be ignored such as in the cases of comments or spaces.
+
+Code for the parser will be shown later, and is expecting a feature file containing a \emph{Feature}. The production rules can be read as in any context-free grammar. As an example, the first production rule states that a \emph{Feature} can have the following form: a \emph{Feature\_Header} composed of an optional \emph{Language} token, optional \emph{Tags}, which are one or more \emph{TagLine} tokens; an optional \emph{Background} (production for background not shown in this listing, as it did not change), a \emph{Feature\_Description} and zero or more \emph{Scenario\_Definition}. In order to fully understand this production rule we have to do the same for production rules not expanded, that is \emph{Background}, \emph{Feature\_Description} and \emph{Scenario\_Definition}.
+
+\begin{featurelist}{Changes to gherkin grammar}{lst:changes_to_gherkin_grammar}
+\begin{featurecode}{0.65}
+\begin{minted}[breaklines=false]{ebnf}
+...
+
+Feature! := Feature_Header Background? Feature_Description Scenario_Definition*
+
+Feature_Header! := #Language? Tags? #FeatureLine
+
+Feature_Description! := Tags? #AsA_Step #IWant_Step #SoThat_Step WichMayImpact* Quality_Step?
+
+Quality_Step!  := #QualityAttributeLine DataTable
+
+WichMayImpact!  := #WichMayImpact
+
+Scenario_Definition! := Tags? (Scenario | ScenarioOutline)
+
+Scenario! := #ScenarioLine Scenario_Step* ScenarioContribution*
+
+ScenarioContribution! := #ScenarioContribution
+
+Tags! := #TagLine+
+...
+
+\end{minted}
+\end{featurecode}
+\end{featurelist}
+
+We now turn attention to the actual Gherkin parser code. Listing~\ref{lst:gherkin_code_parser_construction} shows classes involved in the creation of a Parser object. The parser makes use of a \emph{TokenScanner} to read the feature file line by line and create \emph{Tokens} assigned with a \emph{Location} object with details of the current position in the input file.
+
+\emph{TokenMatcher} has two responsibilities: one is to setup a \emph{GherkinDialect} object -- corresponds to the deserialised version of the JSON content listed earlier -- that is capable of recognizing the keywords in the default language (English) or in the language specified in the feature file; the other is to match parsed lexemes with tokens returned by \emph{TokenScanner}. Listing~\ref{lst:gherkin_code_parser_construction} shows the initial steps in constructing a \emph{Parser} object.
+
+\emph{ASTBuilder}, as the name implies, is responsible for building the AST based on the token or tokens parsed already. It keeps a stack of parsed nodes and whenever the a production rule has been `activated' in its entirety a node is popped from the stack and the current AST node replaced with a transformed one. An extract of the transformation function can be seen in listing~\ref{lst:gherkin_code_parser_transform_token} 
+
+\begin{featurelist}{Parser construction}{lst:gherkin_code_parser_construction}
+\begin{featurecode}{0.7}
+\begin{minted}[breaklines=false]{csharp}
+\\ somewhere, perhaps on a test file, a parser object is constructed
+var parser = new Parser();
+var parsingResult = parser.Parse(testFeatureFile);
+
+\\ which in turn, causes this constructor to be invoked
+public Parser() : this(new AstBuilder<T>())
+{
+}
+
+// and this, setting an astBuilder private readonly object
+public Parser(IAstBuilder<T> astBuilder)
+{
+    this.astBuilder = astBuilder;
+}
+
+\\ then the Parser's Parse method is invoked
+public Feature Parse(string sourceFile)
+{
+    using (var reader = new StreamReader(sourceFile))
+    {
+        return Parse(new TokenScanner(reader));
+    }
+}
+
+// After which, the Parse method in generic base class Parser<Feature> is invoked
+public T Parse(ITokenScanner tokenScanner)
+{
+    return Parse(tokenScanner, new TokenMatcher());
+}
+\end{minted}
+\end{featurecode}
+\end{featurelist}
+
+Listing~\ref{lst:gherkin_code_parser_execution} is the core method where parsing actually occurs. After a set of initialisation instructions, the parser runs a state machine generated by \emph{Berp} when supplied with the gherkin grammar and a template in the language the parser is to be generated in, and in our case that is \emph{.NET/C\#}.
+
+\begin{featurelist}{Parser execution}{lst:gherkin_code_parser_execution}
+\begin{featurecode}{0.7}
+\begin{minted}[breaklines=false]{csharp}
+// The main loop where parsing occurs
+public T Parse(ITokenScanner tokenScanner, ITokenMatcher tokenMatcher)
+{
+    tokenMatcher.Reset();
+    astBuilder.Reset();
+    var context = new ParserContext
+    {
+        TokenScanner = tokenScanner,
+        TokenMatcher = tokenMatcher,
+        TokenQueue = new Queue<Token>(),
+        Errors = new List<ParserException>()
+    };
+
+    StartRule(context, RuleType.Feature);
+    int state = 0;
+    Token token;
+    do
+    {
+        token = ReadToken(context);
+        state = MatchToken(state, token, context);
+    } while(!token.IsEOF);
+
+    EndRule(context, RuleType.Feature);
+
+    if (context.Errors.Count > 0)
+    {
+        throw new CompositeParserException(context.Errors.ToArray());
+    }
+
+    return GetResult(context);
+}
+\end{minted}
+\end{featurecode}
+\end{featurelist}
+
+The Gherkin parser generator (\emph{Berp}) generates several functions that are used to determine the transition from a state to the next state, based on a matched token. Listing~\ref{lst:gherkin_code_parser_execution_token_matching} shows the matching function when the parser engine is on state $0$ and has asked \emph{TokenScanner} for the next \emph{Token}. The function listed correspond to the production rule for a \emph{Feature}~(see listing~\ref{lst:changes_to_gherkin_grammar})
+
+\begin{featurelist}{Parser execution -- Token Matching }{lst:gherkin_code_parser_execution_token_matching}
+\begin{featurecode}{0.7}
+\begin{minted}[breaklines=false]{csharp}
+// Start
+int MatchTokenAt_0(Token token, ParserContext context)
+{
+    if (Match_Language(context, token))
+    {
+        StartRule(context, RuleType.Feature_Header);
+        Build(context, token);
+        return 1;
+    }
+    if (Match_TagLine(context, token))
+    {
+        StartRule(context, RuleType.Feature_Header);
+        StartRule(context, RuleType.Tags);
+        Build(context, token);
+        return 2;
+    }
+    if (Match_FeatureLine(context, token))
+    {
+        StartRule(context, RuleType.Feature_Header);
+        Build(context, token);
+        return 3;
+    }
+    if (Match_Comment(context, token))
+    {
+        Build(context, token);
+        return 0;
+    }
+    if (Match_Empty(context, token))
+    {
+        Build(context, token);
+        return 0;
+    }
+    
+    const string stateComment = "State: 0 - Start";
+    token.Detach();
+    var expectedTokens = new string[] {"#Language", "#TagLine", "#FeatureLine",
+                                        "#Comment", "#Empty"};
+    var error = token.IsEOF ? (ParserException)new UnexpectedEOFException(token,
+                                                                          expectedTokens,
+                                                                          stateComment) 
+        : new UnexpectedTokenException(token, expectedTokens, stateComment);
+    if (StopAtFirstError)
+        throw error;
+    
+    AddError(context, error);
+    return 0;
+}
+\end{minted}
+\end{featurecode}
+\end{featurelist}
+\clearpage
+\begin{featurelist}{Parser execution -- Building AST nodes}{lst:gherkin_code_parser_transform_token}
+\begin{featurecode}{0.7}
+\begin{minted}[breaklines=true]{csharp}
+\\ the end of a production rule has been reached will build a node of the AST
+private object GetTransformedNode(AstNode node)
+{
+ switch (node.RuleType)
+ {
+    // ... Other case statements ommitted
+    case RuleType.WichMayImpact: 
+    {
+        var impactedGoalNode = node.GetToken(TokenType.WichMayImpact);
+        return new Goal(GetLocation(impactedGoalNode), impactedGoalNode.MatchedKeyword, impactedGoalNode.MatchedText);
+    }
+    case RuleType.Feature_Description:
+    {
+       var tags         = GetTags(node);
+       var actorLine    = node.GetToken(TokenType.AsA_Step);
+       var actor        = new Actor(GetLocation(actorLine), actorLine.MatchedKeyword, actorLine.MatchedText);
+       var goalLine     = node.GetToken(TokenType.IWant_Step);
+       var goal         = new Goal(GetLocation(goalLine), goalLine.MatchedKeyword, goalLine.MatchedText);
+       var benefitLine  = node.GetToken(TokenType.SoThat_Step);
+       var benefit      = new Benefit(GetLocation(benefitLine), benefitLine.MatchedKeyword, benefitLine.MatchedText);
+
+       var impactedGoals = node.GetItems<Goal>(RuleType.WichMayImpact).ToArray();
+       var qualities     = node.GetSingle<QualityAttributes>(RuleType.Quality_Step);
+   
+       return new FeatureDescription(tags, GetLocation(actorLine), actor, goal, benefit, impactedGoals, qualities);
+    }
+    case RuleType.Feature:
+    {
+       var header              = node.GetSingle<AstNode>(RuleType.Feature_Header);
+       var tags                = GetTags(header);
+       var featureLine         = header.GetToken(TokenType.FeatureLine);
+       var featureDescription  = node.GetSingle<FeatureDescription>(RuleType.Feature_Description);                   
+       var background          = node.GetSingle<Background>(RuleType.Background);
+       var scenariodefinitions = node.GetItems<ScenarioDefinition>(RuleType.Scenario_Definition).ToArray();
+       var description         = GetDescription(header);
+       var language            = featureLine.MatchedGherkinDialect.Language;
+
+       return new Feature(tags, GetLocation(featureLine), language, featureLine.MatchedKeyword, featureLine.MatchedText, featureDescription, background, scenariodefinitions, comments.ToArray());
+    }
+ }
+ return node;
+}
+\end{minted}
+\end{featurecode}
+\end{featurelist}
+
+\clearpage
+\section{Gherkin to GRL Translator}
+\label{sec:grl_translator}
+The fact that the Gherkin parser returns an AST, allows for other tools to take that intermediate representation and use it to translate Gherkin instances to different formats. Listing~\ref{lst:translator_to_grl_main} below contains the relevant section of the body of the translator program from instances of Gherkin to GRL for use in jUCMNav.
+
+\begin{featurelist}{Translator to GRL -- main body}{lst:translator_to_grl_main}
+\begin{featurecode}{0.70}
+\begin{minted}[breaklines=true]{csharp}
+// Load Default Quality Catalogue
+var lastAssignedId = 0;
+var defaultQualityCatalogue = QualityCatalogue.BuildDefault(out lastAssignedId);
+
+// Initialise a grlCatalogue
+var grlCatalogue = GRLCatalogueFactory.NewGRLCatalog(DEFAULT_CATALOGUE_NAME, DEFAULT_CATALOGUE_DESC, DEFAULT_CATALOGUE_AUTHOR);
+
+var generator = new GRLCatalogueGenerator();
+
+// Avoid parsing features twice by collecting parsing results
+var parsingResults = new Ast.Feature[] { };
+
+// Prepend qualities from default catalogue
+generator.AppendQualityCatalogue(defaultQualityCatalogue,grlCatalogue);
+
+// Process all feature files passed as arguments
+foreach (var featureFiles in args)
+{
+ var parsingResult = UpdateGRLCatalogueWithFeature(featureFiles, grlCatalogue, generator);
+ parsingResults = parsingResults.Concat(new [] { parsingResult } ).ToArray();
+}
+
+// Add any dependencies amongst goals. Can only run when all features have been processed
+foreach (var parsingResult in parsingResults)
+{
+    generator.UpdateGRLCatalogueWithImpactedGoals(grlCatalogue, parsingResult);
+}
+
+// Add any global goals. Need to have access to all AST trees to ensure no dependencies between global goals are created
+generator.UpdateGRLCatalogueWithGlobalGoals(grlCatalogue, parsingResults);
+
+// Serialise resulting GRL Catalogue
+var grlCatalogueAsXmlString = XMLSerializerHelper.SerializeObject(grlCatalogue);
+Console.WriteLine(XMLSerializerHelper.RemoveBOM(grlCatalogueAsXmlString));
+\end{minted}
+\end{featurecode}
+\end{featurelist}
+
+The translator works by populating an object model derived from the XSD schema defined in Appendix~\ref{ch:grl_catalogue_schema} -- created using \emph{xsd.net}, a well known \emph{.NET} serialisation tool~\footnote{~see https://msdn.microsoft.com/en-us/library/x6c1kb0s(v=vs.110).aspx for details} -- in a sequence of logical steps. 
+
+These steps are implemented in a \emph{GRLCatalogueGenerator} object that contains the logic required to create goals, softgoals, tasks, links between them and set containment of goals within actors. The caller, in this case the translator main method, is responsible for orchestrating the calls to the right methods at appropriate times.
+
+The first step consists of populating the GRL catalogue with a default set of quality characteristics and sub-characteristics. In this work we use the ones defined in~\citefield{ieee_std_25010}{journaltitle}, but others could be used as easily.
+
+\begin{featurelist}{Translator to GRL -- default quality set}{lst:translator_to_grl_populate_default_qualities}
+\begin{featurecode}{0.70}
+\begin{minted}[breaklines=true]{csharp}
+public static string[][] DEFAULT_QUALITY_CATALOGUE_SPEC = {
+// Product Quality Charactristics and sub-characteristics
+new [] {NextId,"Functional suitability","And", 
+        NextId,"Functional completeness", 
+        NextId,"Functional correctness", 
+        NextId,"Functional appropriateness"},
+new [] {NextId,"Performance efficiency","And", 
+        NextId,"Time behaviour", 
+        NextId,"Resource utilization", 
+        NextId,"Capacity"},
+new [] {NextId,"Compatibility","And", 
+        NextId,"Co-existence", 
+        NextId,"Interoperability"},
+...
+};       
+\end{minted}
+\end{featurecode}
+\end{featurelist}
+
+Listing~\ref{lst:translator_to_grl_populate_default_qualities} contains an extract of those qualities. We use a multi-dimensional array where each element is another array containing one particular characteristic and zero or more sub-characteristics. The first two elements of that array are the identifier and name; the third element is the type of decomposition to use (we only use \emph{AND} decompositions, but others like \emph{OR} and \emph{XOR} could also be used), and the other elements, processed in groups of two elements at a time, are the sub-characteristics identifier and name. For example, \emph{Compatibility} is a quality with two sub-qualities, namely \emph{Co-Existence} and \emph{Interoperability}. We use a global element identifier to ensure all elements are assigned a unique and incremental id. From this list of qualities we build a \emph{QualityCatalogue} class model as shown in figure~\ref{fig:quality_catalogue}.
+
+\begin{figure}[h!]
+\includegraphics[width=0.85\textwidth]{quality_catalogue}
+\centering
+\caption[Default quality catalogue class model]{Default quality catalogue class model}
+\label{fig:quality_catalogue}
+\end{figure}
+
+Note that in the graphs in chapter~\ref{ch:Extendingbdd}, section~\ref{sec:case_study} we remove any parent and child nodes without any outgoing links from this hierarchy to reduce cluttering in the diagrams. That is the reason, only \emph{Interoperability} is shown and not the complete quality hierarchy with parent \emph{Compatibility} and sibling \emph{Co-existence}.
+
+Once default qualities have been added to the catalogue, the next step is to individually process all feature files passed in as arguments to the translator. The translator will invoke the Gherkin parser for each feature file and pass the results to the generator object instructing it to perform a first pass through each of the AST returned by the parser.
+
+The reason we mention first pass, is due to the nature of impacted goals and global constrains or, in other words, the way links are established within the catalogue. The translator has to do a first pass on ASTs so that all intentional elements are created, so that on a second pass, dependencies between elements can be added as they require goals involved in the dependency to be already present in the catalogue.
+
+\begin{featurelist}{Translator to GRL -- update catalogue with AST}{lst:translator_to_grl_update_with_AST}
+\begin{featurecode}{0.70}
+\begin{minted}[breaklines=false]{csharp}
+public void UpdateGRLCatalogue(grlcatalog grlCatalogue, Ast.Feature parsingResult)
+{
+    // Add new actor element or retrieve existing one from container
+    var actorElement = AddActorToGRLCatalogue(parsingResult, grlCatalogue);
+    
+    // Add new goal (This is the "I want to..." goal of a BDD Feature)
+    var goalElement = AddFeatureGoalToGRLCatalogue(parsingResult, grlCatalogue);
+    
+    // Attach goal to Actor
+    BindElementToActorAndUpdateGRLCatalogue(grlCatalogue, actorElement, goalElement);
+    
+    // Are there any non-functionals?
+    if (parsingResult.Description != null 
+        && parsingResult.Description.QualityAttributes != null 
+        && parsingResult.Description.QualityAttributes.Qualities.Length > 0)
+    {
+        // Add Qualities
+        AddQualitiesToGRLCatalogue(parsingResult, grlCatalogue, actorElement);
+    
+        // Add Contribution Links from qualities to goal
+        AddQualityGoalContributionsToGRLCatalogue(parsingResult, grlCatalogue, goalElement);
+    }
+    
+    // Are there any scenarios?
+    if (parsingResult.ScenarioDefinitions != null 
+        && parsingResult.ScenarioDefinitions.Count() > 0) 
+    {
+        // Add contributions from scenarios to goal
+        AddScenarioGoalContributionsToGRLCatalogue(parsingResult, grlCatalogue, goalElement);
+    }
+}
+\end{minted}
+\end{featurecode}
+\end{featurelist}
+
+Processing each AST includes adding (if not already present) the actor to the catalogue, add the new goal to the catalogue and setting containment of this goal to the actor. If this goal is constrained by any qualities, then those qualities and contributions from each quality to the feature's goal is added to the catalogue. Similar consideration is done if the AST contains nodes for parsed scenarios. 
+
+We will not be listing all of these auxiliary methods as they all follow a similar pattern described next ( figure~\ref{lst:translator_to_grl_add_actor} contains an example of one such methods).
+
+\begin{featurelist}{Translator to GRL -- add actor to catalogue}{lst:translator_to_grl_add_actor}
+\begin{featurecode}{0.75}
+\begin{minted}[breaklines=true]{csharp}
+
+private grlcatalogActor AddActorToGRLCatalogue(Ast.Feature parsingResult, grlcatalog grlCatalogue)
+{
+  var actor = parsingResult.Description.Actor;
+
+  // Create or obtain actor element from container
+  var actorExists = false;
+  var actorElement = container.RegisterElement<grlcatalogActor>(actor.Name, out actorExists);
+
+  // Only add to catalogue if not already present
+  if (!actorExists)
+    grlCatalogue.actordef = grlCatalogue.actordef.Union(new[] { actorElement }).ToArray();
+
+  return actorElement;
+}
+\end{minted}
+\end{featurecode}
+\end{featurelist}
+
+Each of these methods has access to a \emph{GRLElementsContainer}, an implementation of the \emph{Registry} pattern~\footnote{~see http://martinfowler.com/eaaCatalog/registry.html for details} and that creates new and locates existing elements that have been added to the catalogue.
+
+This object is very important, as it allows finding elements already added in the catalogue by name/description which is all that an AST returned by Gherkin has access to. The GRL catalogue instead, requires all elements, and links between them, to have identifiers and use them to establish those links.
+
+Each of the elements to be registered in the catalogue implements an interface, named \emph{IElementWithIdentity}, that ensures they have a valid identifier, name, and description, which is used in registering and locating an element in the registry, but also in code generation to produce the GRL catalogue as all elements are required to have those attributes. Listing~\ref{lst:translator_to_grl_registry} shows the most relevant methods of the registry object.
+
+\begin{featurelist}{Translator to GRL -- a Registry object for GRL elements}{lst:translator_to_grl_registry}
+\begin{featurecode}{0.70}
+\begin{minted}[breaklines=false]{csharp}
+class GRLElementsContainer
+{
+ private Dictionary<int, IElementWithIdentity> registry;
+ private int lastAssignedId = 0;
+ 
+ public int Add<T>(T value) where T : class, IElementWithIdentity
+ {
+     if (value == null)
+         throw new ApplicationException("Cannot register null object in GRLContainer");
+     if (registry.Any(keyval => keyval.Value.name == value.name))
+         throw new ApplicationException("Cannot register value as it already exists");
+     registry.Add(++lastAssignedId, value);
+     return lastAssignedId;
+ }
+ 
+ public T GetElementByName<T>(string name) where T : class, IElementWithIdentity
+ {
+   if (registry.Any(keyval => keyval.Value.name == name))
+     return registry.First(keyval => keyval.Value.name == name).Value as T;
+   return null;
+ }
+ 
+ public T RegisterElement<T>(string name, out bool exists) where T : class, 
+                                                                 IElementWithIdentity, 
+                                                                 new()
+ {
+   T intElement = new T();
+   exists = false;
+   var existingElement = GetElementByName<T>(name);
+   if (existingElement != null)
+   {
+     exists = true;
+     return existingElement;
+   }
+
+   var id = Add<IElementWithIdentity>(intElement);
+   intElement.id          = id.ToString();
+   intElement.name        = name;
+   intElement.description = "";
+   return intElement;
+ }
+\end{minted}
+\end{featurecode}
+\end{featurelist}
+
+Once all feature files have gone through the first pass, we invoke the generator's method \emph{UpdateGRLCatalogueWithImpactedGoals} which adds any dependencies amongst goals (if there is any). Figure~\ref{lst:translator_to_grl_global_goals} shows the method's implementation. 
+
+\begin{featurelist}{Translator to GRL -- Add global goals}{lst:translator_to_grl_global_goals}
+\begin{featurecode}{0.70}
+\begin{minted}[breaklines=false]{csharp}
+
+foreach (var parsingResult in parsingResults)
+{
+    var goalDescription = parsingResult.Description.Goal.Description;
+    var goalElement = container.GetElementByName<grlcatalogIntentionalelement>(goalDescription);
+    if (parsingResult.Description != null 
+        && HasGlobalTag(parsingResult.Description))
+    {
+        foreach (var intentionalElement in grlCatalogue.elementdef)
+        {
+            var otherGoalElement = container.GetElementByName<grlcatalogIntentionalelement>(intentionalElement.name);
+            var isGlobalGoal = parsingResults.Any(f => String.Compare(f.Description.Goal.Description,otherGoalElement.name,true)==0 && HasGlobalTag(f.Description));
+        
+            if (goalElement.id != otherGoalElement.id 
+            && intentionalElement.type == "Goal" 
+            && !isGlobalGoal)
+            {
+                var dependencyElement = BuildDependencyElement(goalElement, otherGoalElement);
+                grlCatalogue.linkdef.dependency = grlCatalogue.linkdef.dependency.Union(new[] { dependencyElement }).ToArray();
+            }
+        }
+    }
+}
+\end{minted}
+\end{featurecode}
+\end{featurelist}
+It is important to note that we avoid adding a dependency if a reverse dependency already exists. For example, if no check was made, then two global goals A and B would create two dependencies $A \rightarrow B$ and $B \rightarrow A$ and that would break the GRL Catalogue consistency.
+
+Last remaining step is to serialize the catalogue object by using simple \emph{.NET} object serialisation techniques.
 
 \chapter{Conclusion}
 \label{ch:Conclusion}
-Most conventional approaches to system design are driven by functional requirements. Developers focus their efforts primarily on achieving the desired functionality of a product or system, usually considering non-functional requirements (such as cost and performance) in a non-systematic and often undocumented way~\citep{Chung2000}. Furthermore, these software quality attributes are often addressed late and viewed as consequences of the decisions rather than as goals to be achieved.
+Most conventional approaches to system design are driven by functional requirements. Developers focus their efforts primarily on achieving the desired functionality of a product or system, usually considering non-functional requirements (such as cost and performance) in a non-systematic and often undocumented way~\citep{Chung2000}.
 
-Out work helps to address some of the most common requirements risks~\citep[p. 20]{Wiegers2013}.
-\begin{itemize}
-\item Insufficient user involvement
-\item Inaccurate planning
-\item Creeping user requirements
-\item Ambiguous requirements
-\item Gold plating
-\item Overlooked stakeholders
-\end{itemize}
-\appendix
-Our work is also actual and contributes to major requirements trends in recent in the past decade, including
-\begin{itemize}
-\item The recognition of business analysis as a professional discipline
-\item The maturing of tools both for managing requirements in a database and for assisting with requirements development activities such as prototyping, modelling, and simulation
-\item The increased use of agile development methods and the evolution of techniques for handling requirements on agile projects
-\item The increased use of visual models to represent requirements knowledge
-\end{itemize}
+Out work helps to address two of the most common requirements risks, which are ambiguous requirements and overlooked stakeholders~\citep[p. 20]{Wiegers2013}. By viewing requirements as goals of stakeholders that when satisfied produce some identified benefit, and by ensuring all stakeholders interests are reflected on identified features, we reduce the potential for overlooked stakeholders. By producing examples of both functional and \nfrs, in the spirit of \emph{Specification by Example}, and representing the latter as constrains to the former, we reduce the ambiguity in requirements elicitation and analysis methods.
 
-Writing the requirements isn't the hard part. The hard part is determining the requirements. Writing requirements is a matter of clarifying, elaborating, and recording what you've learned. A solid understanding of a product's requirements ensures that your team works on the right problem and devises the best solution to that problem. Without knowing the requirements, you can't tell when the project is done, determine whether it has met its goals, or make trade-off decisions when scope adjustments are necessary. It can cost far more to correct a defect that's found late in the project than to fix it shortly after its creation. Shortcomings in requirements practices pose many risks to project success, where success means delivering a product that satisfies the user's functional and quality expectations at the agreed-upon cost and schedule~\citep{Wiegers2013}.
+Our work is also actual and contributes to major requirements trends in recent years, including the increased use of agile development methods and the evolution of techniques for handling requirements on agile projects; the maturing of tools for assisting with requirements development activities and the increased use of visual models to represent requirements knowledge.
 
-Some of the most common requirements risks are insufficient user involvement; inaccurate planning; creeping user requirements ; ambiguous requirements and overlooked stakeholders. Sound requirements processes emphasize a collaborative approach to product development that involves stakeholders in a partnership throughout the project. Eliciting requirements lets the development team better understand its user community or market, a critical success factor. Emphasizing user tasks instead of superficially attractive features helps the team avoid writing code that no one will ever execute. Customer involvement reduces the expectation gap between what the customer really needs and what the developer delivers. Documented and clear requirements greatly facilitate system testing. All of these increase your chances of delivering high-quality products that satisfy all stakeholders~\citep{Wiegers2013}.
+Writing the requirements isn't the hard part. The hard part is determining the requirements. Shortcomings in requirements practices pose many risks to project success, where success means delivering a product that satisfies the user's functional and quality expectations at the agreed-upon cost and schedule~\citep{Wiegers2013}.
 
-A central point for the distinction of functionality and other qualities is that, for software construction, the purpose of the software system needs to be well defined in terms of the functions that the software will perform~\citep{Chung:2009vg}.
+Our approach helps to determine requirements and builds on the foundational principles of agile development and BDD by extending Gherkin with constructs to represent actors, goals and their dependencies, constrains and global quality attributes. Using our extension to BDD, we are able to address three types of requirements : functional, non-functional and design constrains in a coherent manner~\citep{Leffingwell2011}.
 
-The distinction between functionality and other qualities in the field of requirements engineering has an important benefit: it makes clear to software engineers that requirements are meant to deal with quality attributes and not with just one of them. As the software industry became more mature and different domains were explored by software engineers, it became clearer that it would not be enough just to deal with the description of the desired functionality, but that quality attributes should be carefully thought of early on as well~\citep{Chung:2009vg}.
+Documented and clear requirements greatly facilitate system testing. All of these increase chances of delivering high-quality products that satisfy all stakeholders~\citep{Wiegers2013}. Specifications in Gherkin use a ubiquitous language -- a common, rigorous language used between developers and users and based on the domain they belong to -- that fosters communication and clarifies requirements. We benefit from these characteristics and extend its use to the systematic handling of \nfrs.
 
-Not only non-functional requirements need to be stated up front, but they can help the software engineer make design decisions, while also justifying such decisions. However, in order to take this into consideration, it is necessary that quality attributes not be considered just as a separate set of requirements, but with the consideration of the functionality throughout the development process~\citep{Chung:2009vg}.
+As the software industry became more mature, it became clearer that it would not be enough just to deal with the description of the desired functionality, but that quality attributes should be carefully thought of early on as well~\citep{Chung:2009vg}. Not only non-functional requirements need to be stated up front, but they can help the software engineer make design decisions, while also justifying such decisions. However it is necessary that quality attributes not be considered just as a separate set of requirements, but with the consideration of the functionality throughout the development process~\citep{Chung:2009vg}.
 
-\fxnote{Describe the role tools (e.g. Cucumber) could play in marking scenarios as passed and in GRL the corresponding tasks marked as satisficed}
+\section{Related work}
+\citet{Rosa2004} present a process-oriented approach defined around basic abstractions and in which functional and non-functional requirements are refined together in a semi-formal way. It defines non-functional properties using a set of abstractions, namely \emph{NF-Attributes}, \emph{NF-Statements} and \emph{NF-Actions} and integrates them in architectures of software systems by associating them with architectural elements that are then refined into concrete implementations.
 
-\fxnote{Our changes to Gherkin did not introduce any GRL specific concept. Separation of concerns}
+\citet{Araujo2005} defines an aspect-oriented agile requirements approach where initial cross-cutting requirements are modelled as coarse-grained scenarios. Scenarios are used as descriptions of desired or existing system behaviour and composition rules are defined to weave coarse-grained aspectual and non-aspectual scenarios to completely describe functionalities.
 
-\chapter{Typical chapter contents}\fxnote{Remove}
+Also exploring aspect-orientation and looking at reuse from a non-functional (quality) perspective, \citet{Leite2005} combine ideas from reuse, from goal-oriented requirements, aspect-oriented programming and quality management, to obtain a goal-driven process to enable a quality-based reusability of software artefacts. The authors detail propose a goal-oriented representation language to support quality reusability introducing a representation for functions, topics, quality types, pre-conditions, pointcuts (relations among functions, topics and quality types), contribution structures and quality operationalizations.
 
+\cite{Franch1998} presented a proposal for putting non-functional information of software systems into software architectures. Non-functionality is described by means of a notation called \emph{NoFun}, which allows to introduce non-functional attributes of software, to give values to these attributes in component and connectors, and to formulate non-functional requirements in terms of these attributes.
 
-\underline{Start of chapter}
-\paragraph{General advice}
-Link back to previous parts in particular previous chapter\\
-State the aim of the chapter\\
-Outline how you intend to achieve this aim in the form of an overview of contents\\
+There are three research streams that have influenced our work. The first one is closely related to ours, but comes from a different angle and is limited to some types of \nfrs~\citep{barmi2011automated}. The authors propose \emph{ProBDD}, an extension to BDD, in which probabilistic \nfrs -- such as safety, security, and performance -- are specified in BDD scripts using specification patterns for probabilistic properties with a structured English grammar. The proposed extended BDD scripts can be parsed and executed with randomly generated input data and test results can verify the specified \nfrs fulfilment. 
 
-\noindent\underline{Contents}
-\paragraph{Discussion or Analysis}
-\begin{itemize}
-\item What's important
-\item What overall themes can be identified
-\item What can be observed or learned
-\item What limitations or shortcomings have been identified
-\item Situate the chapter within the whole thesis
-\end{itemize}
-\paragraph{Summary}
-\begin{itemize}
-\item Replies to the introduction by briefly identifying the chapter's achievements and sets the scene for the next chapter
-\end{itemize}
+Their work differs from ours as it is restricted to \nfrs that can be written as probabilistic statements, that is, those that can be quantified and can be expressed in a probabilistic form. Also, their focus is on automated testing and validation of \nfrs while our approach is applicable to all \nfrs types, is independent of taxonomy chosen and is intended to foster analysis, detection and management of dependencies and conflicts among \nfrs.
 
-\noindent\underline{End of chapter}
-\paragraph{General advice}
-Start with a strong summary of the main findings of this chapter with academic references and relate it with current theory.\\
-Relates this chapter results to earlier analysis.\\
-End with a strong lead into next chapter.\\
+The second work, describes the building blocks of a lightweight agile methodology (called \emph{NORMAP}) for identifying, linking, and modelling functional and non-functional requirements aimed at improving software quality and support agility~\citep{Farid1998}. The authors proposed \emph{Agile Use Cases (AUCs)} --  hybrid of use cases and agile user stories -- to model functional requirements, \emph{Agile Loose Cases (ALCs)} -- loosely-defined agile NFRs --  and \emph{Agile Choose Cases (ACCs)} to model potential solutions (operationalizations) to \nfrs. The three artefacts are combined in a visual framework to promote agile modelling of \nfrs (primarily) and how they are linked to functional requirements. The authors also enhanced the agile user story card to a new \emph{W8} Story Card Model that captures functional or non-functional agile requirements that has served as inspiration to our proposed additional constructs in Gherkin.
+
+Finally, the foundational work laid by the \emph{NFR Framework}~\cite{Chung2000}, that first introduced the concept of `softgoal', which represents a goal that has no clear-cut definition and/or criteria as to whether it is satisfied or not. The \emph{NFR Framework} allowed systematic handling of \nfrs and later influenced other goal-oriented approaches, such as GRL~\cite{Amyot2003} that we integrate in our research.
+
+\section{Further research}
+Our work has introduced changes in the Gherkin parser but has largely ignored its impact on the compiler. Further research is needed to adapt the compiler for these new constructs. This also implies the need to adapt existing tools, such as Cucumber~\footnote{~see https://cucumber.io/ for details} or SpecFlow~\footnote{~ see http://www.specflow.org/ for details} for the new capabilities in order for those tools to assist in producing specifications that include non-functional constrains alongside functional requirements.
+
+These tools could also play a role in interfacing between Gherkin and GRL by, for example, causing the successful execution of test cases to mark corresponding \emph{Tasks} in GRL as satisfied, or supporting typical editor features (e.g. intellisense and code completion, syntactic analysis, etc.)
+
+Further research is also required in applying the methodology to larger case studies, preferably originated in complex industrial settings where the suitability (or not) of the practices and techniques described in this work, can be assessed.
+
+At the moment, we only support forward generation of GRL models from Gherkin specifications. In an ideal scenario, it would also be possible to do the reverse, that is, start with a GRL model of goals and softgoals, goal decompositions and dependencies among them, a set of actors, tasks and contributions to goals, and generate one or more Gherkin specifications.
+
+With those two generation models in place, it would be easier to support full traceability and navigation between Gherkin and GRL models, offering the capability of doing updates in place where only modified parts of one model are updated in the other.
+
+Another area of future research consists in exploring interaction between our work and more formal and semi-formal languages that explore modelling approaches for capturing \nfrs. In one of such approaches, \citet{MylopoulosOnt2014} propose a modelling language for non-functional requirements that views them as requirements over qualities, mapping a software-related domain to a quality space. Their methodology refines informal \nfrs elicited from stakeholders, resulting in unambiguous, de-idealized, and measurable requirements. This would address a particular limitation with our approach, in which nothing intrinsic to improves the capacity of requirements being measured or not. If such research is carried out, it is important to investigate the extent to which actors and goals satisfaction algorithms can be adapted to support requirements defined in such languages.
+
+Another possible route for research would be to investigate the extent to which our work could be integrated with UCM -- a scenarios-based notation for gathering functional requirements such as operational or architectural requirements, supporting dynamic refinement at the behavioural and structural level~\citep{Roy:2007wyba} -- by exploring how scenarios in BDD can be mapped to their equivalent entities in UCM and determine how activities, tasks or functions within a system can be traced back to original BDD scenarios and be part of goal reasoning in GRL.
+
+Our proposal does not solve completely all enunciated issues with the treatment of non-functional requirements in software development projects. However, our proposal is an effective step towards the explicit treatment of this kind of properties in agile software development, and BDD in particular, and establishes a defined agenda for research in this area.
 
 \begin{appendices}
 \chapter{Case Study}
@@ -1851,7 +2346,7 @@ The table below lists all the original non-functional requirements for the \emph
                 & MA & Maintainability \\
                 & MO & Modifiability \\
                 & AS & user interface aesthetics \\
-                \multicolumn{2}{c}{\multirow{3}[1]{*}{\emph{\bfseries{(*)}} \citet{MylopoulosOnt2014} marked these as Functional requirements and we will not consider them}} 
+                \multicolumn{2}{c}{\multirow{3}[1]{*}{\emph{\bfseries{(*)}} \citet{MylopoulosOnt2014} marked these as Functional requirements and we do not consider them in our work}} 
             \end{tabular}
         }
   }
@@ -1862,10 +2357,11 @@ The table below lists all the original non-functional requirements for the \emph
 \section{Case study requirements in BDD format}
 
 In this section, we list the remaining feature files corresponding to the functional requirements in the \emph{meeting scheduler} case study and not addressed previously in chapter~\ref{ch:Extendingbdd}, section~\ref{sec:case_study}.
+Note that in some listings the lines have been wrapped and a \verb|\|| used to show where the line breaks, to improve visibility but these line breaks should be removed if the text is to be submitted through Gherkin parser.
 
 \begin{featurelist}{R53 -- The product shall store new conference rooms}{lst:feature_r53}
 \begin{featurecode}{0.7}
-\begin{minted}{Gherkin}
+\begin{minted}[breaklines=false]{Gherkin}
 
 
 Feature:    R53 - The product shall store new conference rooms
@@ -1899,7 +2395,7 @@ Scenario:   100% of all transactions recording conference rooms in DBMS are succ
 
 \begin{featurelist}{R54 -- The product shall record meeting entries}{lst:feature_r54}
 \begin{featurecode}{0.7}
-\begin{minted}{Gherkin}
+\begin{minted}[breaklines=false]{Gherkin}
 
 
 Feature:    R54 - The product shall record meeting entries
@@ -1929,7 +2425,7 @@ Scenario:   100% of all transactions updating conference rooms in DBMS are succe
 
 \begin{featurelist}{R55 -- The product will be able to delete conference rooms}{lst:feature_r55}
 \begin{featurecode}{0.7}
-\begin{minted}{Gherkin}
+\begin{minted}[breaklines=false]{Gherkin}
 
 
 Feature:    R55 - The product will be able to delete conference rooms
@@ -1958,7 +2454,7 @@ Scenario:   100% of all transactions deleting conference rooms in DBMS are succe
 
 \begin{featurelist}{R56 -- The product shall be able to store new room equipment}{lst:feature_r56}
 \begin{featurecode}{0.7}
-\begin{minted}{Gherkin}
+\begin{minted}[breaklines=false]{Gherkin}
 
 
 Feature:    R56 - The product shall be able to store new room equipment
@@ -1990,7 +2486,7 @@ Scenario:   100% of all transactions storing room equipment in DBMS are successf
 
 \begin{featurelist}{R57 -- The product will update existing room equipment}{lst:feature_r57}
 \begin{featurecode}{0.7}
-\begin{minted}{Gherkin}
+\begin{minted}[breaklines=false]{Gherkin}
 
 
 Feature:    R57 - The product will update existing room equipment
@@ -2015,7 +2511,7 @@ Scenario:   100% of all transactions updating room equipment in DBMS are success
 
 \begin{featurelist}{R58 -- The product shall be able to delete room equipment}{lst:feature_r58}
 \begin{featurecode}{0.7}
-\begin{minted}{Gherkin}
+\begin{minted}[breaklines=false]{Gherkin}
 
 
 Feature:    R58 - The product shall be able to delete room equipment
@@ -2051,7 +2547,7 @@ Scenario:   100% of all transactions deleting room equipment from DBMS are succe
 
 \begin{featurelist}{R60 -- Each time a conference room is reserved the schedule shall be updated}{lst:feature_r60}
 \begin{featurecode}{0.7}
-\begin{minted}{Gherkin}
+\begin{minted}[breaklines=false]{Gherkin}
 
 
 Feature:    R60 - Each time a conference room is reserved the conference room schedule \
@@ -2085,7 +2581,7 @@ Scenario:   90% of users are able to reserve a conference room within 5 minutes 
 
 \begin{featurelist}{R61 -- The product shall record the transportation status of equipment reserved}{lst:feature_r61}
 \begin{featurecode}{0.7}
-\begin{minted}{Gherkin}
+\begin{minted}[breaklines=false]{Gherkin}
 
 
 Feature:    R61 - The product shall record the transportation status of equipment reserved
@@ -2112,7 +2608,7 @@ Scenario:   100% of all transactions recording transportation status of equipmen
 
 \begin{featurelist}{R62 -- The product shall display a map of the company building}{lst:feature_r62}
 \begin{featurecode}{0.7}
-\begin{minted}{Gherkin}
+\begin{minted}[breaklines=false]{Gherkin}
 
 
 Feature:    R62 - The product shall display a map of the company building showing \
@@ -2146,7 +2642,7 @@ Scenario:   90% of maintenance software developers are able to integrate new \
 
 \begin{featurelist}{R64 -- The product shall send a meeting confirmation to the meeting organizer}{lst:feature_r64}
 \begin{featurecode}{0.7}
-\begin{minted}{Gherkin}
+\begin{minted}[breaklines=false]{Gherkin}
 
 
 Feature:    R64 - The product shall send a meeting confirmation to the meeting organizer
@@ -2168,9 +2664,7 @@ Scenario:   Meeting confirmations can be sent through various email servers
 
 \begin{featurelist}{R68 -- The product shall record all the equipment that has been reserved}{lst:feature_r68}
 \begin{featurecode}{0.7}
-\begin{minted}{Gherkin}
-
-
+\begin{minted}[breaklines=false]{Gherkin}
 Feature:    R68 - The product shall record all the equipment that has been reserved
 
             As a Meeting Organiser
@@ -2198,9 +2692,7 @@ Scenario:   100% of all transactions recording all the reserved equipment \
 
 \begin{featurelist}{R70 -- The product will allow privileged users to view meeting schedules}{lst:feature_r70}
 \begin{featurecode}{0.7}
-\begin{minted}{Gherkin}
-
-
+\begin{minted}[breaklines=false]{Gherkin}
 Feature:    R70 - The product will allow privileged users to view meeting schedules in \ 
             multiple reporting views
 
@@ -2236,7 +2728,7 @@ Scenario:   Multiple reporting views can be customised
 
 \begin{featurelist}{R71 -- The product shall be able to send meeting notifications...}{lst:feature_r71}
 \begin{featurecode}{0.7}
-\begin{minted}{Gherkin}
+\begin{minted}[breaklines=false]{Gherkin}
 
 
 Feature:    R71 - The product shall be able to send meeting notifications via different \
@@ -2263,7 +2755,7 @@ Scenario:   Meeting confirmations can be sent via different kinds of end-user sp
 
 \begin{featurelist}{R72 -- The product shall have a customizable look and feel}{lst:feature_r72}
 \begin{featurecode}{0.7}
-\begin{minted}{Gherkin}
+\begin{minted}[breaklines=false]{Gherkin}
 
 
 Feature:    R72 - The product shall have a customizable look and feel
@@ -2285,7 +2777,7 @@ Scenario:   Product's look and feel can be customised
 
 \begin{featurelist}{R74 -- The product will display availability for unreserved conference rooms}{lst:feature_r74}
 \begin{featurecode}{0.7}
-\begin{minted}{Gherkin}
+\begin{minted}[breaklines=false]{Gherkin}
 
 
 Feature:    R74 - The product will display availability for unreserved conference rooms
@@ -2315,7 +2807,239 @@ Scenario:   It is easy to see status for all unreserved conference rooms
 \end{featurecode}
 \end{featurelist}
 
+\chapter{Gherkin Grammar}
+This appendix contains listings of the original~\footnote{~ original extracted from https://github.com/cucumber/gherkin3/blob/master/gherkin.berp} and updated Gherkin grammars in their entirety.
+
+\begin{featurelist}{Original gherkin grammar}{lst:original_gherkin_grammar}
+\begin{featurecode}{0.8}
+\begin{minted}[breaklines=true]{ebnf}
+[
+	Tokens -> #Empty, #Comment, #TagLine, #FeatureLine, #BackgroundLine, #ScenarioLine, #ScenarioOutlineLine, #ExamplesLine, #StepLine, #DocStringSeparator, #TableRow, #Language
+	IgnoredTokens -> #Comment,#Empty
+	ClassName -> Parser
+	Namespace -> Gherkin
+]
+
+
+Feature! := Feature_Header Background? Scenario_Definition*
+Feature_Header! := #Language? Tags? #FeatureLine Feature_Description
+
+Background! := #BackgroundLine Background_Description Scenario_Step*
+
+// we could avoid defining Scenario_Definition, but that would require regular look-aheads, so worse performance
+Scenario_Definition! := Tags? (Scenario | ScenarioOutline)
+
+Scenario! := #ScenarioLine Scenario_Description Scenario_Step*
+
+ScenarioOutline! := #ScenarioOutlineLine ScenarioOutline_Description ScenarioOutline_Step* Examples_Definition+
+// after the first "Examples" block, interpreting a tag line is ambiguous (tagline of next examples or of next scenario)
+// because of this, we need a lookahead hint, that connects the tag line to the next examples, if there is an examples block ahead
+Examples_Definition! [#Empty|#Comment|#TagLine->#ExamplesLine]:= Tags? Examples
+Examples! := #ExamplesLine Examples_Description #TableRow #TableRow+
+
+Scenario_Step := Step
+ScenarioOutline_Step := Step
+
+Step! := #StepLine Step_Arg?
+Step_Arg := (DataTable | DocString)
+
+DataTable! := #TableRow+
+DocString! := #DocStringSeparator #Other* #DocStringSeparator
+
+Tags! := #TagLine+
+
+Feature_Description := Description_Helper
+Background_Description := Description_Helper
+Scenario_Description := Description_Helper
+ScenarioOutline_Description := Description_Helper
+Examples_Description := Description_Helper
+
+// we need to explicitly mention comment, to avoid merging it into the description line's #Other token
+// we also eat the leading empty lines, the tailing lines are not removed by the parser to avoid lookahead, this has to be done by the AST builder
+Description_Helper := #Empty* Description? #Comment*
+Description! := #Other+
+\end{minted}
+\end{featurecode}
+\end{featurelist}
+\begin{featurelist}{Updated gherkin grammar}{lst:updated_gherkin_grammar}
+\begin{featurecode}{0.7}
+\begin{minted}[breaklines=true]{ebnf}
+[
+	Tokens -> #Empty, #Comment, #TagLine, #FeatureLine, #BackgroundLine, #ScenarioLine, #ScenarioOutlineLine, #ExamplesLine, #StepLine, #DocStringSeparator, #TableRow, #Language, #WichMayImpact, #ScenarioContribution, #QualityAttributeLine, #AsA_Step, #IWant_Step, #SoThat_Step 
+	IgnoredTokens -> #Comment,#Empty
+	ClassName -> Parser
+	Namespace -> Gherkin
+]
+
+Feature! := Feature_Header Background? Feature_Description Scenario_Definition*
+Feature_Header! := #Language? Tags? #FeatureLine
+
+Background! := #BackgroundLine Background_Description Scenario_Step*
+
+Feature_Description! := Tags? #AsA_Step #IWant_Step #SoThat_Step WichMayImpact* Quality_Step?
+Quality_Step!        := #QualityAttributeLine DataTable
+
+WichMayImpact!		:= #WichMayImpact
+
+// we could avoid defining Scenario_Definition, but that would require regular look-aheads, so worse performance
+Scenario_Definition! := Tags? (Scenario | ScenarioOutline)
+
+Scenario! := #ScenarioLine Scenario_Step* ScenarioContribution*
+
+ScenarioContribution! := #ScenarioContribution
+
+ScenarioOutline! := #ScenarioOutlineLine ScenarioOutline_Description ScenarioOutline_Step* Examples_Definition+
+// after the first "Examples" block, interpreting a tag line is ambiguous (tagline of next examples or of next scenario)
+// because of this, we need a lookahead hint, that connects the tag line to the next examples, if there is an examples block ahead
+Examples_Definition! [#Empty|#Comment|#TagLine->#ExamplesLine]:= Tags? Examples
+Examples! := #ExamplesLine Examples_Description #TableRow #TableRow+
+
+Scenario_Step := Step
+ScenarioOutline_Step := Step
+
+Step! := #StepLine Step_Arg?
+Step_Arg := (DataTable | DocString)
+
+DataTable! := #TableRow+
+DocString! := #DocStringSeparator #Other* #DocStringSeparator
+
+Tags! := #TagLine+
+
+Background_Description := Description_Helper
+Scenario_Description := Description_Helper
+ScenarioOutline_Description := Description_Helper
+Examples_Description := Description_Helper
+
+// we need to explicitly mention comment, to avoid merging it into the description line's #Other token
+// we also eat the leading empty lines, the tailing lines are not removed by the parser to avoid lookahead, this has to be done by the AST builder
+Description_Helper := #Empty* Description? #Comment*
+Description! := #Other+
+\end{minted}
+\end{featurecode}
+\end{featurelist}
+
+\chapter{GRL Catalogue XSD Schema}
+\label{ch:grl_catalogue_schema}
+The listing below, contains the XSD schema that is used to generate a class model used by the Gherkin to GRL translator described in chapter~\ref{ch:gherkin_redux}, section~\ref{sec:grl_translator}.
+
+\begin{featurelist}{GRL Catalogue XSD Schema -- Part one}{lst:grl_catalogue_xsd_schema_one}
+\begin{featurecode}{.7}
+\begin{minted}[breaklines=false]{xml}
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+ <xs:element name="grl-catalog">
+  <xs:complexType>
+   <xs:sequence>
+    <!-- Intentional Elements Definitions -->
+	<xs:element name="element-def">
+	 <xs:complexType>
+	  <xs:sequence>
+	   <xs:element maxOccurs="unbounded" minOccurs="0" name="intentional-element">
+	    <xs:complexType>
+		 <xs:attribute name="id" type="xs:positiveInteger" use="required"/>
+		 <xs:attribute name="type" type="xs:string" use="required"/>
+		 <xs:attribute name="decompositiontype" type="xs:string" use="required"/>
+		 <xs:attribute name="name" type="xs:string" use="required"/>
+		 <xs:attribute name="description" type="xs:string" use="required"/>
+		</xs:complexType>
+	   </xs:element>
+	  </xs:sequence>
+     </xs:complexType>
+    </xs:element>
+    <!-- End of Intentional Elements Definitions -->
+    <!-- GRL Links Definitions -->
+    <xs:element name="link-def">
+	 <xs:complexType>
+	  <xs:sequence>
+	  <!-- Dependency -->
+	   <xs:element maxOccurs="unbounded" minOccurs="0" name="dependency">
+	    <xs:complexType>
+		 <xs:attribute name="dependeeid" type="xs:positiveInteger" use="required"/>
+		 <xs:attribute name="dependerid" type="xs:positiveInteger" use="required"/>
+		 <xs:attribute name="name" type="xs:string" use="required"/>
+		 <xs:attribute name="description" type="xs:string" use="required"/>
+		</xs:complexType>
+	   </xs:element>
+	   <!-- Decomposition -->
+	   <xs:element maxOccurs="unbounded" minOccurs="0" name="decomposition">
+	    <xs:complexType>
+	     <xs:attribute name="srcid" type="xs:positiveInteger" use="required"/>
+		 <xs:attribute name="destid" type="xs:positiveInteger" use="required"/>
+		 <xs:attribute name="name" type="xs:string" use="required"/>
+		 <xs:attribute name="description" type="xs:string" use="required"/>
+		</xs:complexType>
+	   </xs:element>
+
+	   <! -- continues next page -->
+        
+\end{minted}
+\end{featurecode}
+\end{featurelist}
+\clearpage
+\begin{featurelist}{GRL Catalogue XSD Schema -- Part two}{lst:grl_catalogue_xsd_schema_two}
+\begin{featurecode}{.7}
+\begin{minted}[breaklines=false,samepage=true]{xml}
+        <! -- continued from previous page -->
+        
+	   <!--Contribution -->
+	   <xs:element maxOccurs="unbounded" minOccurs="0" name="contribution">
+		<xs:complexType>
+		 <xs:attribute name="srcid" type="xs:positiveInteger" use="required"/>
+		 <xs:attribute name="destid" type="xs:positiveInteger" use="required"/>
+		 <xs:attribute name="contributiontype" type="xs:string" use="required"/>
+                 <!-- New. Optional for backward compatibility. -->
+		 <xs:attribute name="quantitativeContribution" type="xs:integer" use="optional"/>
+		 <xs:attribute name="correlation" type="xs:boolean" use="required"/>
+		 <xs:attribute name="name" type="xs:string" use="required"/>
+		 <xs:attribute name="description" type="xs:string" use="required"/>
+		</xs:complexType>
+	   </xs:element>
+	  </xs:sequence>
+	 </xs:complexType>
+	</xs:element>
+	<!-- End of GRL Link Definitions -->
+    <!-- Actor Definitions -->
+	<xs:element name="actor-def">
+	 <xs:complexType>
+	  <xs:sequence>
+	   <xs:element maxOccurs="unbounded" minOccurs="0" name="actor">
+	    <xs:complexType>
+		 <xs:attribute name="id" type="xs:positiveInteger" use="required"/>
+		 <xs:attribute name="name" type="xs:string" use="required"/>
+		 <xs:attribute name="description" type="xs:string" use="required"/>
+		</xs:complexType>
+	   </xs:element>
+	  </xs:sequence>
+     </xs:complexType>
+    </xs:element>
+    <!-- End of Actor Definitions -->
+	<!-- Actor-IE Containment Links -->
+	<xs:element name="actor-IE-link-def">
+	 <xs:complexType>
+	  <xs:sequence>
+	   <xs:element maxOccurs="unbounded" minOccurs="0" name="actorContIE">
+	    <xs:complexType>
+		 <xs:attribute name="actor" type="xs:positiveInteger" use="required"/>
+		 <xs:attribute name="ie" type="xs:positiveInteger" use="required"/>
+		</xs:complexType>
+	   </xs:element>
+	  </xs:sequence>
+     </xs:complexType>
+    </xs:element>
+    <!-- End of Actor-IE Containment Links -->
+   </xs:sequence>
+   <!-- GRL catalogue attributes -->
+   <xs:attribute name="catalog-name" type="xs:string" use="required"/>
+   <xs:attribute name="description" type="xs:string" use="required"/>
+   <xs:attribute name="author" type="xs:string" use="required"/>
+  </xs:complexType>
+ </xs:element>
+</xs:schema>
+\end{minted}
+\end{featurecode}
+\end{featurelist}
 \end{appendices}
+
 
 \ifdraft{%
   \fxnote{Bibliography will go here}
